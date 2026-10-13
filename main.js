@@ -16,6 +16,11 @@ const SITE = {
 
   stack: ['HTML', 'CSS', 'JavaScript', 'React', 'Tailwind'],
 
+  // Lighthouse scores of THIS page (mobile, 0 to 100). Measured 2026-10-13 on a local server
+  // (8 runs: performance 92 to 93, accessibility 100, SEO 100). The lowest performance run is shown.
+  // TODO: run Lighthouse again on the deployed URL and update these. null shows "--" and leaves the ring empty.
+  scores: { performance: 92, accessibility: 100, seo: 100 },
+
   // TODO: three real projects (ideally a website, an online store and a dashboard).
   // Set placeholder to false when a project is real.
   projects: [
@@ -29,6 +34,15 @@ const SITE = {
         en: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.',
         pt: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.',
       },
+      // Shown when the card is opened. TODO: real overview, what Samuel did, and the stack used.
+      details: {
+        about: {
+          en: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+          pt: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+        },
+        role: { en: 'Lorem ipsum dolor sit amet.', pt: 'Lorem ipsum dolor sit amet.' },
+        stack: ['HTML', 'CSS', 'JavaScript'],
+      },
     },
     {
       placeholder: true,
@@ -40,6 +54,15 @@ const SITE = {
         en: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.',
         pt: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.',
       },
+      // Shown when the card is opened. TODO: real overview, what Samuel did, and the stack used.
+      details: {
+        about: {
+          en: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+          pt: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+        },
+        role: { en: 'Lorem ipsum dolor sit amet.', pt: 'Lorem ipsum dolor sit amet.' },
+        stack: ['HTML', 'CSS', 'JavaScript'],
+      },
     },
     {
       placeholder: true,
@@ -50,6 +73,15 @@ const SITE = {
       text: {
         en: 'Duis aute irure dolor in reprehenderit in voluptate velit esse.',
         pt: 'Duis aute irure dolor in reprehenderit in voluptate velit esse.',
+      },
+      // Shown when the card is opened. TODO: real overview, what Samuel did, and the stack used.
+      details: {
+        about: {
+          en: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
+          pt: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
+        },
+        role: { en: 'Lorem ipsum dolor sit amet.', pt: 'Lorem ipsum dolor sit amet.' },
+        stack: ['HTML', 'CSS', 'JavaScript'],
       },
     },
   ],
@@ -94,14 +126,20 @@ const TRANSLATIONS = {
 
     'included.title': 'What you get',
     'included.lead': LOREM_LONG,
-    'included.1.title': 'Works on every screen',
-    'included.1.text': LOREM.s1,
-    'included.2.title': 'Fast loading',
-    'included.2.text': LOREM.s2,
-    'included.3.title': 'Clean, maintainable code',
-    'included.3.text': LOREM.s3,
-    'included.4.title': 'Delivery with support',
-    'included.4.text': LOREM.s4,
+    'included.report': 'Measured with Lighthouse on this page',
+    'included.outOf': 'out of 100',
+    'included.performance.title': 'Performance',
+    'included.performance.text': LOREM.s1,
+    'included.accessibility.title': 'Accessibility',
+    'included.accessibility.text': LOREM.s2,
+    'included.seo.title': 'SEO',
+    'included.seo.text': LOREM.s3,
+    'included.responsive.title': 'Responsive',
+    'included.responsive.text': LOREM.s4,
+    'included.clean.title': 'Clean, maintainable code',
+    'included.clean.text': LOREM.s5,
+    'included.support.title': 'Delivery with support',
+    'included.support.text': LOREM.s1,
 
     'services.title': 'Services',
     'services.lead': LOREM.s1,
@@ -119,6 +157,10 @@ const TRANSLATIONS = {
     'projects.placeholder': 'Placeholder',
     'projects.image': 'Project image',
     'projects.view': 'View project',
+    'projects.details': 'Details',
+    'projects.about': 'About the project',
+    'projects.role': 'What I did',
+    'projects.stack': 'Stack',
 
     'process.title': 'Process',
     'process.lead': LOREM.s3,
@@ -172,14 +214,20 @@ const TRANSLATIONS = {
 
     'included.title': 'O que você recebe',
     'included.lead': LOREM_LONG,
-    'included.1.title': 'Funciona em qualquer tela',
-    'included.1.text': LOREM.s1,
-    'included.2.title': 'Carregamento rápido',
-    'included.2.text': LOREM.s2,
-    'included.3.title': 'Código limpo e fácil de manter',
-    'included.3.text': LOREM.s3,
-    'included.4.title': 'Entrega com suporte',
-    'included.4.text': LOREM.s4,
+    'included.report': 'Medido com o Lighthouse nesta página',
+    'included.outOf': 'de 100',
+    'included.performance.title': 'Desempenho',
+    'included.performance.text': LOREM.s1,
+    'included.accessibility.title': 'Acessibilidade',
+    'included.accessibility.text': LOREM.s2,
+    'included.seo.title': 'SEO',
+    'included.seo.text': LOREM.s3,
+    'included.responsive.title': 'Responsividade',
+    'included.responsive.text': LOREM.s4,
+    'included.clean.title': 'Código limpo e fácil de manter',
+    'included.clean.text': LOREM.s5,
+    'included.support.title': 'Entrega com suporte',
+    'included.support.text': LOREM.s1,
 
     'services.title': 'Serviços',
     'services.lead': LOREM.s1,
@@ -197,6 +245,10 @@ const TRANSLATIONS = {
     'projects.placeholder': 'Exemplo',
     'projects.image': 'Imagem do projeto',
     'projects.view': 'Ver projeto',
+    'projects.details': 'Detalhes',
+    'projects.about': 'Sobre o projeto',
+    'projects.role': 'O que fiz',
+    'projects.stack': 'Tecnologias',
 
     'process.title': 'Processo',
     'process.lead': LOREM.s3,
@@ -261,6 +313,16 @@ function renderProjects(lang) {
     $('[data-project-type]', card).textContent = project.type[lang];
     $('[data-project-title]', card).textContent = project.title[lang];
     $('[data-project-text]', card).textContent = project.text[lang];
+    $('[data-project-about]', card).textContent = project.details.about[lang];
+    $('[data-project-role]', card).textContent = project.details.role[lang];
+    $('[data-project-stack]', card).replaceChildren(
+      ...project.details.stack.map((name) => {
+        const item = document.createElement('li');
+        item.className = 'rounded-full bg-sand px-3 py-1 text-small font-bold';
+        item.textContent = name;
+        return item;
+      })
+    );
     $('[data-project-link]', card).href = project.url;
     $('[data-project-badge]', card).hidden = !project.placeholder;
 
@@ -279,6 +341,25 @@ function renderProjects(lang) {
       label.textContent = t['projects.image'];
       media.append(label);
     }
+  });
+}
+
+/* ---- Project cards: click anywhere on a card to open or close its details ---- */
+$$('[data-project]').forEach((card) => {
+  const toggle = $('[data-project-toggle]', card);
+  toggle.addEventListener('click', () => {
+    const open = !card.hasAttribute('data-open');
+    card.toggleAttribute('data-open', open);
+    toggle.setAttribute('aria-expanded', String(open));
+  });
+});
+
+/* Screen reader text for the gauges. The visible numbers animate, so they are hidden from assistive tech. */
+function renderScores(lang) {
+  const t = TRANSLATIONS[lang];
+  $$('[data-gauge]').forEach((gauge) => {
+    const score = SITE.scores[gauge.dataset.gauge];
+    $('[data-gauge-sr]', gauge).textContent = score === null ? '' : `${score} ${t['included.outOf']}`;
   });
 }
 
@@ -323,6 +404,7 @@ function applyLanguage(lang) {
   });
 
   renderProjects(lang);
+  renderScores(lang);
   $('[data-copyright]').textContent = `© ${new Date().getFullYear()} Samuel Dutra`;
 }
 
@@ -427,9 +509,9 @@ const mockBuilt = new Promise((resolve) => {
 
 function showReadyTime() {
   const ms = measureReadyTime();
-  if (ms === null) return; // can't measure: leave the line hidden
+  if (ms === null) return; // can't measure: the line stays invisible
   const readout = $('[data-ready]');
-  readout.hidden = false;
+  readout.classList.remove('invisible');
   // Wait for the wireframe to finish building, then settle on the real number.
   mockBuilt.then(() => countUp($('[data-ms]', readout), ms));
 }
@@ -440,6 +522,54 @@ if (document.readyState === 'complete') {
   window.addEventListener('load', () => setTimeout(showReadyTime, 0));
 }
 
+/* ---- What you get: rings fill and numbers count up once the panel is on screen ---- */
+// Runs render(progress) from 0 to 1 with an ease-out. With reduced motion it jumps straight to the end.
+function animateProgress(duration, render) {
+  if (reducedMotion) return render(1);
+  const start = performance.now();
+  const tick = (now) => {
+    const linear = Math.min((now - start) / duration, 1);
+    render(1 - (1 - linear) ** 3);
+    if (linear < 1) requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+}
+
+function playReport() {
+  const report = $('[data-report]');
+  const DURATION = 1400;
+
+  $$('[data-gauge]', report).forEach((gauge) => {
+    const score = SITE.scores[gauge.dataset.gauge];
+    const value = $('[data-gauge-value]', gauge);
+    if (score === null) {
+      value.textContent = '--'; // not measured yet: the ring stays empty
+      return;
+    }
+    // The number and the arc grow together, so the ring always fills to exactly the score
+    const arc = $('.gauge-arc', gauge);
+    animateProgress(DURATION, (p) => {
+      value.textContent = Math.round(score * p);
+      arc.style.strokeDashoffset = 100 - score * p; // the arc is 100 long (pathLength)
+    });
+  });
+}
+
+(function setupReport() {
+  const report = $('[data-report]');
+  // Everything starts at its first frame; playReport() moves it to the final state
+  $$('[data-gauge-value]', report).forEach((el) => (el.textContent = '0'));
+
+  if (reducedMotion || !('IntersectionObserver' in window)) return playReport();
+  const observer = new IntersectionObserver((entries) => {
+    if (!entries.some((entry) => entry.isIntersecting)) return;
+    observer.disconnect();
+    playReport();
+  }, { threshold: 0.4 });
+  observer.observe(report);
+})();
+
 /* ---- Start ---- */
 renderAbout();
 applyLanguage(getSavedLang());
+document.body.setAttribute('data-ready', ''); // reveals the page, see style.css

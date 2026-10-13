@@ -46,7 +46,7 @@ At the end of each piece of work, give Samuel a short summary of the design deci
 | `orange` | `#D4621A` | Primary buttons and links, with cream text on buttons |
 | `amber` | `#F4AE52` | Accents: badges, icons, code details on dark. Don't single out one word of a headline with it |
 
-Transition tones already in `src/input.css`: `linen` `#F8E8CF` (hover and soft fills), `ink-soft` `#6B5340` (secondary text), `line` `#D8BD90` (decorative hairlines, never text), `ink-raised` `#3D2A1A` (panels on dark), `cream-muted` `#CDB9A0` (secondary text on dark), `orange-deep` `#B5500F` (button hover).
+Transition tones already in `src/input.css`: `linen` `#F8E8CF` (hover and soft fills), `ink-soft` `#6B5340` (secondary text), `line` `#D8BD90` (decorative hairlines, never text), `ink-raised` `#3D2A1A` (panels on dark), `cream-muted` `#CDB9A0` (secondary text on dark), `orange-deep` `#B5500F` (button hover), `score` `#F4AE52` (the ring), `score-ink` `#9A4308` (the number) and `score-soft` `#FCE6CB` (the fill inside the ring), the light oranges for the Lighthouse scores in "What you get". The ring has low contrast on cream (1.7:1), so it is decorative: the number carries the value (5.3:1 on its fill).
 
 Transition colors: if more are needed, create intermediate tones derived from the five tokens. Name them as tokens in the same single place, keep them in the same warm family, and mention them in the design plan. The five tokens above stay as they are, and the contrast rules below apply to the new tones too.
 
@@ -79,7 +79,7 @@ Structure and feel follow https://weaveos.com. The palette does **not**.
 
 1. **Header** (sticky): logo, anchors (Services, Projects, Process, Contact), EN/PT toggle, "Talk to me" button linking to contact.
 2. **Hero:** the first thing visitors see, so open with the most characteristic thing in Samuel's world (a headline, a live demo, a code block, a load-speed moment, or something else) and say why you chose it. Don't default to a big number with a small label and a gradient accent. Fixed content: a message about what the client gets (the front end their customers use: websites, online stores and dashboards, fast and built to bring in clients), the buttons "Hire me on Upwork" (primary, filled, because hiring is the goal) and "See projects" (secondary, outlined), and a strip with the stack (HTML, CSS, JavaScript, React, Tailwind) instead of client logos. The form is free.
-3. **What you get:** fixed content is four items that hold for any kind of project: works on every screen, fast loading, clean maintainable code, delivery with support. SEO is not an item (it doesn't apply to dashboards): mention it in the websites and stores service text. The form is free (list, checklist, interface-style block, or something else). **No made-up numbers.** Only use the big-number-with-small-label format when real metrics exist, and design the section so they can be swapped in later without a redesign.
+3. **What you get:** a report-style panel with performance, SEO and accessibility as rings that fill while the number counts up. Below the panel, three plain items: responsive on every screen, clean maintainable code and delivery with support. The ring numbers are **real Lighthouse scores of this very page**, kept in `SITE.scores` in `main.js` with the date and conditions of the measurement. Never type a score that was not measured. Re-run Lighthouse after any change that can affect it and on the deployed URL, then update them. **No other made-up numbers.**
 4. **Services:** four services: websites and landing pages, online stores, dashboards and web apps, tweaks and maintenance. The form is free. Avoid identical boxes with the same radius and the same soft grey shadow. Let the layout reflect what each service is.
 5. **Projects:** three clearly marked placeholders (type, image, title, short description, link). Samuel plans to build 3 projects for this site, ideally one website, one online store and one dashboard, so the projects prove each kind of work he sells. Each project carries its type as a short label. Projects are the proof of work, so give them more visual weight than Services. The form is free, with the same warning against identical cards. Vary radius and elevation by importance, and don't use gradient washes as decoration.
 6. **Process:** 4 steps (briefing, layout, development, delivery) in a dark block with a terminal mock.
@@ -99,7 +99,7 @@ Everything Samuel will replace lives in one object (e.g. `const SITE = {...}` in
 - Photo: neutral shape with initials "SD" until it arrives.
 - Links: Upwork, GitHub, LinkedIn, email (use `#` or an example `mailto:` marked TODO).
 - The 3 projects (type, title, description, image, link).
-- Real metrics (years of experience, projects, Upwork rating).
+- Real metrics (years of experience, projects, Upwork rating). The Lighthouse scores in "What you get" are already real, but were measured locally: re-measure on the deployed site.
 
 ## Quality bar
 

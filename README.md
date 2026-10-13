@@ -79,13 +79,17 @@ const SITE = {
   photo: '',                    // e.g. 'assets/samuel.jpg'
   links: { upwork: '#', github: '#', linkedin: '#', email: 'mailto:hello@example.com' },
   stack: ['HTML', 'CSS', 'JavaScript', 'React', 'Tailwind'],
-  projects: [ { placeholder: true, image: '', url: '#', type: { en, pt }, title: { en, pt }, text: { en, pt } }, /* ... */ ],
+  scores: { performance: 92, accessibility: 100, seo: 100 },   // real Lighthouse scores of this page
+  projects: [ { placeholder: true, image: '', url: '#', type: { en, pt }, title: { en, pt }, text: { en, pt },
+                details: { about: { en, pt }, role: { en, pt }, stack: [] } }, /* ... */ ],
 };
 ```
 
+- `scores` are the Lighthouse numbers shown in "What you get". They must be real: run Lighthouse (Chrome DevTools, mobile) on the deployed site and paste the results. The rings and counters animate to whatever is here.
 - Put images in `assets/` and point to them by path.
 - Set `placeholder: false` on a project when it's real. That hides its "Placeholder" badge.
 - `type` is the short label shown on each project (website, online store, dashboard).
+- `details` is what appears when a visitor clicks a card: an overview (`about`), what Samuel did (`role`) and the technologies used (`stack`). The card opens with a smooth animation.
 
 ### `TRANSLATIONS`: all the text
 

@@ -21,9 +21,13 @@
   --color-cream-muted: #CDB9A0; /* secondary text on dark (8.8:1 on ink) */
   --color-orange-deep: #B5500F; /* text links on hover (4.6:1 on cream) */
   --color-orange-hover: #C45817; /* hover on primary buttons, a step darker than orange */
+  /* Lighthouse scores in "What you get": light orange, from amber */
+  --color-score: #F4AE52;      /* the ring (decorative: the number carries the value) */
+  --color-score-ink: #9A4308;  /* the number (5.3:1 on its background) */
+  --color-score-soft: #FCE6CB; /* fill inside the ring: a very light orange */
 
   /* Font */
-  --font-sans: "Alef", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Alef", "Alef Fallback", ui-sans-serif, system-ui, sans-serif;
 
   /* Type scale */
   --text-display: clamp(2.5rem, 1rem + 6vw, 4.75rem);

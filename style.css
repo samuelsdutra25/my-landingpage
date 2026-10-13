@@ -4,6 +4,53 @@
  * Keep it small. Anything that has a Tailwind utility belongs in the HTML.
  */
 
+/*
+ * Fallback for Alef while it loads. Arial is resized and re-spaced to match
+ * Alef's width and line height (measured from the font files), so the swap
+ * doesn't move the layout (Cumulative Layout Shift). Used in --font-sans.
+ */
+@font-face {
+  font-family: "Alef Fallback";
+  src: local("Arial"), local("Liberation Sans");
+  font-weight: 400;
+  size-adjust: 103.4%;
+  ascent-override: 97.6%;
+  descent-override: 34.1%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: "Alef Fallback";
+  src: local("Arial Bold"), local("Arial"), local("Liberation Sans Bold");
+  font-weight: 700;
+  size-adjust: 103.9%;
+  ascent-override: 97.2%;
+  descent-override: 33.9%;
+  line-gap-override: 0%;
+}
+
+/*
+ * All text is filled in by main.js (the HTML is empty on purpose). If the browser
+ * painted before the script ran, the page would show empty boxes and then jump
+ * when the text arrives (a large layout shift). So the page stays invisible until
+ * main.js sets data-ready on <body>. Without JavaScript, or if the script fails,
+ * it shows after 3 seconds anyway.
+ */
+body:not([data-ready]) {
+  visibility: hidden;
+  animation: show-page 0s 3s forwards;
+}
+@keyframes show-page {
+  to {
+    visibility: visible;
+  }
+}
+@media (scripting: none) {
+  body:not([data-ready]) {
+    visibility: visible;
+    animation: none;
+  }
+}
+
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 5rem; /* room for the sticky header */
@@ -73,6 +120,83 @@ html {
 #mobile-menu nav > :nth-child(5) { --n: 4; }
 
 /*
+ * What you get: the rings. pathLength="100" on the arc makes the score a plain
+ * percentage: the arc covers exactly the score of the circle (butt caps, so no
+ * rounded end adds a little extra). main.js playReport() sets stroke-dashoffset
+ * on every frame, together with the number, so the ring always matches what it
+ * says. It is set from JS on purpose: Firefox ignores calc() with a CSS variable
+ * in stroke-dashoffset. The 100 below is the empty ring, the state before the script.
+ */
+.gauge-arc {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+}
+
+/*
+ * Project cards: the whole card is the click target. The button inside the
+ * title stretches over the card (::after), the revealed block sits above it
+ * so its text stays selectable and its link clickable.
+ *
+ * The details open by animating the grid row from 0fr to 1fr. That is a layout
+ * animation, kept on purpose: a card that grows has to push what is below it,
+ * and it is short (400ms). The content itself only fades and slides (opacity
+ * and translate). visibility keeps the closed details out of the tab order.
+ */
+.project {
+  cursor: pointer;
+}
+.project-toggle::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+.project:has(.project-toggle:focus-visible) {
+  outline: 3px solid var(--color-ink);
+  outline-offset: 3px;
+}
+.project-toggle:focus-visible {
+  outline: none; /* the card shows the focus ring instead */
+}
+
+.project-cue-icon {
+  transition: rotate 300ms cubic-bezier(0.34, 1.4, 0.64, 1), background-color 150ms;
+}
+.project:hover .project-cue-icon {
+  background-color: var(--color-linen);
+}
+.project[data-open] .project-cue-icon {
+  rotate: 135deg;
+}
+
+.project-more {
+  position: relative; /* above the stretched button */
+  display: grid;
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  cursor: auto;
+  transition: grid-template-rows 400ms cubic-bezier(0.2, 0.7, 0.2, 1), visibility 0s 400ms;
+}
+.project-more > div {
+  min-height: 0;
+  overflow: hidden;
+}
+.project-more-inner {
+  opacity: 0;
+  translate: 0 -0.5rem;
+  transition: opacity 200ms ease-out, translate 300ms ease-out;
+}
+.project[data-open] .project-more {
+  grid-template-rows: 1fr;
+  visibility: visible;
+  transition-delay: 0s;
+}
+.project[data-open] .project-more-inner {
+  opacity: 1;
+  translate: 0 0;
+  transition-delay: 120ms; /* text arrives once the card has started to open */
+}
+
+/*
  * The one orchestrated moment: the wireframe in the hero builds itself,
  * piece by piece. Each piece sets its order with style="--i: N".
  * It waits (paused) until the mock scrolls into view; main.js then sets
@@ -114,7 +238,9 @@ html {
     animation: none;
   }
   #mobile-menu,
-  #mobile-menu nav > * {
+  #mobile-menu nav > *,
+  .project-more,
+  .project-more-inner {
     transition-delay: 0s !important;
   }
   *,
