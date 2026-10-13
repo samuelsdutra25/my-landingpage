@@ -27,6 +27,9 @@ Thumbs.db
 # .claude/skills/ and CLAUDE.md are meant to be committed.
 .claude/settings.local.json
 
+# Playwright MCP: snapshots and screenshots it saves while testing the page
+.playwright-mcp/
+
 # NOT ignored on purpose:
 # - assets/tailwind.css (compiled CSS, needed so the site runs without a build)
 # - package-lock.json (keeps the Tailwind version the same on every machine)
