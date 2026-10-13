@@ -1,35 +1,144 @@
 # Samuel Dutra: portfolio landing page
 
-A one-page site built with plain HTML, CSS, JavaScript and Tailwind CSS (v4, via the CLI).
+A one-page portfolio for Samuel Dutra, a freelance front-end developer starting on Upwork. The site builds trust with small clients and sends them to hire Samuel on Upwork.
 
-## Open it locally
+It is built with plain HTML, CSS and JavaScript plus Tailwind CSS. There is no framework and no server-side build: open `index.html` and it works.
 
-Open `index.html` in your browser. The compiled CSS is already in `assets/tailwind.css`, so no build is needed just to look at the site.
+> **Status: MVP.** The layout, design system and behavior are done. The text is lorem ipsum, and the links, photo and projects are placeholders. See [Before launch](#before-launch).
 
-## Change the CSS
+## What's inside
 
-Needs Node.js. Install once, then rebuild after changing classes in `index.html`, `main.js` or `src/input.css`:
+- **One page, eight parts:** header, hero, what you get, services, projects, process (with a terminal mock), about, and a final call to action with the footer.
+- **English and Portuguese.** English is the default. A toggle in the header switches the language, remembers the choice in `localStorage` and updates `<html lang>` and the page title.
+- **A hero that measures itself.** A small wireframe builds itself, and under it the page shows how long it really took to be ready in the visitor's browser (from the Navigation Timing API). If the browser can't measure it, the line stays hidden.
+- **Editable without touching the HTML.** Links, photo, projects and all text live in `main.js`.
+- **Accessible by default.** Semantic HTML, one `h1` and a correct heading order, a skip link, visible keyboard focus, labelled controls, and `prefers-reduced-motion` support.
+- **Fast.** No libraries besides Tailwind's compiled CSS (about 19 KB) and one Google Font.
 
-```bash
-npm install
-npm run build:css   # one build
-npm run watch       # rebuild while you work
+## Tech stack
+
+| Part | Choice |
+|---|---|
+| Markup, behavior | HTML and vanilla JavaScript (no framework, no TypeScript) |
+| Styling | [Tailwind CSS v4](https://tailwindcss.com) through its CLI, plus a small hand-written `style.css` |
+| Font | [Alef](https://fonts.google.com/specimen/Alef), weights 400 and 700, loaded with `display=swap` |
+| Hosting | Any static host (Vercel or Netlify, no configuration needed) |
+
+## Project structure
+
+```
+.
+├── index.html          # All markup. Text is empty and filled in by main.js
+├── main.js             # SITE (editable data), TRANSLATIONS (all text), behavior
+├── style.css           # Only what Tailwind can't cover: focus, skip link, hero animation
+├── src/
+│   └── input.css       # Tailwind input: design tokens (@theme), buttons, page width
+├── assets/
+│   ├── tailwind.css    # Compiled CSS. Committed on purpose, see below
+│   └── favicon.svg
+├── package.json        # Scripts and the Tailwind CLI dependency
+├── CLAUDE.md           # Project brief and rules for Claude Code
+└── .claude/skills/     # The frontend-design skill used while building the UI
 ```
 
-Colors, fonts, type sizes and radii live in the `@theme` block at the top of `src/input.css`. Commit `assets/tailwind.css` after every build.
+`assets/tailwind.css` is generated from `src/input.css`, but it is committed so the site runs by just opening `index.html` and deploys with no build step.
 
-## Change content
+## Run it locally
 
-Everything you replace is in `main.js`:
+To look at the site, open `index.html` in your browser. That's all.
 
-- **`SITE`** (top of the file): photo, Upwork/GitHub/LinkedIn/email links, the 3 projects (title, text, image, link) and the tech stack. Search for `TODO`.
-- **`TRANSLATIONS`**: all site text in English and Portuguese. The body copy is lorem ipsum for now, so replace it.
+To change styles, you need [Node.js](https://nodejs.org) (the project was set up with Node 24 LTS):
 
-Put images in `assets/` and point to them from `SITE` (for example `photo: 'assets/samuel.jpg'`).
+```bash
+git clone git@github.com:samuelsdutra25/my-landingpage.git
+cd my-landingpage
+npm install
+npm run watch      # rebuilds assets/tailwind.css while you edit
+```
 
-## Publish
+| Command | What it does |
+|---|---|
+| `npm run build:css` | Builds `assets/tailwind.css` once, minified |
+| `npm run watch` | Rebuilds it every time you save |
 
-The site has no build step on the server, so it works as-is.
+Run `npm run build:css` and commit the result before you push or deploy. If you forget, the live site won't have your new classes.
+
+## Edit the content
+
+Everything Samuel replaces is in [main.js](main.js).
+
+### `SITE`: links, photo, projects, stack
+
+The top of the file. Search for `TODO` to find every value that still needs a real one.
+
+```js
+const SITE = {
+  initials: 'SD',
+  photo: '',                    // e.g. 'assets/samuel.jpg'
+  links: { upwork: '#', github: '#', linkedin: '#', email: 'mailto:hello@example.com' },
+  stack: ['HTML', 'CSS', 'JavaScript', 'Tailwind'],
+  projects: [ { placeholder: true, image: '', url: '#', title: { en, pt }, text: { en, pt } }, /* ... */ ],
+};
+```
+
+- Put images in `assets/` and point to them by path.
+- Set `placeholder: false` on a project when it's real. That hides its "Placeholder" badge.
+
+### `TRANSLATIONS`: all the text
+
+Every piece of text is a key in `TRANSLATIONS.en` and `TRANSLATIONS.pt`. In the HTML, an element reads its text from the `data-i18n` attribute:
+
+```html
+<h2 data-i18n="services.title"></h2>
+```
+
+To add or change text, edit the key in **both** languages. To add a new text element, give it a `data-i18n` key and add that key to both objects. The only text written directly in the HTML is the logo.
+
+The body copy is lorem ipsum for now. It comes from the `LOREM` constants at the top of that section, so replace those references with real sentences.
+
+## Design system
+
+Everything lives in the `@theme` block at the top of [src/input.css](src/input.css). Change a value there, rebuild, and it updates across the site.
+
+| Token | Hex | Used for |
+|---|---|---|
+| `cream` | `#FEF3E2` | Page background, text on dark areas |
+| `sand` | `#F2DFC0` | Contrast sections, kept subtle on purpose |
+| `ink` | `#2A1A0E` | Main text, dark sections |
+| `orange` | `#D4621A` | Primary buttons only |
+| `amber` | `#F4AE52` | Accents on dark backgrounds, badges |
+
+Six transition tones fill the gaps: `linen`, `ink-soft`, `line`, `ink-raised`, `cream-muted` and `orange-deep`.
+
+Type is Alef everywhere, with a scale defined as tokens (`display`, `title`, `heading`, `body`, `small`, `button`, `code`). The terminal mock uses the system monospace font. Buttons use two radii (10px for buttons, 16px for tiles) and there is a single shadow, on the hero mock.
+
+**Contrast note:** cream text on `orange` measures 3.44:1. That passes WCAG AA only as large text, so button labels are Alef bold at 1.2rem (about 19px) or larger. Don't shrink them. Orange is never used for small text on cream.
+
+## Before launch
+
+- [ ] Replace every `#` and the example e-mail in `SITE.links`
+- [ ] Add a photo (`SITE.photo`)
+- [ ] Add the three real projects and set `placeholder: false`
+- [ ] Replace the lorem ipsum with real text, in English and Portuguese
+- [ ] Add real numbers to "What you get" only if they exist. Never invent metrics
+- [ ] Add `og:image` and `og:url` in the `<head>` of `index.html` once the site has an address
+- [ ] Run `npm run build:css` and commit `assets/tailwind.css`
+
+## Deploy
+
+The site is static, so it needs no build on the host.
 
 - **Vercel:** import the repository, leave every setting at its default, and deploy.
-- **Netlify:** import the repository, leave the build command empty and set the publish directory to `/`.
+- **Netlify:** import the repository, leave the build command empty, and set the publish directory to `/`.
+
+Remember to commit a fresh `assets/tailwind.css` first.
+
+## Working with Claude Code
+
+The repository includes [CLAUDE.md](CLAUDE.md), which holds the full brief (stack, palette, sections, rules and what never to do), and the `frontend-design` skill in `.claude/skills/`. Together they let Claude Code keep building in the same style. The skill is Anthropic's, from [anthropics/skills](https://github.com/anthropics/skills), and keeps its own license file.
+
+## Author
+
+Samuel Dutra, [@samuelsdutra25](https://github.com/samuelsdutra25).
+
+No license has been chosen for this project yet.
