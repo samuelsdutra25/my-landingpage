@@ -1,8 +1,8 @@
 # Samuel Dutra: portfolio landing page
 
-A one-page portfolio for Samuel Dutra, a freelance front-end developer starting on Upwork. The site builds trust with small clients and sends them to hire Samuel on Upwork.
+A one-page portfolio for Samuel Dutra, a freelance front-end developer starting on Upwork. The site builds trust with small clients and sends them to hire Samuel on Upwork. He builds websites, online stores, dashboards and other front-end work.
 
-It is built with plain HTML, CSS and JavaScript plus Tailwind CSS. There is no framework and no server-side build: open `index.html` and it works.
+The site itself is built with plain HTML, CSS and JavaScript plus Tailwind CSS. There is no framework and no server-side build: open `index.html` and it works. Samuel also works with React, but a simple page like this one doesn't need it.
 
 > **Status: MVP.** The layout, design system and behavior are done. The text is lorem ipsum, and the links, photo and projects are placeholders. See [Before launch](#before-launch).
 
@@ -78,13 +78,14 @@ const SITE = {
   initials: 'SD',
   photo: '',                    // e.g. 'assets/samuel.jpg'
   links: { upwork: '#', github: '#', linkedin: '#', email: 'mailto:hello@example.com' },
-  stack: ['HTML', 'CSS', 'JavaScript', 'Tailwind'],
-  projects: [ { placeholder: true, image: '', url: '#', title: { en, pt }, text: { en, pt } }, /* ... */ ],
+  stack: ['HTML', 'CSS', 'JavaScript', 'React', 'Tailwind'],
+  projects: [ { placeholder: true, image: '', url: '#', type: { en, pt }, title: { en, pt }, text: { en, pt } }, /* ... */ ],
 };
 ```
 
 - Put images in `assets/` and point to them by path.
 - Set `placeholder: false` on a project when it's real. That hides its "Placeholder" badge.
+- `type` is the short label shown on each project (website, online store, dashboard).
 
 ### `TRANSLATIONS`: all the text
 
@@ -120,7 +121,7 @@ Type is Alef everywhere, with a scale defined as tokens (`display`, `title`, `he
 
 - [ ] Replace every `#` and the example e-mail in `SITE.links`
 - [ ] Add a photo (`SITE.photo`)
-- [ ] Add the three real projects and set `placeholder: false`
+- [ ] Add the three real projects and set `placeholder: false` (ideally a website, an online store and a dashboard)
 - [ ] Replace the lorem ipsum with real text, in English and Portuguese
 - [ ] Add real numbers to "What you get" only if they exist. Never invent metrics
 - [ ] Add `og:image` and `og:url` in the `<head>` of `index.html` once the site has an address

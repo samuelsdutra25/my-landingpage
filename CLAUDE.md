@@ -2,6 +2,8 @@
 
 Single-page portfolio landing site for Samuel Dutra, a freelance front-end developer starting on Upwork. The site builds trust with small Upwork clients and sends them to hire him there. This file is the full brief and the source of truth. If something it doesn't cover comes up, ask Samuel.
 
+**Scope of the work he sells:** the whole front end, not only websites: websites and landing pages, online stores (e-commerce), dashboards and web apps, and tweaks to existing front ends. Site copy talks about "interfaces" and "projects", not only "sites". Samuel also knows React and uses it when an interface has a lot of state. This portfolio itself stays plain HTML on purpose, because a simple page doesn't need a framework.
+
 ## How to work with Samuel
 
 - Chat in Portuguese. Code comments, commit messages, README and all site copy are in English (the site also ships a Portuguese translation).
@@ -28,11 +30,11 @@ At the end of each piece of work, give Samuel a short summary of the design deci
 ## Stack
 
 - Plain HTML, CSS and JavaScript plus **Tailwind CSS via the CLI**.
-- No React, TypeScript, Next.js or any framework. No complex build.
+- No React, TypeScript, Next.js or any framework **in this site**. No complex build. (Samuel knows React and offers it to clients, see the scope above. The rule is about this page only.)
 - Files: `index.html`, `main.js`, `style.css` (only what Tailwind can't cover), `assets/`, plus the Tailwind input at `src/input.css`.
 - The compiled Tailwind output is **committed** (`assets/tailwind.css`), so `index.html` still opens directly in the browser and deploys to Vercel or Netlify with no build step or config. Keep the CLI to one documented command (e.g. an npm script `build:css`, plus a `watch` variant), and document it in the README.
 - Tailwind v4 (`@tailwindcss/cli`). Design tokens (colors, font) live in a single place: the `@theme` block in `src/input.css`. Add any transition tones there. Rebuild with `npm run build:css` (or `npm run watch` while working) and commit the result.
-- No libraries beyond Tailwind unless Samuel agrees.
+- No libraries beyond Tailwind and GSAP unless Samuel agrees. GSAP is approved (vendored at `assets/gsap.min.js`, refreshed with `npm run vendor:gsap`) and only for animations CSS can't do, see "Light animations only".
 
 ## Design tokens
 
@@ -76,12 +78,12 @@ Structure and feel follow https://weaveos.com. The palette does **not**.
 ## Sections (in this order)
 
 1. **Header** (sticky): logo, anchors (Services, Projects, Process, Contact), EN/PT toggle, "Talk to me" button linking to contact.
-2. **Hero:** the first thing visitors see, so open with the most characteristic thing in Samuel's world (a headline, a live demo, a code block, a load-speed moment, or something else) and say why you chose it. Don't default to a big number with a small label and a gradient accent. Fixed content: a message about what the client gets (fast sites that bring in clients), the buttons "Hire me on Upwork" (primary, filled, because hiring is the goal) and "See projects" (secondary, outlined), and a strip with the stack (HTML, CSS, JavaScript, Tailwind) instead of client logos. The form is free.
-3. **What you get:** fixed content is four items: responsive site, fast loading, basic SEO, delivery with support. The form is free (list, checklist, interface-style block, or something else). **No made-up numbers.** Only use the big-number-with-small-label format when real metrics exist, and design the section so they can be swapped in later without a redesign.
-4. **Services:** three services: landing pages, institutional sites, tweaks and maintenance. The form is free. Avoid three identical boxes with the same radius and the same soft grey shadow. Let the layout reflect what each service is.
-5. **Projects:** three clearly marked placeholders (image, title, short description, link). Samuel plans to build 3 projects for this site. Projects are the proof of work, so give them more visual weight than Services. The form is free, with the same warning against identical cards. Vary radius and elevation by importance, and don't use gradient washes as decoration.
+2. **Hero:** the first thing visitors see, so open with the most characteristic thing in Samuel's world (a headline, a live demo, a code block, a load-speed moment, or something else) and say why you chose it. Don't default to a big number with a small label and a gradient accent. Fixed content: a message about what the client gets (the front end their customers use: websites, online stores and dashboards, fast and built to bring in clients), the buttons "Hire me on Upwork" (primary, filled, because hiring is the goal) and "See projects" (secondary, outlined), and a strip with the stack (HTML, CSS, JavaScript, React, Tailwind) instead of client logos. The form is free.
+3. **What you get:** fixed content is four items that hold for any kind of project: works on every screen, fast loading, clean maintainable code, delivery with support. SEO is not an item (it doesn't apply to dashboards): mention it in the websites and stores service text. The form is free (list, checklist, interface-style block, or something else). **No made-up numbers.** Only use the big-number-with-small-label format when real metrics exist, and design the section so they can be swapped in later without a redesign.
+4. **Services:** four services: websites and landing pages, online stores, dashboards and web apps, tweaks and maintenance. The form is free. Avoid identical boxes with the same radius and the same soft grey shadow. Let the layout reflect what each service is.
+5. **Projects:** three clearly marked placeholders (type, image, title, short description, link). Samuel plans to build 3 projects for this site, ideally one website, one online store and one dashboard, so the projects prove each kind of work he sells. Each project carries its type as a short label. Projects are the proof of work, so give them more visual weight than Services. The form is free, with the same warning against identical cards. Vary radius and elevation by importance, and don't use gradient washes as decoration.
 6. **Process:** 4 steps (briefing, layout, development, delivery) in a dark block with a terminal mock.
-7. **About:** photo, short first-person paragraph, stack.
+7. **About:** photo, short first-person paragraph, stack. Include the idea that he picks the tool for the job (plain HTML for a simple site, React when the interface has a lot of state).
 8. **Final CTA and footer:** "Let's talk?" with a button to the Upwork profile, plus email, LinkedIn and GitHub.
 
 ## Content and i18n
@@ -96,7 +98,7 @@ Everything Samuel will replace lives in one object (e.g. `const SITE = {...}` in
 
 - Photo: neutral shape with initials "SD" until it arrives.
 - Links: Upwork, GitHub, LinkedIn, email (use `#` or an example `mailto:` marked TODO).
-- The 3 projects (title, description, image, link).
+- The 3 projects (type, title, description, image, link).
 - Real metrics (years of experience, projects, Upwork rating).
 
 ## Quality bar

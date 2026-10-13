@@ -9,6 +9,12 @@ html {
   scroll-padding-top: 5rem; /* room for the sticky header */
 }
 
+/* Text selection: light orange (amber) with ink text, readable on cream and on dark */
+::selection {
+  background: var(--color-amber);
+  color: var(--color-ink);
+}
+
 /* Visible keyboard focus everywhere; amber on dark sections */
 :focus-visible {
   outline: 3px solid var(--color-ink);
@@ -69,6 +75,9 @@ html {
 /*
  * The one orchestrated moment: the wireframe in the hero builds itself,
  * piece by piece. Each piece sets its order with style="--i: N".
+ * It waits (paused) until the mock scrolls into view; main.js then sets
+ * data-visible on [data-mock]. If you change the timings here, update
+ * BUILD_MS in main.js too (delay + 12 steps + duration).
  */
 @keyframes build-in {
   from {
@@ -81,8 +90,20 @@ html {
   }
 }
 .build {
-  animation: build-in 420ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
-  animation-delay: calc(var(--i, 0) * 80ms + 250ms);
+  animation: build-in 600ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation-delay: calc(var(--i, 0) * 110ms + 250ms);
+}
+/* Paused from the first frame, so nothing builds before main.js says so */
+.build {
+  animation-play-state: paused;
+}
+[data-mock][data-visible] .build {
+  animation-play-state: running;
+}
+@media (scripting: none) {
+  .build {
+    animation-play-state: running;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

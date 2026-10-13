@@ -14,14 +14,16 @@ const SITE = {
     email: 'mailto:hello@example.com',
   },
 
-  stack: ['HTML', 'CSS', 'JavaScript', 'Tailwind'],
+  stack: ['HTML', 'CSS', 'JavaScript', 'React', 'Tailwind'],
 
-  // TODO: three real projects. Set placeholder to false when a project is real.
+  // TODO: three real projects (ideally a website, an online store and a dashboard).
+  // Set placeholder to false when a project is real.
   projects: [
     {
       placeholder: true,
       image: '', // e.g. 'assets/project-1.jpg'
       url: '#',
+      type: { en: 'Website', pt: 'Site' },
       title: { en: 'Lorem ipsum dolor', pt: 'Lorem ipsum dolor' },
       text: {
         en: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.',
@@ -32,6 +34,7 @@ const SITE = {
       placeholder: true,
       image: '',
       url: '#',
+      type: { en: 'Online store', pt: 'Loja virtual' },
       title: { en: 'Sit amet consectetur', pt: 'Sit amet consectetur' },
       text: {
         en: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.',
@@ -42,6 +45,7 @@ const SITE = {
       placeholder: true,
       image: '',
       url: '#',
+      type: { en: 'Dashboard', pt: 'Dashboard' },
       title: { en: 'Adipiscing elit sed', pt: 'Adipiscing elit sed' },
       text: {
         en: 'Duis aute irure dolor in reprehenderit in voluptate velit esse.',
@@ -56,7 +60,6 @@ const SITE = {
    index.html. The body copy is lorem ipsum for now: replace it with real text.
    ========================================================================== */
 const LOREM = {
-  title: 'Lorem ipsum dolor sit amet, consectetur elit.',
   s1: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
   s2: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
   s3: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.',
@@ -79,11 +82,11 @@ const TRANSLATIONS = {
     'nav.menu': 'Menu',
     'lang.label': 'Language',
 
-    'hero.title': LOREM.title,
+    'hero.title': 'I build websites, online stores and dashboards.',
     'hero.text': LOREM_LONG,
     'hero.upwork': 'Hire me on Upwork',
     'hero.projects': 'See projects',
-    'hero.stack': 'Hand-built with HTML, CSS, JavaScript and Tailwind.',
+    'hero.stack': 'Built with HTML, CSS, JavaScript, React and Tailwind.',
     'hero.mockLabel': 'Your site',
     'hero.mockAria': 'Illustration of a small website being built',
     'hero.ready': 'This page was ready in',
@@ -91,23 +94,25 @@ const TRANSLATIONS = {
 
     'included.title': 'What you get',
     'included.lead': LOREM_LONG,
-    'included.1.title': 'Responsive site',
+    'included.1.title': 'Works on every screen',
     'included.1.text': LOREM.s1,
     'included.2.title': 'Fast loading',
     'included.2.text': LOREM.s2,
-    'included.3.title': 'Basic SEO',
+    'included.3.title': 'Clean, maintainable code',
     'included.3.text': LOREM.s3,
     'included.4.title': 'Delivery with support',
     'included.4.text': LOREM.s4,
 
     'services.title': 'Services',
     'services.lead': LOREM.s1,
-    'services.1.title': 'Landing pages',
+    'services.1.title': 'Websites and landing pages',
     'services.1.text': LOREM_LONG,
-    'services.2.title': 'Institutional sites',
+    'services.2.title': 'Online stores',
     'services.2.text': `${LOREM.s3} ${LOREM.s4}`,
-    'services.3.title': 'Tweaks and maintenance',
+    'services.3.title': 'Dashboards and web apps',
     'services.3.text': `${LOREM.s5} ${LOREM.s1}`,
+    'services.4.title': 'Tweaks and maintenance',
+    'services.4.text': `${LOREM.s2} ${LOREM.s3}`,
 
     'projects.title': 'Projects',
     'projects.lead': LOREM.s2,
@@ -131,7 +136,7 @@ const TRANSLATIONS = {
 
     'about.title': 'About',
     'about.text1': LOREM_LONG,
-    'about.text2': `${LOREM.s3} ${LOREM.s5}`,
+    'about.text2': 'I pick the tool for the job: plain HTML for a simple site, React when the interface has a lot of state.',
     'about.stack': 'Tech stack',
 
     'contact.title': "Let's talk?",
@@ -155,11 +160,11 @@ const TRANSLATIONS = {
     'nav.menu': 'Menu',
     'lang.label': 'Idioma',
 
-    'hero.title': LOREM.title,
+    'hero.title': 'Eu crio sites, lojas virtuais e dashboards.',
     'hero.text': LOREM_LONG,
     'hero.upwork': 'Contrate no Upwork',
     'hero.projects': 'Ver projetos',
-    'hero.stack': 'Feito à mão com HTML, CSS, JavaScript e Tailwind.',
+    'hero.stack': 'Feito com HTML, CSS, JavaScript, React e Tailwind.',
     'hero.mockLabel': 'Seu site',
     'hero.mockAria': 'Ilustração de um site pequeno sendo montado',
     'hero.ready': 'Esta página ficou pronta em',
@@ -167,23 +172,25 @@ const TRANSLATIONS = {
 
     'included.title': 'O que você recebe',
     'included.lead': LOREM_LONG,
-    'included.1.title': 'Site responsivo',
+    'included.1.title': 'Funciona em qualquer tela',
     'included.1.text': LOREM.s1,
     'included.2.title': 'Carregamento rápido',
     'included.2.text': LOREM.s2,
-    'included.3.title': 'SEO básico',
+    'included.3.title': 'Código limpo e fácil de manter',
     'included.3.text': LOREM.s3,
     'included.4.title': 'Entrega com suporte',
     'included.4.text': LOREM.s4,
 
     'services.title': 'Serviços',
     'services.lead': LOREM.s1,
-    'services.1.title': 'Landing pages',
+    'services.1.title': 'Sites e landing pages',
     'services.1.text': LOREM_LONG,
-    'services.2.title': 'Sites institucionais',
+    'services.2.title': 'Lojas virtuais',
     'services.2.text': `${LOREM.s3} ${LOREM.s4}`,
-    'services.3.title': 'Ajustes e manutenção',
+    'services.3.title': 'Dashboards e aplicações web',
     'services.3.text': `${LOREM.s5} ${LOREM.s1}`,
+    'services.4.title': 'Ajustes e manutenção',
+    'services.4.text': `${LOREM.s2} ${LOREM.s3}`,
 
     'projects.title': 'Projetos',
     'projects.lead': LOREM.s2,
@@ -207,7 +214,7 @@ const TRANSLATIONS = {
 
     'about.title': 'Sobre',
     'about.text1': LOREM_LONG,
-    'about.text2': `${LOREM.s3} ${LOREM.s5}`,
+    'about.text2': 'Escolho a ferramenta pelo trabalho: HTML puro para um site simples, React quando a interface tem muito estado.',
     'about.stack': 'Tecnologias',
 
     'contact.title': 'Vamos conversar?',
@@ -251,6 +258,7 @@ function renderProjects(lang) {
     const project = SITE.projects[Number(card.dataset.project)];
     if (!project) return;
 
+    $('[data-project-type]', card).textContent = project.type[lang];
     $('[data-project-title]', card).textContent = project.title[lang];
     $('[data-project-text]', card).textContent = project.text[lang];
     $('[data-project-link]', card).href = project.url;
@@ -332,7 +340,7 @@ $$('[data-link]').forEach((a) => {
   a.href = SITE.links[a.dataset.link];
 });
 
-/* ---- Mobile menu ---- */
+/* ---- Mobile menu (below 64rem = 1024px, the lg: breakpoint used by the header) ---- */
 const menuButton = $('[data-menu-button]');
 const menu = $('#mobile-menu');
 
@@ -351,7 +359,7 @@ document.addEventListener('keydown', (event) => {
     menuButton.focus();
   }
 });
-window.matchMedia('(min-width: 48rem)').addEventListener('change', (event) => {
+window.matchMedia('(min-width: 64rem)').addEventListener('change', (event) => {
   if (event.matches) setMenu(false);
 });
 
@@ -396,13 +404,34 @@ function countUp(element, target) {
   requestAnimationFrame(tick);
 }
 
+/*
+ * The wireframe only builds once it is on screen (on phones and tablets it
+ * sits below the fold). mockBuilt resolves when the animation has finished.
+ * BUILD_MS = initial delay + 12 steps + duration, as set in style.css.
+ */
+const BUILD_MS = 250 + 12 * 110 + 600;
+const mock = $('[data-mock]');
+const mockBuilt = new Promise((resolve) => {
+  const start = () => {
+    mock.setAttribute('data-visible', '');
+    setTimeout(resolve, reducedMotion ? 0 : BUILD_MS);
+  };
+  if (reducedMotion || !('IntersectionObserver' in window)) return start();
+  const observer = new IntersectionObserver((entries) => {
+    if (!entries.some((entry) => entry.isIntersecting)) return;
+    observer.disconnect();
+    start();
+  }, { threshold: 0.5 }); // 0.8 could never fire on short viewports (e.g. a phone in landscape)
+  observer.observe(mock);
+});
+
 function showReadyTime() {
   const ms = measureReadyTime();
   if (ms === null) return; // can't measure: leave the line hidden
   const readout = $('[data-ready]');
   readout.hidden = false;
   // Wait for the wireframe to finish building, then settle on the real number.
-  setTimeout(() => countUp($('[data-ms]', readout), ms), reducedMotion ? 0 : 1300);
+  mockBuilt.then(() => countUp($('[data-ms]', readout), ms));
 }
 
 if (document.readyState === 'complete') {

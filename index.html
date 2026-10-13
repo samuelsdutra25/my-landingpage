@@ -4,13 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Samuel Dutra | Front-end developer</title>
-  <meta name="description" content="Portfolio of Samuel Dutra, a freelance front-end developer building fast landing pages and small business websites.">
+  <meta name="description" content="Portfolio of Samuel Dutra, a freelance front-end developer building fast websites, online stores and dashboards.">
   <meta name="theme-color" content="#FEF3E2">
 
   <!-- Open Graph. TODO: add og:image and og:url once the site has a public address. -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="Samuel Dutra | Front-end developer">
-  <meta property="og:description" content="Portfolio of Samuel Dutra, a freelance front-end developer building fast landing pages and small business websites.">
+  <meta property="og:description" content="Portfolio of Samuel Dutra, a freelance front-end developer building fast websites, online stores and dashboards.">
 
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 
@@ -31,7 +31,7 @@
     <div class="wrap flex h-16 items-center justify-between gap-4 md:h-18">
       <a href="#top" class="text-xl font-bold transition-colors duration-150 hover:text-orange">Samuel Dutra</a>
 
-      <nav class="hidden items-center gap-8 md:flex" data-i18n-aria="nav.label">
+      <nav class="hidden items-center gap-8 lg:flex" data-i18n-aria="nav.label">
         <a href="#services" class="nav-link" data-i18n="nav.services"></a>
         <a href="#projects" class="nav-link" data-i18n="nav.projects"></a>
         <a href="#process" class="nav-link" data-i18n="nav.process"></a>
@@ -44,8 +44,8 @@
           <button type="button" data-lang="en" aria-pressed="true" class="lang-option">EN</button>
           <button type="button" data-lang="pt" aria-pressed="false" class="lang-option">PT</button>
         </div>
-        <a href="#contact" class="btn btn-primary hidden px-5 py-2 md:inline-flex" data-i18n="nav.talk"></a>
-        <button type="button" data-menu-button aria-expanded="false" aria-controls="mobile-menu" data-i18n-aria="nav.menu" class="group inline-grid h-11 w-11 place-items-center rounded-button border-2 border-ink md:hidden">
+        <a href="#contact" class="btn btn-primary hidden px-5 py-2 lg:inline-flex" data-i18n="nav.talk"></a>
+        <button type="button" data-menu-button aria-expanded="false" aria-controls="mobile-menu" data-i18n-aria="nav.menu" class="group inline-grid h-11 w-11 place-items-center rounded-button border-2 border-ink lg:hidden">
           <svg class="col-start-1 row-start-1 h-5 w-5 transition duration-200 group-aria-expanded:rotate-90 group-aria-expanded:opacity-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
           <svg class="col-start-1 row-start-1 h-5 w-5 -rotate-90 opacity-0 transition duration-200 group-aria-expanded:rotate-0 group-aria-expanded:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
         </button>
@@ -53,7 +53,7 @@
     </div>
 
     <!-- Mobile menu -->
-    <div id="mobile-menu" class="absolute inset-x-0 top-full -mt-px border-y border-line bg-cream md:hidden">
+    <div id="mobile-menu" class="absolute inset-x-0 top-full -mt-px border-y border-line bg-cream lg:hidden">
       <nav class="wrap flex flex-col gap-1 py-4" data-i18n-aria="nav.label">
         <a href="#services" class="py-3 text-body font-bold" data-i18n="nav.services"></a>
         <a href="#projects" class="py-3 text-body font-bold" data-i18n="nav.projects"></a>
@@ -70,7 +70,7 @@
       <div class="wrap grid items-center gap-12 lg:grid-cols-12 lg:gap-8">
         <div class="lg:col-span-6">
           <h1 id="hero-title" class="text-display font-bold" data-i18n="hero.title"></h1>
-          <p class="mt-6 max-w-[65ch] text-ink-soft" data-i18n="hero.text"></p>
+          <p class="mt-6 max-w-[min(80%,65ch)] text-ink-soft" data-i18n="hero.text"></p>
           <div class="mt-8 flex flex-wrap gap-3">
             <a href="#" data-link="upwork" class="btn btn-primary" data-i18n="hero.upwork"></a>
             <a href="#projects" class="btn btn-secondary" data-i18n="hero.projects"></a>
@@ -80,7 +80,7 @@
 
         <!-- A small site building itself, with the real load time of this page -->
         <div class="lg:col-span-6">
-          <div class="overflow-hidden rounded-tile border-2 border-ink bg-linen shadow-window" role="img" data-i18n-aria="hero.mockAria">
+          <div data-mock class="overflow-hidden rounded-tile border-2 border-ink bg-linen shadow-window" role="img" data-i18n-aria="hero.mockAria">
             <div class="flex items-center gap-2 bg-ink px-4 py-3">
               <span class="h-2.5 w-2.5 rounded-full bg-cream-muted/60"></span>
               <span class="h-2.5 w-2.5 rounded-full bg-cream-muted/60"></span>
@@ -179,6 +179,10 @@
             <h3 class="text-heading font-bold md:col-span-4" data-i18n="services.3.title"></h3>
             <p class="max-w-[65ch] text-ink-soft md:col-span-8" data-i18n="services.3.text"></p>
           </li>
+          <li class="grid gap-3 border-t border-line py-8 md:grid-cols-12 md:gap-8">
+            <h3 class="text-heading font-bold md:col-span-4" data-i18n="services.4.title"></h3>
+            <p class="max-w-[65ch] text-ink-soft md:col-span-8" data-i18n="services.4.text"></p>
+          </li>
         </ul>
       </div>
     </section>
@@ -193,7 +197,10 @@
           <article data-project="0" class="overflow-hidden rounded-3xl border border-line bg-cream md:col-span-2">
             <div data-project-media class="flex aspect-16/10 items-center justify-center bg-linen text-ink-soft md:aspect-21/9"></div>
             <div class="p-6 md:p-8">
-              <span data-project-badge class="inline-block rounded-full bg-amber px-3 py-0.5 text-small font-bold text-ink" data-i18n="projects.placeholder"></span>
+              <div class="flex flex-wrap items-center gap-3">
+                <span data-project-badge class="inline-block rounded-full bg-amber px-3 py-0.5 text-small font-bold text-ink" data-i18n="projects.placeholder"></span>
+                <span data-project-type class="text-small text-ink-soft"></span>
+              </div>
               <h3 data-project-title class="mt-3 text-heading font-bold"></h3>
               <p data-project-text class="mt-2 max-w-[65ch] text-ink-soft"></p>
               <a data-project-link href="#" class="mt-4 inline-block font-bold underline underline-offset-4 hover:text-orange-deep" data-i18n="projects.view"></a>
@@ -202,7 +209,10 @@
           <article data-project="1" class="overflow-hidden rounded-tile border border-line bg-cream">
             <div data-project-media class="flex aspect-4/3 items-center justify-center bg-linen text-ink-soft"></div>
             <div class="p-6">
-              <span data-project-badge class="inline-block rounded-full bg-amber px-3 py-0.5 text-small font-bold text-ink" data-i18n="projects.placeholder"></span>
+              <div class="flex flex-wrap items-center gap-3">
+                <span data-project-badge class="inline-block rounded-full bg-amber px-3 py-0.5 text-small font-bold text-ink" data-i18n="projects.placeholder"></span>
+                <span data-project-type class="text-small text-ink-soft"></span>
+              </div>
               <h3 data-project-title class="mt-3 text-heading font-bold"></h3>
               <p data-project-text class="mt-2 text-ink-soft"></p>
               <a data-project-link href="#" class="mt-4 inline-block font-bold underline underline-offset-4 hover:text-orange-deep" data-i18n="projects.view"></a>
@@ -211,7 +221,10 @@
           <article data-project="2" class="overflow-hidden rounded-tile border border-line bg-cream">
             <div data-project-media class="flex aspect-4/3 items-center justify-center bg-linen text-ink-soft"></div>
             <div class="p-6">
-              <span data-project-badge class="inline-block rounded-full bg-amber px-3 py-0.5 text-small font-bold text-ink" data-i18n="projects.placeholder"></span>
+              <div class="flex flex-wrap items-center gap-3">
+                <span data-project-badge class="inline-block rounded-full bg-amber px-3 py-0.5 text-small font-bold text-ink" data-i18n="projects.placeholder"></span>
+                <span data-project-type class="text-small text-ink-soft"></span>
+              </div>
               <h3 data-project-title class="mt-3 text-heading font-bold"></h3>
               <p data-project-text class="mt-2 text-ink-soft"></p>
               <a data-project-link href="#" class="mt-4 inline-block font-bold underline underline-offset-4 hover:text-orange-deep" data-i18n="projects.view"></a>
