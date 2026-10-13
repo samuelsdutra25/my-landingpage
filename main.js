@@ -320,6 +320,8 @@ function applyLanguage(lang) {
 
 $$('[data-lang]').forEach((button) => {
   button.addEventListener('click', () => {
+    // Enable the switch transitions only after the first click, not on page load
+    $('[data-lang-switch]').setAttribute('data-animate', '');
     saveLang(button.dataset.lang);
     applyLanguage(button.dataset.lang);
   });
@@ -335,16 +337,16 @@ const menuButton = $('[data-menu-button]');
 const menu = $('#mobile-menu');
 
 function setMenu(open) {
-  menu.hidden = !open;
+  menu.toggleAttribute('data-open', open);
   menuButton.setAttribute('aria-expanded', String(open));
 }
 
-menuButton.addEventListener('click', () => setMenu(menu.hidden));
+menuButton.addEventListener('click', () => setMenu(!menu.hasAttribute('data-open')));
 menu.addEventListener('click', (event) => {
   if (event.target.closest('a')) setMenu(false);
 });
 document.addEventListener('keydown', (event) => {
-  if (event.key === 'Escape' && !menu.hidden) {
+  if (event.key === 'Escape' && menu.hasAttribute('data-open')) {
     setMenu(false);
     menuButton.focus();
   }
@@ -352,6 +354,25 @@ document.addEventListener('keydown', (event) => {
 window.matchMedia('(min-width: 48rem)').addEventListener('change', (event) => {
   if (event.matches) setMenu(false);
 });
+
+/* ---- Buttons: hop on hover, landing with a GSAP bounce (transform only, skipped for reduced motion) ---- */
+if (window.gsap && !reducedMotion) {
+  $$('.btn').forEach((button) => {
+    button.addEventListener('mouseenter', () => {
+      gsap.killTweensOf(button);
+      gsap
+        .timeline()
+        .to(button, { y: -10, duration: 0.15, ease: 'power2.out' })
+        .to(button, { y: 0, duration: 0.8, ease: 'bounce.out' });
+    });
+  });
+}
+
+/* ---- Header: the bottom line only shows once the page has scrolled ---- */
+const header = $('[data-header]');
+const syncHeaderLine = () => header.toggleAttribute('data-scrolled', window.scrollY > 0);
+window.addEventListener('scroll', syncHeaderLine, { passive: true });
+syncHeaderLine();
 
 /* ---- Hero: how long this page took to be ready, measured in the visitor's browser ---- */
 function measureReadyTime() {

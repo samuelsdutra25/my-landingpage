@@ -19,7 +19,8 @@
   --color-line: #D8BD90;        /* decorative hairlines, never text */
   --color-ink-raised: #3D2A1A;  /* panels on dark backgrounds (terminal) */
   --color-cream-muted: #CDB9A0; /* secondary text on dark (8.8:1 on ink) */
-  --color-orange-deep: #B5500F; /* hover on primary buttons (4.6:1 with cream text) */
+  --color-orange-deep: #B5500F; /* text links on hover (4.6:1 on cream) */
+  --color-orange-hover: #C45817; /* hover on primary buttons, a step darker than orange */
 
   /* Font */
   --font-sans: "Alef", ui-sans-serif, system-ui, sans-serif;
@@ -86,15 +87,53 @@
  */
 @layer components {
   .btn {
-    @apply inline-flex items-center justify-center rounded-button border-2 border-transparent px-6 py-3 text-button font-bold transition-colors duration-150;
+    @apply inline-flex items-center justify-center rounded-button border-2 border-transparent px-6 py-3 text-button font-bold;
+    transition: color 150ms, background-color 150ms, border-color 150ms;
   }
   .btn-primary {
-    @apply border-orange bg-orange text-cream hover:border-orange-deep hover:bg-orange-deep;
+    @apply border-orange bg-orange text-cream hover:border-orange-hover hover:bg-orange-hover;
   }
   .btn-secondary {
     @apply border-ink text-ink hover:bg-linen;
   }
   .btn-secondary-dark {
     @apply border-cream text-cream hover:bg-ink-raised;
+  }
+  /* Header nav link: a 2px line grows in from the left on hover and leaves back to the left (transform only) */
+  .nav-link {
+    @apply relative py-1 text-small font-bold;
+  }
+  .nav-link::after {
+    content: "";
+    @apply absolute inset-x-0 bottom-0 h-[2px] origin-left rounded-full scale-x-0 bg-current transition-transform duration-500 ease-out;
+  }
+  .nav-link:hover::after {
+    @apply scale-x-100;
+  }
+  /* EN/PT switch: an ink thumb slides between two equal cells, with a small overshoot like a toggle.
+     Transitions only start after the first click (data-animate), so a saved PT choice doesn't slide in on load. */
+  .lang-switch {
+    @apply relative inline-grid grid-cols-2 rounded-button border-2 border-ink p-0.5;
+  }
+  .lang-thumb {
+    @apply absolute top-0.5 bottom-0.5 left-0.5 w-[calc((100%-4px)/2)] rounded-[7px] bg-ink;
+  }
+  .lang-switch:has([data-lang="pt"][aria-pressed="true"]) .lang-thumb {
+    @apply translate-x-full;
+  }
+  .lang-switch[data-animate] .lang-thumb {
+    transition: translate 300ms cubic-bezier(0.34, 1.4, 0.64, 1);
+  }
+  .lang-option {
+    @apply relative w-11 rounded-[7px] py-1 text-center text-small font-bold;
+  }
+  .lang-switch[data-animate] .lang-option {
+    @apply transition-colors duration-300;
+  }
+  .lang-option[aria-pressed="true"] {
+    @apply text-cream;
+  }
+  .lang-option[aria-pressed="false"]:hover {
+    @apply bg-linen;
   }
 }
