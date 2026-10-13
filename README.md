@@ -13,7 +13,7 @@ It is built with plain HTML, CSS and JavaScript plus Tailwind CSS. There is no f
 - **A hero that measures itself.** A small wireframe builds itself, and under it the page shows how long it really took to be ready in the visitor's browser (from the Navigation Timing API). If the browser can't measure it, the line stays hidden.
 - **Editable without touching the HTML.** Links, photo, projects and all text live in `main.js`.
 - **Accessible by default.** Semantic HTML, one `h1` and a correct heading order, a skip link, visible keyboard focus, labelled controls, and `prefers-reduced-motion` support.
-- **Fast.** No libraries besides Tailwind's compiled CSS (about 19 KB) and one Google Font.
+- **Fast.** No libraries besides Tailwind's compiled CSS (about 19 KB), [GSAP](https://gsap.com) for animation (loaded from `assets/`) and one Google Font.
 
 ## Tech stack
 
@@ -35,8 +35,9 @@ It is built with plain HTML, CSS and JavaScript plus Tailwind CSS. There is no f
 │   └── input.css       # Tailwind input: design tokens (@theme), buttons, page width
 ├── assets/
 │   ├── tailwind.css    # Compiled CSS. Committed on purpose, see below
+│   ├── gsap.min.js     # GSAP core, copied from node_modules. Committed on purpose
 │   └── favicon.svg
-├── package.json        # Scripts and the Tailwind CLI dependency
+├── package.json        # Scripts and the Tailwind CLI and GSAP dependencies
 ├── CLAUDE.md           # Project brief and rules for Claude Code
 └── .claude/skills/     # The frontend-design skill used while building the UI
 ```
@@ -60,6 +61,7 @@ npm run watch      # rebuilds assets/tailwind.css while you edit
 |---|---|
 | `npm run build:css` | Builds `assets/tailwind.css` once, minified |
 | `npm run watch` | Rebuilds it every time you save |
+| `npm run vendor:gsap` | Copies GSAP from `node_modules` to `assets/gsap.min.js` (only needed when updating GSAP) |
 
 Run `npm run build:css` and commit the result before you push or deploy. If you forget, the live site won't have your new classes.
 

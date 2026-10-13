@@ -105,6 +105,7 @@ Everything Samuel will replace lives in one object (e.g. `const SITE = {...}` in
 - Accessibility: semantic HTML, correct heading hierarchy, `alt` on images, visible focus, keyboard navigation, respect `prefers-reduced-motion`.
 - SEO basics: `<title>`, meta description, Open Graph, correct `lang`, simple favicon.
 - Performance: light images, no unnecessary libraries.
+- Light animations only: always prefer lightweight animations. Animate `transform` and `opacity`, avoid layout-triggering properties, keep durations short, and prefer CSS when it is enough. Use GSAP only when CSS can't do the job.
 - Motion: one orchestrated moment (likely in the hero) plus feedback for user actions (EN/PT toggle, menu, button hover and focus). No fade-and-slide entrance on every section and no hover effect on every card. Always respect `prefers-reduced-motion`. Nothing that hurts reading.
 
 ## Never do
