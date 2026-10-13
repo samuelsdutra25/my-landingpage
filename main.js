@@ -569,6 +569,30 @@ function playReport() {
   observer.observe(report);
 })();
 
+/* ---- Services: when the list reaches the screen, its rows slide in from the left in order, in one go ---- */
+(function setupServices() {
+  if (reducedMotion || !('IntersectionObserver' in window)) return; // rows just stay visible
+  const START_MS = 400; // wait before the first row moves
+  const STEP_MS = 1000; // gap between one row and the next: enough to read a title before the next row starts
+  const list = $('[data-services]');
+  // The delays are fixed up front, so the sequence plays the same no matter how the page is scrolled
+  $$('li', list).forEach((row, index) => {
+    row.classList.add('reveal');
+    row.style.setProperty('--reveal-delay', `${START_MS + index * STEP_MS}ms`);
+  });
+
+  // Force the hidden first frame to be computed now. If the page reloads already scrolled
+  // to this section, the observer fires at once and without this the rows would skip the transition.
+  void list.offsetHeight;
+
+  const observer = new IntersectionObserver((entries) => {
+    if (!entries.some((entry) => entry.isIntersecting)) return;
+    observer.disconnect();
+    list.setAttribute('data-visible', '');
+  }, { threshold: 0.1 }); // low, because the list is taller than a phone screen
+  observer.observe(list);
+})();
+
 /* ---- Start ---- */
 renderAbout();
 applyLanguage(getSavedLang());

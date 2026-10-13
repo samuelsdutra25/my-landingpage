@@ -230,6 +230,30 @@ html {
   }
 }
 
+/*
+ * Services: each row slides in from the left, in order. main.js adds .reveal
+ * (so without JS the rows simply show) and sets each row's --reveal-delay.
+ * data-visible goes on the list when it reaches the screen, so all rows play
+ * in order from one trigger.
+ */
+/* The closing hairline belongs to the last row (not to the list) so it animates with it */
+[data-services] > li:last-child {
+  border-bottom: 1px solid var(--color-line);
+}
+.reveal {
+  opacity: 0;
+  transform: translateX(-0.75rem);
+}
+/* The transition lives only here, so hiding the rows is instant and only showing them is animated */
+[data-services][data-visible] > .reveal {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 1200ms cubic-bezier(0.25, 0.1, 0.25, 1),
+    transform 1400ms cubic-bezier(0.25, 0.1, 0.25, 1);
+  transition-delay: var(--reveal-delay, 0ms); /* set per row by main.js */
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
