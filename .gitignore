@@ -1,0 +1,32 @@
+# Dependencies (restored with `npm install`)
+node_modules/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Secrets and local config
+.env
+.env.*
+
+# Operating system
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*~
+
+# Deploy tooling (created by the Vercel and Netlify CLIs)
+.vercel/
+.netlify/
+
+# Claude Code: personal settings stay local. The project skill in
+# .claude/skills/ and CLAUDE.md are meant to be committed.
+.claude/settings.local.json
+
+# NOT ignored on purpose:
+# - assets/tailwind.css (compiled CSS, needed so the site runs without a build)
+# - package-lock.json (keeps the Tailwind version the same on every machine)

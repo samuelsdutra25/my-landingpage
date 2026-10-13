@@ -1,0 +1,100 @@
+@import "tailwindcss";
+
+/*
+ * Design tokens: the single place to change colors, type scale, radii and shadow.
+ * Each color becomes utilities such as bg-cream, text-ink, border-sand.
+ * `static` keeps every token in the compiled CSS, even before it is used.
+ */
+@theme static {
+  /* Palette (from the brief) */
+  --color-cream: #FEF3E2;  /* page background; text on dark areas */
+  --color-sand: #F2DFC0;   /* contrast section background (subtle on purpose) */
+  --color-ink: #2A1A0E;    /* main text; dark sections */
+  --color-orange: #D4621A; /* primary buttons only; cream bold text >= 19px on it */
+  --color-amber: #F4AE52;  /* accents on dark backgrounds, badges, icons */
+
+  /* Transition tones, same warm family */
+  --color-linen: #F8E8CF;       /* hover and soft fills, between cream and sand */
+  --color-ink-soft: #6B5340;    /* secondary text (6.5:1 on cream, 5.5:1 on sand) */
+  --color-line: #D8BD90;        /* decorative hairlines, never text */
+  --color-ink-raised: #3D2A1A;  /* panels on dark backgrounds (terminal) */
+  --color-cream-muted: #CDB9A0; /* secondary text on dark (8.8:1 on ink) */
+  --color-orange-deep: #B5500F; /* hover on primary buttons (4.6:1 with cream text) */
+
+  /* Font */
+  --font-sans: "Alef", ui-sans-serif, system-ui, sans-serif;
+
+  /* Type scale */
+  --text-display: clamp(2.5rem, 1rem + 6vw, 4.75rem);
+  --text-display--line-height: 1.05;
+  --text-display--letter-spacing: -0.02em;
+  --text-title: clamp(1.875rem, 1rem + 3vw, 3rem);
+  --text-title--line-height: 1.1;
+  --text-title--letter-spacing: -0.015em;
+  --text-heading: 1.375rem;
+  --text-heading--line-height: 1.25;
+  --text-body: 1.125rem;
+  --text-body--line-height: 1.6;
+  --text-small: 0.9375rem;
+  --text-small--line-height: 1.5;
+  --text-button: 1.2rem;
+  --text-button--line-height: 1.2;
+  --text-code: 0.9rem;
+  --text-code--line-height: 1.6;
+
+  /* Radii and the single shadow */
+  --radius-button: 10px;
+  --radius-tile: 16px;
+  --shadow-window: 0 24px 48px -16px rgb(42 26 14 / 0.3);
+}
+
+/* Page width and vertical rhythm */
+@utility wrap {
+  max-width: 72rem;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+  @media (min-width: 40rem) {
+    padding-inline: 2rem;
+  }
+}
+
+@utility section-y {
+  padding-block: clamp(4rem, 10vw, 8rem);
+}
+
+@layer base {
+  body {
+    background-color: var(--color-cream);
+    color: var(--color-ink);
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+    -webkit-font-smoothing: antialiased;
+  }
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+}
+
+/*
+ * Buttons. Labels are Alef bold at 1.2rem (about 19px), which counts as large
+ * text, so cream on orange (3.4:1) passes WCAG AA.
+ */
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center rounded-button border-2 border-transparent px-6 py-3 text-button font-bold transition-colors duration-150;
+  }
+  .btn-primary {
+    @apply border-orange bg-orange text-cream hover:border-orange-deep hover:bg-orange-deep;
+  }
+  .btn-secondary {
+    @apply border-ink text-ink hover:bg-linen;
+  }
+  .btn-secondary-dark {
+    @apply border-cream text-cream hover:bg-ink-raised;
+  }
+}

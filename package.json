@@ -1,0 +1,13 @@
+{
+  "name": "landingpage-samuel",
+  "private": true,
+  "description": "Single-page portfolio landing site for Samuel Dutra",
+  "scripts": {
+    "build:css": "tailwindcss -i src/input.css -o assets/tailwind.css --minify",
+    "watch": "tailwindcss -i src/input.css -o assets/tailwind.css --watch"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.3.3",
+    "tailwindcss": "^4.3.3"
+  }
+}

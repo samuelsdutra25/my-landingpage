@@ -1,0 +1,67 @@
+/*
+ * Hand-written CSS for what Tailwind doesn't cover: focus, skip link,
+ * smooth scroll, and the hero wireframe animation.
+ * Keep it small. Anything that has a Tailwind utility belongs in the HTML.
+ */
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem; /* room for the sticky header */
+}
+
+/* Visible keyboard focus everywhere; amber on dark sections */
+:focus-visible {
+  outline: 3px solid var(--color-ink);
+  outline-offset: 3px;
+}
+.on-dark :focus-visible {
+  outline-color: var(--color-amber);
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  z-index: 100;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-button);
+  background: var(--color-ink);
+  color: var(--color-cream);
+  font-weight: 700;
+}
+.skip-link:focus {
+  top: 1rem;
+}
+
+/*
+ * The one orchestrated moment: the wireframe in the hero builds itself,
+ * piece by piece. Each piece sets its order with style="--i: N".
+ */
+@keyframes build-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.build {
+  animation: build-in 420ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation-delay: calc(var(--i, 0) * 80ms + 250ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .build {
+    animation: none;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+  }
+}
