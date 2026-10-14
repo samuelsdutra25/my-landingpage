@@ -103,6 +103,39 @@
   .btn-secondary-dark {
     @apply border-cream text-cream hover:bg-ink-raised;
   }
+  /* Footer (dark): column headings in cream, links in muted cream that brighten on hover */
+  .footer-heading {
+    @apply text-body font-bold text-cream;
+  }
+  .footer-link {
+    @apply inline-block py-1 text-cream-muted underline-offset-4 hover:text-cream hover:underline;
+    transition: color 150ms;
+  }
+  /* Contact form: text fields share the button's radius and 2px ink border */
+  .field {
+    @apply block w-full rounded-button border-2 border-ink bg-cream px-4 py-3 text-body;
+  }
+  .field[aria-invalid="true"] {
+    @apply border-orange-deep;
+  }
+  .field-error {
+    @apply mt-2 text-small font-bold text-orange-deep empty:hidden;
+  }
+  /* Project type: radio chips. The input is visually hidden, the label text is the chip. */
+  .chip span {
+    @apply block cursor-pointer rounded-full border-2 border-ink px-4 py-1.5 text-small font-bold;
+    transition: color 150ms, background-color 150ms;
+  }
+  .chip:hover span {
+    @apply bg-linen;
+  }
+  .chip:has(input:checked) span {
+    @apply bg-ink text-cream;
+  }
+  .chip:has(input:focus-visible) span {
+    outline: 3px solid var(--color-ink);
+    outline-offset: 3px;
+  }
   /* Header nav link: a 2px line grows in from the left on hover and leaves back to the left (transform only) */
   .nav-link {
     @apply relative py-1 text-small font-bold;

@@ -1,6 +1,6 @@
 # Samuel Dutra: portfolio landing page
 
-A one-page portfolio for Samuel Dutra, a freelance front-end developer starting on Upwork. The site builds trust with small clients and sends them to contact Samuel (by email for now, with a form planned), with Upwork as a secondary route. He builds websites, online stores, dashboards and other front-end work.
+A one-page portfolio for Samuel Dutra, a freelance front-end developer. The site builds trust with small clients and sends them to contact Samuel (through a contact form). He builds websites, online stores, dashboards and other front-end work.
 
 The site itself is built with plain HTML, CSS and JavaScript plus Tailwind CSS. There is no framework and no server-side build: open `index.html` and it works. Samuel also works with React, but a simple page like this one doesn't need it.
 
@@ -77,8 +77,9 @@ The top of the file. Search for `TODO` to find every value that still needs a re
 const SITE = {
   initials: 'SD',
   photo: '',                    // e.g. 'assets/samuel.jpg'
-  links: { upwork: '#', github: '#', linkedin: '#', email: 'mailto:hello@example.com' },
+  links: { github: '#', linkedin: '#', email: 'mailto:hello@example.com' },
   stack: ['HTML', 'CSS', 'JavaScript', 'React', 'Tailwind'],
+  form: { action: '' },         // contact form endpoint, see below
   scores: { performance: 92, accessibility: 100, seo: 100 },   // real Lighthouse scores of this page
   projects: [ { placeholder: true, image: '', url: '#', type: { en, pt }, title: { en, pt }, text: { en, pt },
                 details: { about: { en, pt }, role: { en, pt }, stack: [] } }, /* ... */ ],
@@ -86,6 +87,7 @@ const SITE = {
 ```
 
 - `scores` are the Lighthouse numbers shown in "What you get". They must be real: run Lighthouse (Chrome DevTools, mobile) on the deployed site and paste the results. The rings and counters animate to whatever is here.
+- `form.action` is where the contact form sends messages. Empty (the default): the form opens the visitor's email app with the message ready, using `links.email`. To receive messages without that step, create a form on a service such as Formspree or Basin, paste its URL here and the form will send in the background (it POSTs the fields and expects a JSON answer). Publish and test one message after changing it.
 - Put images in `assets/` and point to them by path.
 - Set `placeholder: false` on a project when it's real. That hides its "Placeholder" badge.
 - `type` is the short label shown on each project (website, online store, dashboard).

@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-Single-page portfolio landing site for Samuel Dutra, a freelance front-end developer starting on Upwork. The site builds trust with small clients and sends them to contact him (by email for now, with a form planned). Upwork is the secondary route. This file is the full brief and the source of truth. If something it doesn't cover comes up, ask Samuel.
+Single-page portfolio landing site for Samuel Dutra, a freelance front-end developer. The site builds trust with small clients and sends them to contact him (with a contact form that opens his email app until a form endpoint is set). This file is the full brief and the source of truth. If something it doesn't cover comes up, ask Samuel.
 
 **Scope of the work he sells:** the whole front end, not only websites: websites and landing pages, online stores (e-commerce), dashboards and web apps, and tweaks to existing front ends. Site copy talks about "interfaces" and "projects", not only "sites". Samuel also knows React and uses it when an interface has a lot of state. This portfolio itself stays plain HTML on purpose, because a simple page doesn't need a framework.
 
@@ -42,7 +42,7 @@ At the end of each piece of work, give Samuel a short summary of the design deci
 |---|---|---|
 | `cream` | `#FEF3E2` | Page background; text on dark areas |
 | `sand` | `#F2DFC0` | Contrast section background. Confirmed by Samuel: keep the contrast with cream subtle |
-| `ink` | `#2A1A0E` | Main text; dark sections (how it works, final CTA, footer) |
+| `ink` | `#2A1A0E` | Main text; dark sections (how it works, footer) |
 | `orange` | `#D4621A` | Primary buttons and links, with cream text on buttons |
 | `amber` | `#F4AE52` | Accents: badges, icons, code details on dark. Don't single out one word of a headline with it |
 
@@ -77,14 +77,14 @@ Structure and feel follow https://weaveos.com. The palette does **not**.
 
 ## Sections (in this order)
 
-1. **Header** (sticky): logo, anchors (Services, Projects, Process, Contact), EN/PT toggle, "Talk to me" button linking to contact.
-2. **Hero:** the first thing visitors see, so open with the most characteristic thing in Samuel's world (a headline, a live demo, a code block, a load-speed moment, or something else) and say why you chose it. Don't default to a big number with a small label and a gradient accent. Fixed content: a message about what the client gets (the front end their customers use: websites, online stores and dashboards, fast and easy to use; never promise business results), the buttons "Tell me about your project" (primary, filled, links to email until the contact form exists) and "See projects" (secondary, outlined), and a strip with the stack (HTML, CSS, JavaScript, React, Tailwind) instead of client logos. The form is free.
+1. **Header** (sticky): logo, anchors (Services, Projects, How it works, Contact), EN/PT toggle, "Talk to me" button linking to contact.
+2. **Hero:** the first thing visitors see, so open with the most characteristic thing in Samuel's world (a headline, a live demo, a code block, a load-speed moment, or something else) and say why you chose it. Don't default to a big number with a small label and a gradient accent. Fixed content: a message about what the client gets (the front end their customers use: websites, online stores and dashboards, fast and easy to use; never promise business results), the buttons "Tell me about your project" (primary, filled, links to email) and "See projects" (secondary, outlined), and a strip with the stack (HTML, CSS, JavaScript, React, Tailwind) instead of client logos. The form is free.
 3. **What you get:** a report-style panel with performance, SEO and accessibility as rings that fill while the number counts up. Below the panel, three plain items: responsive on every screen, clean maintainable code and delivery with support. The ring numbers are **real Lighthouse scores of this very page**, kept in `SITE.scores` in `main.js` with the date and conditions of the measurement. Never type a score that was not measured. Re-run Lighthouse after any change that can affect it and on the deployed URL, then update them. **No other made-up numbers.**
 4. **Services:** four services: websites and landing pages, online stores, dashboards and web apps, tweaks and maintenance. The form is free. Avoid identical boxes with the same radius and the same soft grey shadow. Let the layout reflect what each service is.
 5. **Projects:** three clearly marked placeholders (type, image, title, short description, link). Samuel plans to build 3 projects for this site, ideally one website, one online store and one dashboard, so the projects prove each kind of work he sells. Each project carries its type as a short label. Projects are the proof of work, so give them more visual weight than Services. The form is free, with the same warning against identical cards. Vary radius and elevation by importance, and don't use gradient washes as decoration.
-6. **How it works** (`#process`, nav label still "Process"): 4 steps (briefing, layout, development, delivery) in a dark block. Four boxes in a row, the even ones set lower than the odd ones, joined by upright semicircles (with a straight piece that reaches the lower or higher box) that alternate under and over the row (on mobile, a column of narrower boxes alternating left and right, joined by S-shaped curves with the same stroke and dots; on tablet each curve leaves its box a little to the side of where the previous one arrived). Replaces the old terminal mock (2026-10-14).
+6. **How it works** (`#process`, nav label "How it works"): 4 steps (briefing, layout, development, delivery) in a dark block. Four boxes in a row, the even ones set lower than the odd ones, joined by upright semicircles (with a straight piece that reaches the lower or higher box) that alternate under and over the row (on mobile, a column of narrower boxes alternating left and right, joined by S-shaped curves with the same stroke and dots; on tablet each curve leaves its box a little to the side of where the previous one arrived). Replaces the old terminal mock (2026-10-14). When the row reaches the screen it plays once, in order: box 1 appears, the line is drawn from it, and the next box appears as the line arrives; slower (1.5x) on phone and tablet.
 7. **About:** photo, short first-person paragraph, stack. Include the idea that he picks the tool for the job (plain HTML for a simple site, React when the interface has a lot of state).
-8. **Final CTA and footer:** "Let's talk?" with a primary button to email ("Send me a message") and a secondary button to the Upwork profile, plus email, LinkedIn and GitHub.
+8. **Final CTA and footer:** "Let's talk?" on a `sand` background (not dark) with a contact form in a cream panel (name, email, optional project type as radio chips, message; the submit button is the primary "Send me a message"), and the email address as a text link. No Upwork mention anywhere: this site is separate from his Upwork profile. The form posts to `SITE.form.action` when set; otherwise it opens the visitor's email app with a ready `mailto:`. Validation messages follow the EN/PT toggle. The footer stays dark (`ink`) with email, LinkedIn and GitHub.
 
 ## Content and i18n
 
@@ -97,9 +97,9 @@ Structure and feel follow https://weaveos.com. The palette does **not**.
 Everything Samuel will replace lives in one object (e.g. `const SITE = {...}` in `main.js`), so he never has to hunt through the HTML. Keep placeholders obvious and easy to swap. Still **PENDING**:
 
 - Photo: neutral shape with initials "SD" until it arrives.
-- Links: Upwork, GitHub, LinkedIn, email (use `#` or an example `mailto:` marked TODO).
+- Links: GitHub, LinkedIn, email (use `#` or an example `mailto:` marked TODO).
 - The 3 projects (type, title, description, image, link).
-- Real metrics (years of experience, projects, Upwork rating). The Lighthouse scores in "What you get" are already real, but were measured locally: re-measure on the deployed site.
+- Real metrics (years of experience, projects). The Lighthouse scores in "What you get" are already real, but were measured locally: re-measure on the deployed site.
 
 ## Quality bar
 

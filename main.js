@@ -8,11 +8,15 @@ const SITE = {
 
   // TODO: replace every '#' and the example e-mail with the real links.
   links: {
-    upwork: '#',
     github: '#',
     linkedin: '#',
     email: 'mailto:hello@example.com',
   },
+
+  // Contact form. Without an action it opens the visitor's email app with the message ready (mailto).
+  // TODO: to receive messages directly, set action to a form endpoint that accepts a POST and answers JSON
+  // (e.g. 'https://formspree.io/f/xxxxxxxx'). The form then sends in the background.
+  form: { action: '' },
 
   stack: ['HTML', 'CSS', 'JavaScript', 'React', 'Tailwind'],
 
@@ -109,7 +113,7 @@ const TRANSLATIONS = {
     'nav.label': 'Main',
     'nav.services': 'Services',
     'nav.projects': 'Projects',
-    'nav.process': 'Process',
+    'nav.process': 'How it works',
     'nav.contact': 'Contact',
     'nav.talk': 'Talk to me',
     'nav.menu': 'Menu',
@@ -119,7 +123,6 @@ const TRANSLATIONS = {
     'hero.text':
       'They load fast, work on every screen and are easy to use. You get a clear estimate before we start and two weeks of support after delivery.',
     'hero.cta': 'Tell me about your project',
-    'hero.upwork': 'Hire me on Upwork',
     'hero.projects': 'See projects',
     'hero.stack': 'Built with HTML, CSS, JavaScript, React and Tailwind.',
     'hero.mockLabel': 'Your site',
@@ -208,8 +211,31 @@ const TRANSLATIONS = {
     'contact.text':
       'Describe what you need and get an estimate. A short message is enough.',
     'contact.cta': 'Send me a message',
+    'contact.direct': 'Prefer to write directly?',
 
-    'footer.email': 'Email',
+    'form.name': 'Name',
+    'form.email': 'Email',
+    'form.type': 'Type of project (optional)',
+    'form.type.website': 'Website or landing page',
+    'form.type.store': 'Online store',
+    'form.type.dashboard': 'Dashboard or web app',
+    'form.type.tweaks': 'Changes to an existing project',
+    'form.type.unsure': 'Not sure yet',
+    'form.message': 'Your message',
+    'form.messageHint': 'What you need, what already exists and when you need it.',
+    'form.error.name': 'Enter your name.',
+    'form.error.email': 'Enter a valid email address.',
+    'form.error.message': 'Write a short message.',
+    'form.sending': 'Sending...',
+    'form.sent': 'Message sent. I will reply by email.',
+    'form.mailto': 'Your email app should open with the message ready. If it does not, write to',
+    'form.failed': 'The message could not be sent. Write to',
+    'form.mailSubject': 'New project from',
+
+    'footer.tagline': 'Front-end for websites, online stores and dashboards.',
+    'footer.menu': 'Menu',
+    'footer.menuLabel': 'Footer',
+    'footer.top': 'Back to top',
     'footer.linkedin': 'LinkedIn',
     'footer.github': 'GitHub',
   },
@@ -222,7 +248,7 @@ const TRANSLATIONS = {
     'nav.label': 'Principal',
     'nav.services': 'Serviços',
     'nav.projects': 'Projetos',
-    'nav.process': 'Processo',
+    'nav.process': 'Como funciona',
     'nav.contact': 'Contato',
     'nav.talk': 'Fale comigo',
     'nav.menu': 'Menu',
@@ -232,8 +258,6 @@ const TRANSLATIONS = {
     'hero.text':
       'Abrem rápido, funcionam em qualquer tela e são fáceis de usar. Você conhece custo e prazo antes de começar e conta com suporte depois da entrega.',
     'hero.cta': 'Conte sobre o seu projeto',
-    'hero.upwork':
-      'Contratar pelo Upwork',
     'hero.projects': 'Ver projetos',
     'hero.stack': 'Feito com HTML, CSS, JavaScript, React e Tailwind.',
     'hero.mockLabel': 'Seu site',
@@ -321,8 +345,31 @@ const TRANSLATIONS = {
       'Descreva o que você precisa e receba um orçamento. Uma mensagem curta é suficiente.',
     'contact.cta':
       'Enviar mensagem',
+    'contact.direct': 'Prefere escrever direto?',
 
-    'footer.email': 'E-mail',
+    'form.name': 'Nome',
+    'form.email': 'E-mail',
+    'form.type': 'Tipo de projeto (opcional)',
+    'form.type.website': 'Site ou landing page',
+    'form.type.store': 'Loja virtual',
+    'form.type.dashboard': 'Dashboard ou aplicação web',
+    'form.type.tweaks': 'Ajustes em um projeto existente',
+    'form.type.unsure': 'Ainda não sei',
+    'form.message': 'Sua mensagem',
+    'form.messageHint': 'O que você precisa, o que já existe e para quando.',
+    'form.error.name': 'Informe seu nome.',
+    'form.error.email': 'Informe um e-mail válido.',
+    'form.error.message': 'Escreva uma mensagem curta.',
+    'form.sending': 'Enviando...',
+    'form.sent': 'Mensagem enviada. Respondo por e-mail.',
+    'form.mailto': 'Seu app de e-mail deve abrir com a mensagem pronta. Se não abrir, escreva para',
+    'form.failed': 'Não foi possível enviar a mensagem. Escreva para',
+    'form.mailSubject': 'Novo projeto de',
+
+    'footer.tagline': 'Front-end para sites, lojas virtuais e painéis.',
+    'footer.menu': 'Menu',
+    'footer.menuLabel': 'Rodapé',
+    'footer.top': 'Voltar ao topo',
     'footer.linkedin': 'LinkedIn',
     'footer.github': 'GitHub',
   },
@@ -470,6 +517,103 @@ $$('[data-lang]').forEach((button) => {
 /* ---- Links from SITE.links ---- */
 $$('[data-link]').forEach((a) => {
   a.href = SITE.links[a.dataset.link];
+});
+const emailAddress = SITE.links.email.replace(/^mailto:/, '');
+$$('[data-email-text]').forEach((a) => {
+  a.textContent = emailAddress;
+});
+
+/* ---- Contact form ----
+   Validation is ours (the form has novalidate) so the messages follow the EN/PT toggle.
+   Messages are set through data-i18n, so applyLanguage() translates them when the language changes. */
+const form = $('[data-contact-form]');
+const formStatus = $('[data-form-status]', form);
+const formSubmit = $('[data-form-submit]', form);
+
+function setI18n(el, key) {
+  if (key) {
+    el.dataset.i18n = key;
+    el.textContent = TRANSLATIONS[document.documentElement.lang][key];
+  } else {
+    delete el.dataset.i18n;
+    el.textContent = '';
+  }
+}
+
+function setFieldError(input, key) {
+  setI18n($(`#${input.id}-error`), key);
+  if (key) input.setAttribute('aria-invalid', 'true');
+  else input.removeAttribute('aria-invalid');
+}
+
+function showStatus(key, withEmail = false) {
+  formStatus.hidden = !key;
+  setI18n($('[data-form-status-text]', form), key);
+  $('[data-form-status-email]', form).hidden = !withEmail;
+}
+
+// Returns true when every required field is filled in; focuses the first one that is not
+function validateForm() {
+  const checks = [
+    [$('#f-name'), (input) => input.value.trim() !== '', 'form.error.name'],
+    [$('#f-email'), (input) => input.value.trim() !== '' && !input.validity.typeMismatch, 'form.error.email'],
+    [$('#f-message'), (input) => input.value.trim() !== '', 'form.error.message'],
+  ];
+  let firstInvalid = null;
+  checks.forEach(([input, isValid, errorKey]) => {
+    const ok = isValid(input);
+    setFieldError(input, ok ? '' : errorKey);
+    if (!ok && !firstInvalid) firstInvalid = input;
+  });
+  firstInvalid?.focus();
+  return !firstInvalid;
+}
+
+form.addEventListener('input', (event) => {
+  if (event.target.hasAttribute('aria-invalid')) setFieldError(event.target, '');
+});
+
+function sendByMailto(data) {
+  const t = TRANSLATIONS[document.documentElement.lang];
+  const chip = $('input[name="type"]:checked', form);
+  const body = [
+    `${t['form.name']}: ${data.get('name')}`,
+    `${t['form.email']}: ${data.get('email')}`,
+    ...(chip ? [`${t['form.type']}: ${chip.nextElementSibling.textContent}`] : []),
+    '',
+    data.get('message'),
+  ].join('\n');
+  const subject = `${t['form.mailSubject']} ${data.get('name')}`;
+  window.location.href = `mailto:${emailAddress}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  showStatus('form.mailto', true);
+}
+
+async function sendToEndpoint(data) {
+  formSubmit.disabled = true;
+  showStatus('form.sending');
+  try {
+    const response = await fetch(SITE.form.action, {
+      method: 'POST',
+      body: data,
+      headers: { Accept: 'application/json' },
+    });
+    if (!response.ok) throw new Error(String(response.status));
+    form.reset();
+    showStatus('form.sent');
+  } catch {
+    showStatus('form.failed', true);
+  } finally {
+    formSubmit.disabled = false;
+  }
+}
+
+form.addEventListener('submit', (event) => {
+  event.preventDefault();
+  if (!validateForm()) return;
+  const data = new FormData(form);
+  if (data.get('company')) return; // the hidden field is filled in: a bot
+  if (SITE.form.action) sendToEndpoint(data);
+  else sendByMailto(data);
 });
 
 /* ---- Mobile menu (below 64rem = 1024px, the lg: breakpoint used by the header) ---- */
@@ -641,6 +785,46 @@ function playReport() {
     list.setAttribute('data-visible', '');
   }, { threshold: 0.1 }); // low, because the list is taller than a phone screen
   observer.observe(list);
+})();
+
+/* ---- How it works: when the row reaches the screen, the boxes and the line between them appear one after the other (timing in style.css) ---- */
+(function setupProcess() {
+  if (reducedMotion || !('IntersectionObserver' in window)) return; // everything just stays visible
+  const frame = $('.steps-frame');
+
+  // The lines are drawn with a dash as long as the line itself. The strokes keep their width when the
+  // SVG is stretched, so the dash is measured in screen pixels: sample the path and scale each point.
+  const measure = () => {
+    $$('svg path', frame).forEach((path) => {
+      const svg = path.ownerSVGElement;
+      const box = svg.getBoundingClientRect();
+      const view = svg.viewBox.baseVal;
+      const kx = box.width / view.width;
+      const ky = box.height / view.height;
+      const total = path.getTotalLength();
+      const SAMPLES = 80;
+      let length = 0;
+      let prev = path.getPointAtLength(0);
+      for (let i = 1; i <= SAMPLES; i += 1) {
+        const point = path.getPointAtLength((total * i) / SAMPLES);
+        length += Math.hypot((point.x - prev.x) * kx, (point.y - prev.y) * ky);
+        prev = point;
+      }
+      path.style.setProperty('--len', `${Math.ceil(length) + 1}px`);
+    });
+  };
+  measure();
+  new ResizeObserver(measure).observe(frame); // the lines change length with the width of the screen
+
+  frame.classList.add('steps-anim');
+  void frame.offsetHeight; // compute the hidden first frame now, so the transitions always play
+
+  const observer = new IntersectionObserver((entries) => {
+    if (!entries.some((entry) => entry.isIntersecting)) return;
+    observer.disconnect();
+    frame.setAttribute('data-visible', '');
+  }, { rootMargin: '0px 0px -20% 0px' }); // starts once the first box is well inside the screen
+  observer.observe(frame);
 })();
 
 /* ---- Start ---- */
