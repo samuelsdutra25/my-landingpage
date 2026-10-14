@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-Single-page portfolio landing site for Samuel Dutra, a freelance front-end developer starting on Upwork. The site builds trust with small Upwork clients and sends them to hire him there. This file is the full brief and the source of truth. If something it doesn't cover comes up, ask Samuel.
+Single-page portfolio landing site for Samuel Dutra, a freelance front-end developer starting on Upwork. The site builds trust with small clients and sends them to contact him (by email for now, with a form planned). Upwork is the secondary route. This file is the full brief and the source of truth. If something it doesn't cover comes up, ask Samuel.
 
 **Scope of the work he sells:** the whole front end, not only websites: websites and landing pages, online stores (e-commerce), dashboards and web apps, and tweaks to existing front ends. Site copy talks about "interfaces" and "projects", not only "sites". Samuel also knows React and uses it when an interface has a lot of state. This portfolio itself stays plain HTML on purpose, because a simple page doesn't need a framework.
 
@@ -42,7 +42,7 @@ At the end of each piece of work, give Samuel a short summary of the design deci
 |---|---|---|
 | `cream` | `#FEF3E2` | Page background; text on dark areas |
 | `sand` | `#F2DFC0` | Contrast section background. Confirmed by Samuel: keep the contrast with cream subtle |
-| `ink` | `#2A1A0E` | Main text; dark sections (terminal, final CTA, footer) |
+| `ink` | `#2A1A0E` | Main text; dark sections (how it works, final CTA, footer) |
 | `orange` | `#D4621A` | Primary buttons and links, with cream text on buttons |
 | `amber` | `#F4AE52` | Accents: badges, icons, code details on dark. Don't single out one word of a headline with it |
 
@@ -60,7 +60,7 @@ Contrast rules:
 ## Typography
 
 - **Alef** from Google Fonts, weights 400 and 700 only (the only ones that exist), loaded with `display=swap`.
-- Alef everywhere. The terminal mock uses the system monospace font.
+- Alef everywhere.
 - Headings use `text-wrap: balance`. Body text is at most about 65 characters wide.
 - Define the type scale (sizes, weights, line height, spacing) in the design plan, following the `frontend-design` skill, and keep it consistent across the page. Don't change it later without saying so.
 - The logo is the text "Samuel Dutra" in Alef bold. No image.
@@ -72,19 +72,19 @@ Structure and feel follow https://weaveos.com. The palette does **not**.
 - Lean header: logo left, few anchors, one primary button right.
 - Hero: direct and confident, with a primary and a secondary button. See the Hero entry in "Sections" for what is fixed and what is free.
 - Few illustrations and decorative elements, lots of white space.
-- Product-interface-style blocks, e.g. a dark terminal mock in the process section. The weaveos.com number strip is inspiration for the "What you get" section only if real numbers exist.
+- Product-interface-style blocks, e.g. the report panel in "What you get". The weaveos.com number strip is inspiration for the "What you get" section only if real numbers exist.
 - Tone: friendly and relaxed, but organized and professional. Short sentences, direct voice, no corporate jargon.
 
 ## Sections (in this order)
 
 1. **Header** (sticky): logo, anchors (Services, Projects, Process, Contact), EN/PT toggle, "Talk to me" button linking to contact.
-2. **Hero:** the first thing visitors see, so open with the most characteristic thing in Samuel's world (a headline, a live demo, a code block, a load-speed moment, or something else) and say why you chose it. Don't default to a big number with a small label and a gradient accent. Fixed content: a message about what the client gets (the front end their customers use: websites, online stores and dashboards, fast and built to bring in clients), the buttons "Hire me on Upwork" (primary, filled, because hiring is the goal) and "See projects" (secondary, outlined), and a strip with the stack (HTML, CSS, JavaScript, React, Tailwind) instead of client logos. The form is free.
+2. **Hero:** the first thing visitors see, so open with the most characteristic thing in Samuel's world (a headline, a live demo, a code block, a load-speed moment, or something else) and say why you chose it. Don't default to a big number with a small label and a gradient accent. Fixed content: a message about what the client gets (the front end their customers use: websites, online stores and dashboards, fast and easy to use; never promise business results), the buttons "Tell me about your project" (primary, filled, links to email until the contact form exists) and "See projects" (secondary, outlined), and a strip with the stack (HTML, CSS, JavaScript, React, Tailwind) instead of client logos. The form is free.
 3. **What you get:** a report-style panel with performance, SEO and accessibility as rings that fill while the number counts up. Below the panel, three plain items: responsive on every screen, clean maintainable code and delivery with support. The ring numbers are **real Lighthouse scores of this very page**, kept in `SITE.scores` in `main.js` with the date and conditions of the measurement. Never type a score that was not measured. Re-run Lighthouse after any change that can affect it and on the deployed URL, then update them. **No other made-up numbers.**
 4. **Services:** four services: websites and landing pages, online stores, dashboards and web apps, tweaks and maintenance. The form is free. Avoid identical boxes with the same radius and the same soft grey shadow. Let the layout reflect what each service is.
 5. **Projects:** three clearly marked placeholders (type, image, title, short description, link). Samuel plans to build 3 projects for this site, ideally one website, one online store and one dashboard, so the projects prove each kind of work he sells. Each project carries its type as a short label. Projects are the proof of work, so give them more visual weight than Services. The form is free, with the same warning against identical cards. Vary radius and elevation by importance, and don't use gradient washes as decoration.
-6. **Process:** 4 steps (briefing, layout, development, delivery) in a dark block with a terminal mock.
+6. **How it works** (`#process`, nav label still "Process"): 4 steps (briefing, layout, development, delivery) in a dark block. Four boxes in a row, the even ones set lower than the odd ones, joined by upright semicircles (with a straight piece that reaches the lower or higher box) that alternate under and over the row (on mobile, a column of narrower boxes alternating left and right, joined by S-shaped curves with the same stroke and dots; on tablet each curve leaves its box a little to the side of where the previous one arrived). Replaces the old terminal mock (2026-10-14).
 7. **About:** photo, short first-person paragraph, stack. Include the idea that he picks the tool for the job (plain HTML for a simple site, React when the interface has a lot of state).
-8. **Final CTA and footer:** "Let's talk?" with a button to the Upwork profile, plus email, LinkedIn and GitHub.
+8. **Final CTA and footer:** "Let's talk?" with a primary button to email ("Send me a message") and a secondary button to the Upwork profile, plus email, LinkedIn and GitHub.
 
 ## Content and i18n
 
@@ -115,7 +115,7 @@ Everything Samuel will replace lives in one object (e.g. `const SITE = {...}` in
 - Do not invent clients, testimonials, metrics, awards or projects.
 - Do not change the five palette tokens, the font or the default language without asking. Adding transition tones is fine.
 - No emojis as section markers.
-- Lorem ipsum is allowed only as temporary placeholder copy in the MVP (Samuel's request). It lives in `main.js` (`LOREM`), the real labels (nav, buttons, section names, service and step names) are already final, and the lorem must be replaced with real text before launch. Don't write new lorem ipsum elsewhere.
+- No lorem ipsum. The site copy was written and approved by Samuel (2026-10-13). Facts in it (two weeks of support, contract, estimate, monthly hours) come from Samuel, so don't change them without asking. Avoid coach-style words, humor, em dashes in short copy, and any mention of being new to the field. Don't state an hourly rate on the site. The project texts are still pending and will be written once the projects exist.
 - No extra pages. It is one page.
 - No fixed text in the HTML outside the translations object (except the logo).
 

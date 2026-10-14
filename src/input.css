@@ -17,7 +17,7 @@
   --color-linen: #F8E8CF;       /* hover and soft fills, between cream and sand */
   --color-ink-soft: #6B5340;    /* secondary text (6.5:1 on cream, 5.5:1 on sand) */
   --color-line: #D8BD90;        /* decorative hairlines, never text */
-  --color-ink-raised: #3D2A1A;  /* panels on dark backgrounds (terminal) */
+  --color-ink-raised: #3D2A1A;  /* panels on dark backgrounds (how it works) */
   --color-cream-muted: #CDB9A0; /* secondary text on dark (8.8:1 on ink) */
   --color-orange-deep: #B5500F; /* text links on hover (4.6:1 on cream) */
   --color-orange-hover: #C45817; /* hover on primary buttons, a step darker than orange */

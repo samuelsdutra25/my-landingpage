@@ -21,27 +21,31 @@ const SITE = {
   // TODO: run Lighthouse again on the deployed URL and update these. null shows "--" and leaves the ring empty.
   scores: { performance: 92, accessibility: 100, seo: 100 },
 
-  // TODO: three real projects (ideally a website, an online store and a dashboard).
-  // Set placeholder to false when a project is real.
+  // TODO: three real projects (a website, an online store and a dashboard).
+  // The text below says what each one will prove. Replace titles, text and url when the project exists,
+  // then set placeholder to false.
   projects: [
     {
       placeholder: true,
       image: '', // e.g. 'assets/project-1.jpg'
       url: '#',
       type: { en: 'Website', pt: 'Site' },
-      title: { en: 'Lorem ipsum dolor', pt: 'Lorem ipsum dolor' },
+      title: { en: 'Website built from a Figma design', pt: 'Site feito a partir de um design no Figma' },
       text: {
-        en: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.',
-        pt: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.',
+        en: 'A pixel-perfect build of a Figma project: spacing, type and colors match the design, on every screen size.',
+        pt: 'Uma implementação pixel a pixel de um projeto do Figma: espaçamentos, tipografia e cores iguais ao design, em qualquer tela.',
       },
-      // Shown when the card is opened. TODO: real overview, what Samuel did, and the stack used.
+      // Shown when the card is opened. TODO: real overview and what Samuel did.
       details: {
         about: {
-          en: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-          pt: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+          en: 'A website built to match a Figma file exactly. The goal is to show that the page you approve in the design is the page you get in the browser.',
+          pt: 'Um site construído para ficar igual a um arquivo do Figma. A ideia é mostrar que a página que você aprova no design é a que você recebe no navegador.',
         },
-        role: { en: 'Lorem ipsum dolor sit amet.', pt: 'Lorem ipsum dolor sit amet.' },
-        stack: ['HTML', 'CSS', 'JavaScript'],
+        role: {
+          en: 'I turned the Figma design into responsive HTML, CSS and JavaScript, checking every detail against the original.',
+          pt: 'Transformei o design do Figma em HTML, CSS e JavaScript responsivos, conferindo cada detalhe com o original.',
+        },
+        stack: ['HTML', 'Tailwind', 'JavaScript'],
       },
     },
     {
@@ -49,19 +53,22 @@ const SITE = {
       image: '',
       url: '#',
       type: { en: 'Online store', pt: 'Loja virtual' },
-      title: { en: 'Sit amet consectetur', pt: 'Sit amet consectetur' },
+      title: { en: 'Online store in React', pt: 'Loja virtual em React' },
       text: {
-        en: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.',
-        pt: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.',
+        en: 'A store front end in React, with product pages, a cart and a checkout flow.',
+        pt: 'O front end de uma loja em React, com páginas de produto, carrinho e fluxo de compra.',
       },
-      // Shown when the card is opened. TODO: real overview, what Samuel did, and the stack used.
+      // Shown when the card is opened. TODO: real overview and what Samuel did.
       details: {
         about: {
-          en: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-          pt: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+          en: 'A store interface where the cart, filters and checkout share a lot of state, which is where React pays off.',
+          pt: 'Uma interface de loja em que carrinho, filtros e compra compartilham muito estado, que é onde o React compensa.',
         },
-        role: { en: 'Lorem ipsum dolor sit amet.', pt: 'Lorem ipsum dolor sit amet.' },
-        stack: ['HTML', 'CSS', 'JavaScript'],
+        role: {
+          en: 'I built the screens as React components and styled them with Tailwind.',
+          pt: 'Construí as telas como componentes React e estilizei com Tailwind.',
+        },
+        stack: ['React', 'Tailwind', 'JavaScript'],
       },
     },
     {
@@ -69,19 +76,22 @@ const SITE = {
       image: '',
       url: '#',
       type: { en: 'Dashboard', pt: 'Dashboard' },
-      title: { en: 'Adipiscing elit sed', pt: 'Adipiscing elit sed' },
+      title: { en: 'Dashboard in React', pt: 'Dashboard em React' },
       text: {
-        en: 'Duis aute irure dolor in reprehenderit in voluptate velit esse.',
-        pt: 'Duis aute irure dolor in reprehenderit in voluptate velit esse.',
+        en: 'A data dashboard in React, with charts, tables and filters that update together.',
+        pt: 'Um dashboard de dados em React, com gráficos, tabelas e filtros que se atualizam juntos.',
       },
-      // Shown when the card is opened. TODO: real overview, what Samuel did, and the stack used.
+      // Shown when the card is opened. TODO: real overview and what Samuel did.
       details: {
         about: {
-          en: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
-          pt: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
+          en: 'A dashboard where one filter changes every chart and table on the screen, so the state has to be organized well.',
+          pt: 'Um dashboard em que um filtro altera todos os gráficos e tabelas da tela, então o estado precisa estar bem organizado.',
         },
-        role: { en: 'Lorem ipsum dolor sit amet.', pt: 'Lorem ipsum dolor sit amet.' },
-        stack: ['HTML', 'CSS', 'JavaScript'],
+        role: {
+          en: 'I built the interface as React components and styled it with Tailwind.',
+          pt: 'Construí a interface como componentes React e estilizei com Tailwind.',
+        },
+        stack: ['React', 'Tailwind', 'JavaScript'],
       },
     },
   ],
@@ -89,20 +99,11 @@ const SITE = {
 
 /* ==========================================================================
    2. TRANSLATIONS: all site text, English first. Keys match data-i18n in
-   index.html. The body copy is lorem ipsum for now: replace it with real text.
+   index.html. The project texts live in SITE.projects above.
    ========================================================================== */
-const LOREM = {
-  s1: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-  s2: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-  s3: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.',
-  s4: 'Duis aute irure dolor in reprehenderit in voluptate velit esse.',
-  s5: 'Excepteur sint occaecat cupidatat non proident, sunt in culpa.',
-};
-const LOREM_LONG = `${LOREM.s1} ${LOREM.s2}`;
-
 const TRANSLATIONS = {
   en: {
-    'meta.title': 'Samuel Dutra | Front-end developer',
+    'meta.title': 'Samuel Dutra | Front-end developer for websites, stores and dashboards',
     skip: 'Skip to content',
 
     'nav.label': 'Main',
@@ -114,8 +115,10 @@ const TRANSLATIONS = {
     'nav.menu': 'Menu',
     'lang.label': 'Language',
 
-    'hero.title': 'I build websites, online stores and dashboards.',
-    'hero.text': LOREM_LONG,
+    'hero.title': 'I build the websites, stores and dashboards your customers use.',
+    'hero.text':
+      'They load fast, work on every screen and are easy to use. You get a clear estimate before we start and two weeks of support after delivery.',
+    'hero.cta': 'Tell me about your project',
     'hero.upwork': 'Hire me on Upwork',
     'hero.projects': 'See projects',
     'hero.stack': 'Built with HTML, CSS, JavaScript, React and Tailwind.',
@@ -125,36 +128,50 @@ const TRANSLATIONS = {
     'hero.ms': 'ms',
 
     'included.title': 'What you get',
-    'included.lead': LOREM_LONG,
+    'included.lead':
+      "Every project meets the same standard. The scores below come from Lighthouse, Google's auditing tool, and were measured on this very page.",
     'included.report': 'Measured with Lighthouse on this page',
     'included.outOf': 'out of 100',
     'included.performance.title': 'Performance',
-    'included.performance.text': LOREM.s1,
+    'included.performance.text':
+      'Fast loading on a phone and smooth interactions.',
     'included.accessibility.title': 'Accessibility',
-    'included.accessibility.text': LOREM.s2,
+    'included.accessibility.text':
+      'Keyboard navigation, screen reader support and enough contrast between text and background.',
     'included.seo.title': 'SEO',
-    'included.seo.text': LOREM.s3,
+    'included.seo.text':
+      'Titles, descriptions and page structure ready for search engines.',
     'included.responsive.title': 'Responsive',
-    'included.responsive.text': LOREM.s4,
+    'included.responsive.text':
+      'Layouts that adapt to phones, tablets and large screens, checked at every size before delivery.',
     'included.clean.title': 'Clean, maintainable code',
-    'included.clean.text': LOREM.s5,
+    'included.clean.text':
+      'Organized, consistent code that is easy to maintain or hand over to another developer.',
     'included.support.title': 'Delivery with support',
-    'included.support.text': LOREM.s1,
+    'included.support.text':
+      'Two weeks of support after delivery are included in the project price. After that, fixes and small changes are agreed separately.',
 
     'services.title': 'Services',
-    'services.lead': LOREM.s1,
+    'services.lead':
+      'Front end for small and mid-size projects, with back-end integration when the project needs it.',
     'services.1.title': 'Websites and landing pages',
-    'services.1.text': LOREM_LONG,
+    'services.1.text':
+      'Company and lead-generation pages that match the approved layout, with well-crafted animations, SEO done right and analytics already set up.',
     'services.2.title': 'Online stores',
-    'services.2.text': `${LOREM.s3} ${LOREM.s4}`,
+    'services.2.text':
+      'Storefront, product pages, cart and checkout designed for shopping on any device.',
     'services.3.title': 'Dashboards and web apps',
-    'services.3.text': `${LOREM.s5} ${LOREM.s1}`,
+    'services.3.text':
+      'Dashboards with charts, tables and filters that update together, so you can follow your business data on one screen.',
     'services.4.title': 'Tweaks and maintenance',
-    'services.4.text': `${LOREM.s2} ${LOREM.s3}`,
+    'services.4.text':
+      'Fixes for specific problems in existing sites and systems, or ongoing maintenance to keep them up to date, stable and always improving.',
 
     'projects.title': 'Projects',
-    'projects.lead': LOREM.s2,
-    'projects.placeholder': 'Placeholder',
+    'projects.lead':
+      'Each project shows a different kind of work, and you can open it and try it yourself.',
+    'projects.placeholder':
+      'Example',
     'projects.image': 'Project image',
     'projects.view': 'View project',
     'projects.details': 'Details',
@@ -162,27 +179,35 @@ const TRANSLATIONS = {
     'projects.role': 'What I did',
     'projects.stack': 'Stack',
 
-    'process.title': 'Process',
-    'process.lead': LOREM.s3,
-    'process.terminal': 'terminal',
-    'process.command': 'samuel start --project',
+    'process.title': 'How it works',
+    'process.lead':
+      "Four steps, and you're kept in the loop from start to finish.",
     'process.1.title': 'Briefing',
-    'process.1.text': LOREM.s1,
+    'process.1.text':
+      'A chat by message or call to understand your goal and scope, followed by an estimate. Once you approve it, a contract sets the scope, price, deadline and number of revision rounds.',
     'process.2.title': 'Layout',
-    'process.2.text': LOREM.s2,
+    'process.2.text':
+      'The layout starts from your Figma file or the references you send. You review it and ask for changes within the agreed rounds.',
     'process.3.title': 'Development',
-    'process.3.text': LOREM.s3,
+    'process.3.text':
+      'Code in HTML, CSS and JavaScript, with React when the interface handles a lot of data and interaction at once. Regular updates let you follow the progress and ask for changes early.',
     'process.4.title': 'Delivery',
-    'process.4.text': LOREM.s4,
-    'process.done': 'Project delivered.',
+    'process.4.text':
+      'The finished project is delivered along with the source code. The two weeks of support start on the delivery date. If you want, I can also keep maintaining it after that.',
 
     'about.title': 'About',
-    'about.text1': LOREM_LONG,
-    'about.text2': 'I pick the tool for the job: plain HTML for a simple site, React when the interface has a lot of state.',
+    'about.text1':
+      "I'm Samuel, a front-end developer. I'm the link between your system and your customer, making sure they get a great experience and everything works smoothly.",
+    'about.text2':
+      'To get there, I use current technologies and aim for efficiency. Not every project needs complex tools, which only raise the cost and stretch the timeline. I also aim for excellence, down to the details that make the difference in the end.',
+    'about.text3':
+      "Liked what you saw? Get in touch and let's talk about your project.",
     'about.stack': 'Tech stack',
 
     'contact.title': "Let's talk?",
-    'contact.text': LOREM_LONG,
+    'contact.text':
+      'Describe what you need and get an estimate. A short message is enough.',
+    'contact.cta': 'Send me a message',
 
     'footer.email': 'Email',
     'footer.linkedin': 'LinkedIn',
@@ -190,7 +215,8 @@ const TRANSLATIONS = {
   },
 
   pt: {
-    'meta.title': 'Samuel Dutra | Desenvolvedor front-end',
+    'meta.title':
+      'Samuel Dutra | Desenvolvedor front-end de sites, lojas virtuais e dashboards',
     skip: 'Pular para o conteúdo',
 
     'nav.label': 'Principal',
@@ -202,9 +228,12 @@ const TRANSLATIONS = {
     'nav.menu': 'Menu',
     'lang.label': 'Idioma',
 
-    'hero.title': 'Eu crio sites, lojas virtuais e dashboards.',
-    'hero.text': LOREM_LONG,
-    'hero.upwork': 'Contrate no Upwork',
+    'hero.title': 'Eu construo os sites, lojas e painéis que os seus clientes usam.',
+    'hero.text':
+      'Abrem rápido, funcionam em qualquer tela e são fáceis de usar. Você conhece custo e prazo antes de começar e conta com suporte depois da entrega.',
+    'hero.cta': 'Conte sobre o seu projeto',
+    'hero.upwork':
+      'Contratar pelo Upwork',
     'hero.projects': 'Ver projetos',
     'hero.stack': 'Feito com HTML, CSS, JavaScript, React e Tailwind.',
     'hero.mockLabel': 'Seu site',
@@ -213,35 +242,48 @@ const TRANSLATIONS = {
     'hero.ms': 'ms',
 
     'included.title': 'O que você recebe',
-    'included.lead': LOREM_LONG,
+    'included.lead':
+      'Todo projeto segue o mesmo padrão de qualidade. As notas abaixo vêm do Lighthouse, ferramenta de auditoria do Google, e foram medidas nesta página.',
     'included.report': 'Medido com o Lighthouse nesta página',
     'included.outOf': 'de 100',
     'included.performance.title': 'Desempenho',
-    'included.performance.text': LOREM.s1,
+    'included.performance.text':
+      'Carregamento rápido no celular e interações sem travamentos.',
     'included.accessibility.title': 'Acessibilidade',
-    'included.accessibility.text': LOREM.s2,
+    'included.accessibility.text':
+      'Navegação por teclado, compatibilidade com leitores de tela e contraste adequado entre texto e fundo.',
     'included.seo.title': 'SEO',
-    'included.seo.text': LOREM.s3,
+    'included.seo.text':
+      'Títulos, descrições e estrutura de página preparados para os mecanismos de busca.',
     'included.responsive.title': 'Responsividade',
-    'included.responsive.text': LOREM.s4,
+    'included.responsive.text':
+      'Layout que se adapta a celulares, tablets e telas grandes, conferido em cada tamanho antes da entrega.',
     'included.clean.title': 'Código limpo e fácil de manter',
-    'included.clean.text': LOREM.s5,
+    'included.clean.text':
+      'Código organizado e padronizado, fácil de manter ou de ser assumido por outro desenvolvedor.',
     'included.support.title': 'Entrega com suporte',
-    'included.support.text': LOREM.s1,
+    'included.support.text':
+      'Duas semanas de suporte após a entrega estão incluídas no valor do projeto. Depois disso, correções e pequenos ajustes são combinados à parte.',
 
     'services.title': 'Serviços',
-    'services.lead': LOREM.s1,
+    'services.lead':
+      'Front end de projetos pequenos e médios, com integração ao back end quando o projeto exige.',
     'services.1.title': 'Sites e landing pages',
-    'services.1.text': LOREM_LONG,
+    'services.1.text':
+      'Páginas institucionais e de captação de clientes, fiéis ao layout aprovado, com animações bem trabalhadas, SEO otimizado e medição de acessos configurada.',
     'services.2.title': 'Lojas virtuais',
-    'services.2.text': `${LOREM.s3} ${LOREM.s4}`,
+    'services.2.text':
+      'Vitrine, páginas de produto, carrinho e checkout pensados para compras em qualquer dispositivo.',
     'services.3.title': 'Dashboards e aplicações web',
-    'services.3.text': `${LOREM.s5} ${LOREM.s1}`,
+    'services.3.text':
+      'Painéis com gráficos, tabelas e filtros que se atualizam juntos, para acompanhar os dados do negócio em uma só tela.',
     'services.4.title': 'Ajustes e manutenção',
-    'services.4.text': `${LOREM.s2} ${LOREM.s3}`,
+    'services.4.text':
+      'Correção de problemas pontuais em sites e sistemas já existentes, ou manutenção recorrente para mantê-los atualizados, estáveis e em constante evolução.',
 
     'projects.title': 'Projetos',
-    'projects.lead': LOREM.s2,
+    'projects.lead':
+      'Cada projeto mostra um tipo de trabalho diferente e pode ser aberto e testado.',
     'projects.placeholder': 'Exemplo',
     'projects.image': 'Imagem do projeto',
     'projects.view': 'Ver projeto',
@@ -250,27 +292,35 @@ const TRANSLATIONS = {
     'projects.role': 'O que fiz',
     'projects.stack': 'Tecnologias',
 
-    'process.title': 'Processo',
-    'process.lead': LOREM.s3,
-    'process.terminal': 'terminal',
-    'process.command': 'samuel start --project',
+    'process.title': 'Como funciona',
+    'process.lead':
+      'Quatro etapas, com acompanhamento do início ao fim.',
     'process.1.title': 'Briefing',
-    'process.1.text': LOREM.s1,
+    'process.1.text':
+      'Conversa por mensagem ou reunião para entender o objetivo e o escopo, seguida do orçamento. Aprovado o orçamento, um contrato define escopo, valor, prazo e número de rodadas de ajustes.',
     'process.2.title': 'Layout',
-    'process.2.text': LOREM.s2,
+    'process.2.text':
+      'O layout parte do seu arquivo do Figma ou das referências que você enviar. Você revisa e pede ajustes dentro das rodadas combinadas.',
     'process.3.title': 'Desenvolvimento',
-    'process.3.text': LOREM.s3,
+    'process.3.text':
+      'Código em HTML, CSS e JavaScript, com React quando a interface tem muitos dados e interações ao mesmo tempo. Atualizações periódicas permitem acompanhar o andamento e pedir mudanças cedo.',
     'process.4.title': 'Entrega',
-    'process.4.text': LOREM.s4,
-    'process.done': 'Projeto entregue.',
+    'process.4.text':
+      'Entrega do projeto finalizado junto com o código-fonte. As duas semanas de suporte começam na data da entrega. Se você quiser, também posso continuar fazendo a manutenção depois disso.',
 
     'about.title': 'Sobre',
-    'about.text1': LOREM_LONG,
-    'about.text2': 'Escolho a ferramenta pelo trabalho: HTML puro para um site simples, React quando a interface tem muito estado.',
+    'about.text1':
+      'Sou o Samuel, desenvolvedor front-end. Sou o responsável pela ponte entre o sistema e o seu cliente, garantindo que ele tenha uma ótima experiência e que tudo funcione bem.',
+    'about.text2':
+      'Para isso, trabalho com as tecnologias mais atuais e busco o máximo de eficiência. Nem todo projeto precisa de ferramentas complexas, que acabam encarecendo o projeto e aumentando o tempo de produção. Além disso, busco sempre a excelência, entregando os detalhes que fazem a diferença no final.',
+    'about.text3': 'Se você gostou do que viu, entre em contato comigo e vamos conversar sobre seu projeto.',
     'about.stack': 'Tecnologias',
 
     'contact.title': 'Vamos conversar?',
-    'contact.text': LOREM_LONG,
+    'contact.text':
+      'Descreva o que você precisa e receba um orçamento. Uma mensagem curta é suficiente.',
+    'contact.cta':
+      'Enviar mensagem',
 
     'footer.email': 'E-mail',
     'footer.linkedin': 'LinkedIn',
@@ -572,8 +622,8 @@ function playReport() {
 /* ---- Services: when the list reaches the screen, its rows slide in from the left in order, in one go ---- */
 (function setupServices() {
   if (reducedMotion || !('IntersectionObserver' in window)) return; // rows just stay visible
-  const START_MS = 400; // wait before the first row moves
-  const STEP_MS = 1000; // gap between one row and the next: enough to read a title before the next row starts
+  const START_MS = 200; // wait before the first row moves
+  const STEP_MS = 250; // gap between one row and the next
   const list = $('[data-services]');
   // The delays are fixed up front, so the sequence plays the same no matter how the page is scrolled
   $$('li', list).forEach((row, index) => {

@@ -1,14 +1,14 @@
 # Samuel Dutra: portfolio landing page
 
-A one-page portfolio for Samuel Dutra, a freelance front-end developer starting on Upwork. The site builds trust with small clients and sends them to hire Samuel on Upwork. He builds websites, online stores, dashboards and other front-end work.
+A one-page portfolio for Samuel Dutra, a freelance front-end developer starting on Upwork. The site builds trust with small clients and sends them to contact Samuel (by email for now, with a form planned), with Upwork as a secondary route. He builds websites, online stores, dashboards and other front-end work.
 
 The site itself is built with plain HTML, CSS and JavaScript plus Tailwind CSS. There is no framework and no server-side build: open `index.html` and it works. Samuel also works with React, but a simple page like this one doesn't need it.
 
-> **Status: MVP.** The layout, design system and behavior are done. The text is lorem ipsum, and the links, photo and projects are placeholders. See [Before launch](#before-launch).
+> **Status: MVP.** The layout, design system and behavior are done. The site copy is written (English and Portuguese), and the links, photo and project texts are placeholders. See [Before launch](#before-launch).
 
 ## What's inside
 
-- **One page, eight parts:** header, hero, what you get, services, projects, process (with a terminal mock), about, and a final call to action with the footer.
+- **One page, eight parts:** header, hero, what you get, services, projects, how it works (four boxes joined by semicircles), about, and a final call to action with the footer.
 - **English and Portuguese.** English is the default. A toggle in the header switches the language, remembers the choice in `localStorage` and updates `<html lang>` and the page title.
 - **A hero that measures itself.** A small wireframe builds itself, and under it the page shows how long it really took to be ready in the visitor's browser (from the Navigation Timing API). If the browser can't measure it, the line stays hidden.
 - **Editable without touching the HTML.** Links, photo, projects and all text live in `main.js`.
@@ -101,7 +101,7 @@ Every piece of text is a key in `TRANSLATIONS.en` and `TRANSLATIONS.pt`. In the 
 
 To add or change text, edit the key in **both** languages. To add a new text element, give it a `data-i18n` key and add that key to both objects. The only text written directly in the HTML is the logo.
 
-The body copy is lorem ipsum for now. It comes from the `LOREM` constants at the top of that section, so replace those references with real sentences.
+The site copy is final, except the project texts, which live in `SITE.projects`.
 
 ## Design system
 
@@ -117,7 +117,7 @@ Everything lives in the `@theme` block at the top of [src/input.css](src/input.c
 
 Six transition tones fill the gaps: `linen`, `ink-soft`, `line`, `ink-raised`, `cream-muted` and `orange-deep`.
 
-Type is Alef everywhere, with a scale defined as tokens (`display`, `title`, `heading`, `body`, `small`, `button`, `code`). The terminal mock uses the system monospace font. Buttons use two radii (10px for buttons, 16px for tiles) and there is a single shadow, on the hero mock.
+Type is Alef everywhere, with a scale defined as tokens (`display`, `title`, `heading`, `body`, `small`, `button`, `code`). Buttons use two radii (10px for buttons, 16px for tiles) and there is a single shadow, on the hero mock.
 
 **Contrast note:** cream text on `orange` measures 3.44:1. That passes WCAG AA only as large text, so button labels are Alef bold at 1.2rem (about 19px) or larger. Don't shrink them. Orange is never used for small text on cream.
 
@@ -126,7 +126,7 @@ Type is Alef everywhere, with a scale defined as tokens (`display`, `title`, `he
 - [ ] Replace every `#` and the example e-mail in `SITE.links`
 - [ ] Add a photo (`SITE.photo`)
 - [ ] Add the three real projects and set `placeholder: false` (ideally a website, an online store and a dashboard)
-- [ ] Replace the lorem ipsum with real text, in English and Portuguese
+- [ ] Write the real project texts, in English and Portuguese
 - [ ] Add real numbers to "What you get" only if they exist. Never invent metrics
 - [ ] Add `og:image` and `og:url` in the `<head>` of `index.html` once the site has an address
 - [ ] Run `npm run build:css` and commit `assets/tailwind.css`

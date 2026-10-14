@@ -249,9 +249,201 @@ html {
   opacity: 1;
   transform: none;
   transition:
-    opacity 1200ms cubic-bezier(0.25, 0.1, 0.25, 1),
-    transform 1400ms cubic-bezier(0.25, 0.1, 0.25, 1);
+    opacity 700ms cubic-bezier(0.25, 0.1, 0.25, 1),
+    transform 800ms cubic-bezier(0.25, 0.1, 0.25, 1);
   transition-delay: var(--reveal-delay, 0ms); /* set per row by main.js */
+}
+
+/*
+ * How it works: four boxes joined by semicircles.
+ * Desktop: one row. The arcs alternate, one hanging under the row, the next rising over it,
+ * each an upright semicircle between the middle of one box edge and the next. The even boxes sit lower, so
+ * a straight leg first takes the line down (or up) to the level where the semicircle starts.
+ * Mobile: one column of narrower boxes, the odd ones left and the even ones right, joined by an S-shaped curve
+ * (the link SVG) with the same stroke and dots. The arcs are hidden.
+ * The arcs are one SVG each (2:1 box, so the curve is never distorted).
+ */
+.steps-frame {
+  container-type: inline-size; /* so the arcs' padding can follow the width of the row */
+  --gap: 1.5rem;
+}
+.steps {
+  display: grid;
+  color: var(--color-amber);
+}
+.step {
+  position: relative;
+  display: flex;
+}
+.step-box {
+  flex: 1;
+  border: 1px solid color-mix(in srgb, var(--color-cream) 10%, transparent);
+  border-radius: var(--radius-tile);
+  background: var(--color-ink-raised);
+  padding: 1.25rem;
+  color: var(--color-cream);
+}
+.step-num {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border: 2px solid var(--color-amber);
+  border-radius: 9999px;
+  color: var(--color-amber);
+  font-weight: 700;
+  line-height: 1;
+}
+/* Layout (the step you approve) and Delivery (the end of the path) have a filled number */
+.step:nth-child(2) .step-num,
+.step-last .step-num {
+  background: var(--color-amber);
+  color: var(--color-ink);
+}
+
+.step-arc,
+.step-leg,
+.step-link {
+  position: absolute;
+  overflow: visible;
+  pointer-events: none;
+}
+
+/* Mobile only: the S-shaped curve from one box to the next */
+.step-link {
+  display: none;
+}
+
+/* The nodes where an arc meets a box */
+.step-dot {
+  --dot: 0.875rem;
+  position: absolute;
+  width: var(--dot);
+  height: var(--dot);
+  border-radius: 9999px;
+  background: var(--color-amber);
+  box-shadow: 0 0 0 4px var(--color-ink); /* a ring of the background keeps the node apart from the line */
+  translate: -50% -50%;
+  pointer-events: none;
+}
+
+@media (max-width: 63.999rem) {
+  .steps-frame {
+    --link: 6rem;  /* height of the curve between two boxes */
+    --shift: 3rem; /* how much narrower the boxes are than the column: the odd ones sit left, the even ones right */
+    --o: 0rem;     /* how far a curve leaves a box from the point where the previous one arrived (tablet only) */
+  }
+  .steps {
+    row-gap: var(--link);
+  }
+  .step {
+    width: calc(100% - var(--shift));
+  }
+  .step:nth-child(even) {
+    justify-self: end;
+  }
+  .step-arc,
+  .step-leg {
+    display: none;
+  }
+  /* An S that reaches the middle of the top of the next box, which sits --shift to the right (odd boxes)
+     or to the left (even boxes). It leaves the bottom of its own box --o away from the middle, on the side
+     facing away from the next box. Vertical at both ends. */
+  .step-link {
+    display: block;
+    top: 100%;
+    left: calc(50% - var(--o));
+    width: calc(var(--shift) + var(--o));
+    height: var(--link);
+  }
+  .step:nth-child(even) .step-link {
+    left: calc(50% - var(--shift));
+    scale: -1 1; /* mirrored, so the S runs right to left */
+  }
+  .step-dot {
+    left: 50%;
+  }
+  .step-dot-b {
+    top: 100%;
+    left: calc(50% - var(--o));
+  }
+  .step:nth-child(even) .step-dot-b {
+    left: calc(50% + var(--o));
+  }
+  .step-dot-t,
+  .step-dot-end {
+    top: 0;
+  }
+}
+
+/* Tablet: a curve does not leave a box right under the point where the previous one arrived, but a little to the side */
+@media (min-width: 40rem) and (max-width: 63.999rem) {
+  .steps-frame {
+    --o: 2.5rem;
+  }
+}
+
+@media (min-width: 64rem) {
+  .steps-frame {
+    --s: 5rem; /* how far the even boxes sit below the odd ones */
+  }
+  .steps {
+    /* Boxes sit (row width + gap) / 4 apart, which is the width of an arc, so an arc is half of that tall.
+       cq units resolve against the container, so this has to live on a child of .steps-frame.
+       Over the row the arc rises c / 2; under it, the straight leg (s) and then the arc (c / 2) hang below. */
+    --c: calc((100cqw + var(--gap)) / 4);
+    padding-top: calc(var(--c) / 2);
+    padding-bottom: calc(var(--s) + var(--c) / 2);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--gap);
+  }
+  /* translate, not margin, so all four boxes keep the same height */
+  .step:nth-child(even) {
+    translate: 0 var(--s);
+  }
+  .step-box {
+    padding: 1.5rem;
+  }
+  .step-leg {
+    left: 50%;
+    width: 8px; /* the line is drawn in the middle, with the same stroke as the arcs */
+    height: var(--s);
+    translate: -50% 0;
+  }
+  .step-leg-under {
+    top: 100%;
+  }
+  .step-leg-over {
+    bottom: 100%;
+  }
+  /* Upright semicircles. Each starts where its leg ends: under the row, s below the box;
+     over the row, s above it (which is the top of the next, higher box). */
+  .step-arc {
+    left: 50%;
+    width: calc(100% + var(--gap));
+    height: auto;
+    aspect-ratio: 2 / 1;
+    transform: none;
+  }
+  .step-arc-under {
+    top: calc(100% + var(--s));
+  }
+  .step-arc-over {
+    top: auto;
+    bottom: calc(100% + var(--s));
+  }
+  .step-dot {
+    left: 50%;
+  }
+  .step-dot-t {
+    top: 0;
+  }
+  .step-dot-b,
+  .step-dot-end {
+    top: 100%;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
