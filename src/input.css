@@ -54,8 +54,6 @@
   --text-small--line-height: 1.5;
   --text-button: 1.2rem;
   --text-button--line-height: 1.2;
-  --text-code: 0.9rem;
-  --text-code--line-height: 1.6;
 
   /* Radii and the single shadow */
   --radius-button: 10px;
@@ -109,9 +107,6 @@
   }
   .btn-secondary {
     @apply border-ink text-ink hover:bg-linen;
-  }
-  .btn-secondary-dark {
-    @apply border-cream text-cream hover:bg-ink-raised;
   }
   /* Footer (dark): column headings in cream, links in muted cream that brighten on hover */
   .footer-heading {

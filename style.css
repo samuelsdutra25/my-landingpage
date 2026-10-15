@@ -1,7 +1,10 @@
 /*
- * Hand-written CSS for what Tailwind doesn't cover: focus, skip link,
- * smooth scroll, and the hero wireframe animation.
+ * Hand-written CSS for what Tailwind doesn't cover. In page order:
+ * font fallback, page reveal, scroll and focus, skip link, mobile menu,
+ * the "What you get" rings, project cards, the hero wireframe, the Services
+ * reveal, "How it works" (layout, then animation) and reduced motion.
  * Keep it small. Anything that has a Tailwind utility belongs in the HTML.
+ * Colors come from the tokens in src/input.css (var(--color-*)).
  */
 
 /*
@@ -77,6 +80,10 @@ html[data-smooth] {
 }
 .on-dark :focus-visible {
   outline-color: var(--color-amber);
+}
+/* Sections that main.js focuses after an anchor link (tabindex="-1"): focus moves there, but no ring around a whole section */
+[tabindex="-1"]:focus {
+  outline: none;
 }
 
 .skip-link {
@@ -221,10 +228,7 @@ html[data-smooth] {
 .build {
   animation: build-in 600ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
   animation-delay: calc(var(--i, 0) * 110ms + 250ms);
-}
-/* Paused from the first frame, so nothing builds before main.js says so */
-.build {
-  animation-play-state: paused;
+  animation-play-state: paused; /* from the first frame, so nothing builds before main.js says so */
 }
 [data-mock][data-visible] .build {
   animation-play-state: running;
@@ -329,6 +333,7 @@ html[data-smooth] {
 .step-dot {
   --dot: 0.875rem;
   position: absolute;
+  left: 50%; /* the middle of the box edge; the breakpoints below set top (and move the mobile/tablet bottom dot) */
   width: var(--dot);
   height: var(--dot);
   border-radius: 9999px;
@@ -372,9 +377,6 @@ html[data-smooth] {
     left: calc(50% - var(--shift));
     scale: -1 1; /* mirrored, so the S runs right to left */
   }
-  .step-dot {
-    left: 50%;
-  }
   .step-dot-b {
     top: 100%;
     left: calc(50% - var(--o));
@@ -413,9 +415,6 @@ html[data-smooth] {
   .step:nth-child(even) {
     translate: 0 var(--s);
   }
-  .step-box {
-    padding: 1.25rem;
-  }
   /* The columns are narrow, so the number sits above the title: "Desenvolvimento" (PT) does not fit beside it */
   .step-head {
     flex-direction: column;
@@ -442,19 +441,13 @@ html[data-smooth] {
   .step-arc {
     left: 50%;
     width: calc(100% + var(--gap));
-    height: auto;
     aspect-ratio: 2 / 1;
-    transform: none;
   }
   .step-arc-under {
     top: calc(100% + var(--s));
   }
   .step-arc-over {
-    top: auto;
     bottom: calc(100% + var(--s));
-  }
-  .step-dot {
-    left: 50%;
   }
   .step-dot-t {
     top: 0;

@@ -13,7 +13,7 @@ The site itself is built with plain HTML, CSS and JavaScript plus Tailwind CSS. 
 - **A hero that measures itself.** A small wireframe builds itself, and under it the page shows how long it really took to be ready in the visitor's browser (from the Navigation Timing API). If the browser can't measure it, the line stays hidden.
 - **Editable without touching the HTML.** Links, photo, projects and all text live in `main.js`.
 - **Accessible by default.** Semantic HTML, one `h1` and a correct heading order, a skip link, visible keyboard focus, labelled controls, and `prefers-reduced-motion` support.
-- **Fast.** No libraries besides Tailwind's compiled CSS (about 19 KB), [GSAP](https://gsap.com) for animation (loaded from `assets/`) and one Google Font.
+- **Fast.** No libraries besides Tailwind's compiled CSS (about 30 KB), [GSAP](https://gsap.com) with its ScrollToPlugin for the button bounce and the smooth scroll (loaded from `assets/`) and one Google Font.
 
 ## Tech stack
 
@@ -30,7 +30,7 @@ The site itself is built with plain HTML, CSS and JavaScript plus Tailwind CSS. 
 .
 ├── index.html          # All markup. Text is empty and filled in by main.js
 ├── main.js             # SITE (editable data), TRANSLATIONS (all text), behavior
-├── style.css           # Only what Tailwind can't cover: focus, skip link, hero animation
+├── style.css           # Only what Tailwind can't cover: focus, menu, rings, project cards, section animations
 ├── src/
 │   └── input.css       # Tailwind input: design tokens (@theme), buttons, page width
 ├── assets/
@@ -79,7 +79,7 @@ const SITE = {
   initials: 'SD',
   photo: '',                    // e.g. 'assets/samuel.jpg'
   links: { github: '#', linkedin: '#', instagram: '#', whatsapp: '#', email: 'mailto:hello@example.com' },
-  stack: ['HTML', 'CSS', 'JavaScript', 'React', 'Tailwind'],
+  stack: ['HTML', 'CSS', 'Tailwind', 'JavaScript', 'GSAP', 'React'], // chips in About
   form: { action: '' },         // contact form endpoint, see below
   scores: { performance: 92, accessibility: 100, seo: 100 },   // real Lighthouse scores of this page
   projects: [ { placeholder: true, image: '', url: '#', type: { en, pt }, title: { en, pt }, text: { en, pt },
@@ -90,7 +90,9 @@ const SITE = {
 - `scores` are the Lighthouse numbers shown in "What you get". They must be real: run Lighthouse (Chrome DevTools, mobile) on the deployed site and paste the results. The rings and counters animate to whatever is here.
 - `form.action` is where the contact form sends messages. Empty (the default): the form opens the visitor's email app with the message ready, using `links.email`. To receive messages without that step, create a form on a service such as Formspree or Basin, paste its URL here and the form will send in the background (it POSTs the fields and expects a JSON answer). Publish and test one message after changing it.
 - Put images in `assets/` and point to them by path.
-- Set `placeholder: false` on a project when it's real. That hides its "Placeholder" badge.
+- Set `placeholder: false` on a project when it's real. That hides its "Example" badge.
+- Only the first project card is in the HTML for now. The online store and dashboard cards are commented out in `index.html`; remove the comment markers to bring them back.
+- A new technology in `stack` gets a sand chip. To give it its own pastel color, add it to `STACK_COLORS` in `main.js`.
 - `type` is the short label shown on each project (website, online store, dashboard).
 - `details` is what appears when a visitor clicks a card: an overview (`about`), what Samuel did (`role`) and the technologies used (`stack`). The card opens with a smooth animation.
 
@@ -118,15 +120,15 @@ Everything lives in the `@theme` block at the top of [src/input.css](src/input.c
 | `orange` | `#D4621A` | Primary buttons only |
 | `amber` | `#F4AE52` | Accents on dark backgrounds, badges |
 
-Six transition tones fill the gaps: `linen`, `ink-soft`, `line`, `ink-raised`, `cream-muted` and `orange-deep`.
+Transition tones in the same warm family fill the gaps: `linen`, `ink-soft`, `line`, `ink-raised`, `cream-muted`, `orange-deep`, `orange-hover`, and `score`, `score-ink` and `score-soft` for the Lighthouse rings. A few colors step outside the palette on purpose, each commented in `src/input.css`: the hero window dots, the green checks and label in "What you get", the pastel chips in About, and the brand colors of the contact icons on hover.
 
-Type is Alef everywhere, with a scale defined as tokens (`display`, `title`, `heading`, `body`, `small`, `button`, `code`). Buttons use two radii (10px for buttons, 16px for tiles) and there is a single shadow, on the hero mock.
+Type is Alef everywhere, with a scale defined as tokens (`display`, `title`, `heading`, `body`, `small`, `button`). The page uses two radii (10px for buttons and fields, 16px for tiles) and there is a single shadow, on the hero mock.
 
 **Contrast note:** cream text on `orange` measures 3.44:1. That passes WCAG AA only as large text, so button labels are Alef bold at 1.2rem (about 19px) or larger. Don't shrink them. Orange is never used for small text on cream.
 
 ## Before launch
 
-- [ ] Replace every `#` and the example e-mail in `SITE.links`
+- [ ] Replace every `#` and the example e-mail in `SITE.links` (GitHub, LinkedIn, Instagram, WhatsApp, email)
 - [ ] Add a photo (`SITE.photo`)
 - [ ] Add the three real projects and set `placeholder: false` (ideally a website, an online store and a dashboard)
 - [ ] Write the real project texts, in English and Portuguese

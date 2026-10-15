@@ -389,11 +389,36 @@ const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+// Calls callback once, the first time element reaches the screen. Every scroll-triggered
+// animation on the page uses it. Without IntersectionObserver it runs right away.
+function onceVisible(element, callback, options) {
+  if (!('IntersectionObserver' in window)) return callback();
+  const observer = new IntersectionObserver((entries) => {
+    if (!entries.some((entry) => entry.isIntersecting)) return;
+    observer.disconnect();
+    callback();
+  }, options);
+  observer.observe(element);
+}
+
+// Runs render(progress) from 0 to 1 with an ease-out. With reduced motion it jumps straight to the end.
+// Used by the counters in the hero and in "What you get".
+function animateProgress(duration, render) {
+  if (reducedMotion) return render(1);
+  const start = performance.now();
+  const tick = (now) => {
+    const linear = Math.min((now - start) / duration, 1);
+    render(1 - (1 - linear) ** 3);
+    if (linear < 1) requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+}
+
 /* ---- Language ---- */
 function getSavedLang() {
   try {
     const saved = localStorage.getItem('lang');
-    return saved in TRANSLATIONS ? saved : 'en';
+    return Object.hasOwn(TRANSLATIONS, saved) ? saved : 'en';
   } catch {
     return 'en'; // storage can be blocked (private window, file://)
   }
@@ -407,6 +432,8 @@ function saveLang(lang) {
   }
 }
 
+/* ---- Content rendered from SITE ---- */
+// Fills each project card from SITE.projects[n], where n is the card's data-project. Runs on every language change.
 function renderProjects(lang) {
   const t = TRANSLATIONS[lang];
   $$('[data-project]').forEach((card) => {
@@ -466,6 +493,17 @@ function renderScores(lang) {
   });
 }
 
+// Pastel background per technology in the About stack (full class names so Tailwind finds them)
+const STACK_COLORS = {
+  HTML: 'bg-score-soft',
+  CSS: 'bg-tag-blue',
+  Tailwind: 'bg-tag-pink',
+  JavaScript: 'bg-tag-yellow',
+  GSAP: 'bg-tag-purple',
+  React: 'bg-check-soft',
+};
+
+// Photo (or the initials until there is one) and the stack chips. Language-independent, so it runs once.
 function renderAbout() {
   const photo = $('[data-about-photo]');
   photo.replaceChildren();
@@ -490,16 +528,7 @@ function renderAbout() {
   );
 }
 
-// Pastel background per technology in the About stack (full class names so Tailwind finds them)
-const STACK_COLORS = {
-  HTML: 'bg-score-soft',
-  CSS: 'bg-tag-blue',
-  Tailwind: 'bg-tag-pink',
-  JavaScript: 'bg-tag-yellow',
-  GSAP: 'bg-tag-purple',
-  React: 'bg-check-soft',
-};
-
+// Fills every [data-i18n] element (text) and [data-i18n-aria] element (aria-label) in the chosen language
 function applyLanguage(lang) {
   const t = TRANSLATIONS[lang];
 
@@ -518,7 +547,6 @@ function applyLanguage(lang) {
 
   renderProjects(lang);
   renderScores(lang);
-  $('[data-copyright]').textContent = `© ${new Date().getFullYear()} Samuel Dutra`;
 }
 
 $$('[data-lang]').forEach((button) => {
@@ -728,7 +756,9 @@ if (window.gsap && window.ScrollToPlugin && !reducedMotion) {
     scrollToY(target + event.deltaY * unit, 0.8);
   }, { passive: false });
 
-  // Anchor links glide to their section, leaving room for the sticky header
+  // Anchor links glide to their section, leaving room for the sticky header.
+  // preventDefault() also cancels the browser moving focus to the target, so it is done by hand:
+  // otherwise the skip link (and the menu links) would leave keyboard users back in the header.
   document.addEventListener('click', (event) => {
     const link = event.target.closest('a[href^="#"]');
     if (!link || event.defaultPrevented || event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0) return;
@@ -740,6 +770,8 @@ if (window.gsap && window.ScrollToPlugin && !reducedMotion) {
     const headerOffset = parseFloat(getComputedStyle(root).scrollPaddingTop) || 0;
     scrollToY(section.id === 'top' ? 0 : section.getBoundingClientRect().top + window.scrollY - headerOffset, 0.9);
     history.pushState(null, '', hash);
+    if (!section.hasAttribute('tabindex')) section.setAttribute('tabindex', '-1'); // focusable by script only, no ring (style.css)
+    section.focus({ preventScroll: true }); // the tween does the scrolling
   });
 }
 
@@ -756,21 +788,6 @@ function measureReadyTime() {
   return ms > 0 ? ms : null;
 }
 
-function countUp(element, target) {
-  if (reducedMotion) {
-    element.textContent = target;
-    return;
-  }
-  const duration = 800;
-  const start = performance.now();
-  const tick = (now) => {
-    const progress = Math.min((now - start) / duration, 1);
-    element.textContent = Math.round(target * (1 - (1 - progress) ** 3)); // ease-out
-    if (progress < 1) requestAnimationFrame(tick);
-  };
-  requestAnimationFrame(tick);
-}
-
 /*
  * The wireframe only builds once it is on screen (on phones and tablets it
  * sits below the fold). mockBuilt resolves when the animation has finished.
@@ -783,22 +800,18 @@ const mockBuilt = new Promise((resolve) => {
     mock.setAttribute('data-visible', '');
     setTimeout(resolve, reducedMotion ? 0 : BUILD_MS);
   };
-  if (reducedMotion || !('IntersectionObserver' in window)) return start();
-  const observer = new IntersectionObserver((entries) => {
-    if (!entries.some((entry) => entry.isIntersecting)) return;
-    observer.disconnect();
-    start();
-  }, { threshold: 0.5 }); // 0.8 could never fire on short viewports (e.g. a phone in landscape)
-  observer.observe(mock);
+  if (reducedMotion) return start();
+  onceVisible(mock, start, { threshold: 0.5 }); // 0.8 could never fire on short viewports (e.g. a phone in landscape)
 });
 
 function showReadyTime() {
   const ms = measureReadyTime();
   if (ms === null) return; // can't measure: the line stays invisible
-  const readout = $('[data-ready]');
+  const readout = $('[data-ready-time]');
   readout.classList.remove('invisible');
-  // Wait for the wireframe to finish building, then settle on the real number.
-  mockBuilt.then(() => countUp($('[data-ms]', readout), ms));
+  // Wait for the wireframe to finish building, then count up to the real number.
+  const number = $('[data-ms]', readout);
+  mockBuilt.then(() => animateProgress(800, (p) => (number.textContent = Math.round(ms * p))));
 }
 
 if (document.readyState === 'complete') {
@@ -808,20 +821,7 @@ if (document.readyState === 'complete') {
 }
 
 /* ---- What you get: rings fill and numbers count up once the panel is on screen ---- */
-// Runs render(progress) from 0 to 1 with an ease-out. With reduced motion it jumps straight to the end.
-function animateProgress(duration, render) {
-  if (reducedMotion) return render(1);
-  const start = performance.now();
-  const tick = (now) => {
-    const linear = Math.min((now - start) / duration, 1);
-    render(1 - (1 - linear) ** 3);
-    if (linear < 1) requestAnimationFrame(tick);
-  };
-  requestAnimationFrame(tick);
-}
-
-function playReport() {
-  const report = $('[data-report]');
+function playReport(report) {
   const DURATION = 1400;
 
   $$('[data-gauge]', report).forEach((gauge) => {
@@ -845,13 +845,8 @@ function playReport() {
   // Everything starts at its first frame; playReport() moves it to the final state
   $$('[data-gauge-value]', report).forEach((el) => (el.textContent = '0'));
 
-  if (reducedMotion || !('IntersectionObserver' in window)) return playReport();
-  const observer = new IntersectionObserver((entries) => {
-    if (!entries.some((entry) => entry.isIntersecting)) return;
-    observer.disconnect();
-    playReport();
-  }, { threshold: 0.4 });
-  observer.observe(report);
+  if (reducedMotion) return playReport(report);
+  onceVisible(report, () => playReport(report), { threshold: 0.4 });
 })();
 
 /* ---- Services: when the list reaches the screen, its rows slide in from the left in order, in one go ---- */
@@ -870,12 +865,8 @@ function playReport() {
   // to this section, the observer fires at once and without this the rows would skip the transition.
   void list.offsetHeight;
 
-  const observer = new IntersectionObserver((entries) => {
-    if (!entries.some((entry) => entry.isIntersecting)) return;
-    observer.disconnect();
-    list.setAttribute('data-visible', '');
-  }, { threshold: 0.1 }); // low, because the list is taller than a phone screen
-  observer.observe(list);
+  // Low threshold, because the list is taller than a phone screen
+  onceVisible(list, () => list.setAttribute('data-visible', ''), { threshold: 0.1 });
 })();
 
 /* ---- How it works: when the row reaches the screen, the boxes and the line between them appear one after the other (timing in style.css) ---- */
@@ -904,21 +895,20 @@ function playReport() {
       path.style.setProperty('--len', `${Math.ceil(length) + 1}px`);
     });
   };
+  // Measured now (not only in the observer, which fires later) so --len exists before the hidden first frame
   measure();
-  new ResizeObserver(measure).observe(frame); // the lines change length with the width of the screen
+  // The lines change length with the width of the screen; arcs hidden on mobile measure 0 until they show
+  new ResizeObserver(measure).observe(frame);
 
   frame.classList.add('steps-anim');
   void frame.offsetHeight; // compute the hidden first frame now, so the transitions always play
 
-  const observer = new IntersectionObserver((entries) => {
-    if (!entries.some((entry) => entry.isIntersecting)) return;
-    observer.disconnect();
-    frame.setAttribute('data-visible', '');
-  }, { rootMargin: '0px 0px -20% 0px' }); // starts once the first box is well inside the screen
-  observer.observe(frame);
+  // Starts once the first box is well inside the screen
+  onceVisible(frame, () => frame.setAttribute('data-visible', ''), { rootMargin: '0px 0px -20% 0px' });
 })();
 
 /* ---- Start ---- */
 renderAbout();
 applyLanguage(getSavedLang());
+$('[data-copyright]').textContent = `© ${new Date().getFullYear()} Samuel Dutra`;
 document.body.setAttribute('data-ready', ''); // reveals the page, see style.css

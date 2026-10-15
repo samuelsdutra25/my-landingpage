@@ -34,7 +34,17 @@ At the end of each piece of work, give Samuel a short summary of the design deci
 - Files: `index.html`, `main.js`, `style.css` (only what Tailwind can't cover), `assets/`, plus the Tailwind input at `src/input.css`.
 - The compiled Tailwind output is **committed** (`assets/tailwind.css`), so `index.html` still opens directly in the browser and deploys to Vercel or Netlify with no build step or config. Keep the CLI to one documented command (e.g. an npm script `build:css`, plus a `watch` variant), and document it in the README.
 - Tailwind v4 (`@tailwindcss/cli`). Design tokens (colors, font) live in a single place: the `@theme` block in `src/input.css`. Add any transition tones there. Rebuild with `npm run build:css` (or `npm run watch` while working) and commit the result.
-- No libraries beyond Tailwind and GSAP unless Samuel agrees. GSAP is approved (vendored at `assets/gsap.min.js`, refreshed with `npm run vendor:gsap`) and only for animations CSS can't do, see "Light animations only".
+- No libraries beyond Tailwind and GSAP unless Samuel agrees. GSAP is approved (vendored at `assets/gsap.min.js` and `assets/ScrollToPlugin.min.js`, both refreshed with `npm run vendor:gsap`) and only for animations CSS can't do, see "Light animations only". Today it drives the button bounce and the smooth scroll.
+
+## Code conventions
+
+- **`main.js` order:** `SITE` (editable data), `TRANSLATIONS`, then behavior. Shared helpers sit at the top of the behavior part: `$`, `$$`, `reducedMotion`, `onceVisible(element, callback, options)` and `animateProgress(duration, render)`.
+- **Scroll-triggered animations** (hero wireframe, rings, Services rows, How it works) all use `onceVisible()`. Don't write a new `IntersectionObserver` by hand. Counters use `animateProgress()`, which already respects reduced motion.
+- **Anchor links and focus:** the GSAP smooth scroll cancels the browser's own anchor jump, so it moves focus to the target by hand (`tabindex="-1"`, no outline, see `style.css`). Keep that when touching the scroll code, or the skip link breaks for keyboard users.
+- **Data attributes are the JS hooks.** They are unique per purpose: `data-ready` on `<body>` reveals the page, `data-ready-time` is the hero load-time line. Don't reuse a name for two things.
+- **Tokens:** only add a token to `@theme` when something uses it, and comment why it exists. Same for components in `src/input.css`: delete them when the markup stops using them (the old terminal's `text-code` and `btn-secondary-dark` were removed this way).
+- **`style.css`** has a table of contents in its top comment. Layout properties shared by every breakpoint go on the base rule, not repeated in each media query.
+- **Project cards:** only project 0 is in the HTML; cards 1 and 2 are commented out in `index.html` and their texts stay in `SITE.projects`.
 
 ## Design tokens
 
