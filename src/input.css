@@ -121,20 +121,18 @@
     @apply grid h-12 w-12 place-items-center rounded-xl border-2 border-current text-ink hover:scale-110;
     transition: transform 150ms, color 150ms;
   }
-  /* Icons are ink at rest and take their brand color on hover and focus (outside the palette on purpose, like the hero dots) */
-  .social-link[data-link="gmail"]:is(:hover, :focus-visible) { color: #EA4335; }
-  .social-link[data-link="whatsapp"]:is(:hover, :focus-visible) { color: #25D366; }
-  .social-link[data-link="instagram"]:is(:hover, :focus-visible) { color: #E4405F; }
+  /* Icons are ink at rest and take their brand color on hover and focus (outside the palette on purpose, like the hero dots).
+     The brand colors are darkened until each one has at least 3:1 on cream and sand (WCAG 1.4.11): the official WhatsApp green had 1.8:1 */
+  .social-link[data-link="gmail"]:is(:hover, :focus-visible) { color: #C5221F; }
+  .social-link[data-link="whatsapp"]:is(:hover, :focus-visible) { color: #0B7A55; }
+  .social-link[data-link="instagram"]:is(:hover, :focus-visible) { color: #C13584; }
   .social-link[data-link="github"]:is(:hover, :focus-visible) { color: #181717; }
   .social-link[data-link="linkedin"]:is(:hover, :focus-visible) { color: #0A66C2; }
   /* Contact form: text fields share the button's radius and 2px ink border */
   .field {
     @apply block w-full rounded-button border-2 border-ink bg-cream px-4 py-3 text-body;
   }
-  /* Focus: only the 2px border changes color (the global outline is removed in style.css) */
-  .field:focus-visible {
-    @apply border-orange;
-  }
+  /* Focus: the global ring from style.css (3px ink, offset), the same as every other control */
   .field[aria-invalid="true"] {
     @apply border-orange-deep;
   }
@@ -182,7 +180,7 @@
     transition: translate 300ms cubic-bezier(0.34, 1.4, 0.64, 1);
   }
   .lang-option {
-    @apply relative w-11 rounded-[7px] py-1 text-center text-small font-bold;
+    @apply relative w-11 rounded-[7px] py-2 text-center text-small font-bold;
   }
   .lang-switch[data-animate] .lang-option {
     @apply transition-colors duration-300;
@@ -192,5 +190,19 @@
   }
   .lang-option[aria-pressed="false"]:hover {
     @apply bg-linen;
+  }
+
+  /* Windows high contrast removes background colors, so the selected chip and language would look like the others.
+     System colors keep the state visible. */
+  @media (forced-colors: active) {
+    .chip:has(input:checked) span,
+    .lang-thumb {
+      background-color: Highlight;
+      color: HighlightText;
+      forced-color-adjust: none;
+    }
+    .lang-option[aria-pressed="true"] {
+      color: HighlightText;
+    }
   }
 }

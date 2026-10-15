@@ -166,10 +166,6 @@ html[data-smooth] {
   outline: 3px solid var(--color-ink);
   outline-offset: 3px;
 }
-/* Text fields show focus through their border color instead (see .field in src/input.css) */
-.field:focus-visible {
-  outline: none;
-}
 .on-dark :focus-visible {
   outline-color: var(--color-amber);
 }
