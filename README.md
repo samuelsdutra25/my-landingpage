@@ -36,6 +36,7 @@ The site itself is built with plain HTML, CSS and JavaScript plus Tailwind CSS. 
 ├── assets/
 │   ├── tailwind.css    # Compiled CSS. Committed on purpose, see below
 │   ├── gsap.min.js     # GSAP core, copied from node_modules. Committed on purpose
+│   ├── ScrollToPlugin.min.js # GSAP plugin for the smooth scroll, same idea
 │   └── favicon.svg
 ├── package.json        # Scripts and the Tailwind CLI and GSAP dependencies
 ├── CLAUDE.md           # Project brief and rules for Claude Code
@@ -61,7 +62,7 @@ npm run watch      # rebuilds assets/tailwind.css while you edit
 |---|---|
 | `npm run build:css` | Builds `assets/tailwind.css` once, minified |
 | `npm run watch` | Rebuilds it every time you save |
-| `npm run vendor:gsap` | Copies GSAP from `node_modules` to `assets/gsap.min.js` (only needed when updating GSAP) |
+| `npm run vendor:gsap` | Copies GSAP and its ScrollToPlugin from `node_modules` to `assets/` (only needed when updating GSAP) |
 
 Run `npm run build:css` and commit the result before you push or deploy. If you forget, the live site won't have your new classes.
 
@@ -77,7 +78,7 @@ The top of the file. Search for `TODO` to find every value that still needs a re
 const SITE = {
   initials: 'SD',
   photo: '',                    // e.g. 'assets/samuel.jpg'
-  links: { github: '#', linkedin: '#', email: 'mailto:hello@example.com' },
+  links: { github: '#', linkedin: '#', instagram: '#', whatsapp: '#', email: 'mailto:hello@example.com' },
   stack: ['HTML', 'CSS', 'JavaScript', 'React', 'Tailwind'],
   form: { action: '' },         // contact form endpoint, see below
   scores: { performance: 92, accessibility: 100, seo: 100 },   // real Lighthouse scores of this page

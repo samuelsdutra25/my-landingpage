@@ -5,7 +5,7 @@
   "scripts": {
     "build:css": "tailwindcss -i src/input.css -o assets/tailwind.css --minify",
     "watch": "tailwindcss -i src/input.css -o assets/tailwind.css --watch",
-    "vendor:gsap": "cp node_modules/gsap/dist/gsap.min.js assets/gsap.min.js"
+    "vendor:gsap": "cp node_modules/gsap/dist/gsap.min.js node_modules/gsap/dist/ScrollToPlugin.min.js assets/"
   },
   "devDependencies": {
     "@tailwindcss/cli": "^4.3.3",

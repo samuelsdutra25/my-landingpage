@@ -25,6 +25,16 @@
   --color-score: #F4AE52;      /* the ring (decorative: the number carries the value) */
   --color-score-ink: #9A4308;  /* the number (5.3:1 on its background) */
   --color-score-soft: #FCE6CB; /* fill inside the ring: a very light orange */
+  /* Window dots in the hero mock: the one place that steps out of the palette on purpose */
+  --color-dot-red: #EC6A5E;
+  --color-dot-yellow: #F4BF4F;
+  --color-dot-green: #61C554;
+  --color-check: #7BD389; /* light green check icons in "What you get" (test) */
+  --color-tag-blue: #D3E6F5;   /* pastel blue behind CSS in the About stack */
+  --color-tag-yellow: #F7E8A8; /* pastel yellow behind JavaScript in the About stack */
+  --color-tag-pink: #F6D5E3;   /* pastel pink behind Tailwind in the About stack */
+  --color-tag-purple: #E2D6F5; /* pastel purple behind GSAP in the About stack */
+  --color-check-soft: #B4E5BB; /* pastel green behind the Lighthouse label */
 
   /* Font */
   --font-sans: "Alef", "Alef Fallback", ui-sans-serif, system-ui, sans-serif;
@@ -111,9 +121,24 @@
     @apply inline-block py-1 text-cream-muted underline-offset-4 hover:text-cream hover:underline;
     transition: color 150ms;
   }
+  /* Contact channels: rounded squares, ink at rest; a small grow and the brand color on hover */
+  .social-link {
+    @apply grid h-12 w-12 place-items-center rounded-xl border-2 border-current text-ink hover:scale-110;
+    transition: transform 150ms, color 150ms;
+  }
+  /* Icons are ink at rest and take their brand color on hover and focus (outside the palette on purpose, like the hero dots) */
+  .social-link[data-link="gmail"]:is(:hover, :focus-visible) { color: #EA4335; }
+  .social-link[data-link="whatsapp"]:is(:hover, :focus-visible) { color: #25D366; }
+  .social-link[data-link="instagram"]:is(:hover, :focus-visible) { color: #E4405F; }
+  .social-link[data-link="github"]:is(:hover, :focus-visible) { color: #181717; }
+  .social-link[data-link="linkedin"]:is(:hover, :focus-visible) { color: #0A66C2; }
   /* Contact form: text fields share the button's radius and 2px ink border */
   .field {
     @apply block w-full rounded-button border-2 border-ink bg-cream px-4 py-3 text-body;
+  }
+  /* Focus: only the 2px border changes color (the global outline is removed in style.css) */
+  .field:focus-visible {
+    @apply border-orange;
   }
   .field[aria-invalid="true"] {
     @apply border-orange-deep;

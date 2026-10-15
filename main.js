@@ -10,6 +10,8 @@ const SITE = {
   links: {
     github: '#',
     linkedin: '#',
+    instagram: '#',
+    whatsapp: '#', // TODO: e.g. 'https://wa.me/5511999999999' (country code + number, digits only)
     email: 'mailto:hello@example.com',
   },
 
@@ -18,7 +20,7 @@ const SITE = {
   // (e.g. 'https://formspree.io/f/xxxxxxxx'). The form then sends in the background.
   form: { action: '' },
 
-  stack: ['HTML', 'CSS', 'JavaScript', 'React', 'Tailwind'],
+  stack: ['HTML', 'CSS', 'Tailwind', 'JavaScript', 'GSAP', 'React'],
 
   // Lighthouse scores of THIS page (mobile, 0 to 100). Measured 2026-10-13 on a local server
   // (8 runs: performance 92 to 93, accessibility 100, SEO 100). The lowest performance run is shown.
@@ -123,8 +125,8 @@ const TRANSLATIONS = {
     'hero.text':
       'They load fast, work on every screen and are easy to use. You get a clear estimate before we start and two weeks of support after delivery.',
     'hero.cta': 'Tell me about your project',
-    'hero.projects': 'See projects',
-    'hero.stack': 'Built with HTML, CSS, JavaScript, React and Tailwind.',
+    'hero.projects': 'See my work',
+    'hero.stack': 'Built with HTML, Tailwind, JavaScript and GSAP.',
     'hero.mockLabel': 'Your site',
     'hero.mockAria': 'Illustration of a small website being built',
     'hero.ready': 'This page was ready in',
@@ -176,7 +178,7 @@ const TRANSLATIONS = {
     'projects.placeholder':
       'Example',
     'projects.image': 'Project image',
-    'projects.view': 'View project',
+    'projects.view': 'View project online',
     'projects.details': 'Details',
     'projects.about': 'About the project',
     'projects.role': 'What I did',
@@ -211,7 +213,7 @@ const TRANSLATIONS = {
     'contact.text':
       'Describe what you need and get an estimate. A short message is enough.',
     'contact.cta': 'Send me a message',
-    'contact.direct': 'Prefer to write directly?',
+    'contact.direct': 'Prefer another contact channel?',
 
     'form.name': 'Name',
     'form.email': 'Email',
@@ -238,6 +240,8 @@ const TRANSLATIONS = {
     'footer.top': 'Back to top',
     'footer.linkedin': 'LinkedIn',
     'footer.github': 'GitHub',
+    'footer.instagram': 'Instagram',
+    'footer.whatsapp': 'WhatsApp',
   },
 
   pt: {
@@ -258,8 +262,8 @@ const TRANSLATIONS = {
     'hero.text':
       'Abrem rápido, funcionam em qualquer tela e são fáceis de usar. Você conhece custo e prazo antes de começar e conta com suporte depois da entrega.',
     'hero.cta': 'Conte sobre o seu projeto',
-    'hero.projects': 'Ver projetos',
-    'hero.stack': 'Feito com HTML, CSS, JavaScript, React e Tailwind.',
+    'hero.projects': 'Ver meus trabalhos',
+    'hero.stack': 'Feito com HTML, Tailwind, JavaScript e GSAP.',
     'hero.mockLabel': 'Seu site',
     'hero.mockAria': 'Ilustração de um site pequeno sendo montado',
     'hero.ready': 'Esta página ficou pronta em',
@@ -310,7 +314,7 @@ const TRANSLATIONS = {
       'Cada projeto mostra um tipo de trabalho diferente e pode ser aberto e testado.',
     'projects.placeholder': 'Exemplo',
     'projects.image': 'Imagem do projeto',
-    'projects.view': 'Ver projeto',
+    'projects.view': 'Ver projeto online',
     'projects.details': 'Detalhes',
     'projects.about': 'Sobre o projeto',
     'projects.role': 'O que fiz',
@@ -345,7 +349,7 @@ const TRANSLATIONS = {
       'Descreva o que você precisa e receba um orçamento. Uma mensagem curta é suficiente.',
     'contact.cta':
       'Enviar mensagem',
-    'contact.direct': 'Prefere escrever direto?',
+    'contact.direct': 'Prefere outro canal de contato?',
 
     'form.name': 'Nome',
     'form.email': 'E-mail',
@@ -372,6 +376,8 @@ const TRANSLATIONS = {
     'footer.top': 'Voltar ao topo',
     'footer.linkedin': 'LinkedIn',
     'footer.github': 'GitHub',
+    'footer.instagram': 'Instagram',
+    'footer.whatsapp': 'WhatsApp',
   },
 };
 
@@ -477,12 +483,22 @@ function renderAbout() {
   $('[data-stack]').replaceChildren(
     ...SITE.stack.map((name) => {
       const item = document.createElement('li');
-      item.className = 'rounded-full bg-sand px-3 py-1 text-small font-bold';
+      item.className = `rounded-full px-3 py-1 text-small font-bold ${STACK_COLORS[name] || 'bg-sand'}`;
       item.textContent = name;
       return item;
     })
   );
 }
+
+// Pastel background per technology in the About stack (full class names so Tailwind finds them)
+const STACK_COLORS = {
+  HTML: 'bg-score-soft',
+  CSS: 'bg-tag-blue',
+  Tailwind: 'bg-tag-pink',
+  JavaScript: 'bg-tag-yellow',
+  GSAP: 'bg-tag-purple',
+  React: 'bg-check-soft',
+};
 
 function applyLanguage(lang) {
   const t = TRANSLATIONS[lang];
@@ -516,7 +532,13 @@ $$('[data-lang]').forEach((button) => {
 
 /* ---- Links from SITE.links ---- */
 $$('[data-link]').forEach((a) => {
-  a.href = SITE.links[a.dataset.link];
+  const url = SITE.links[a.dataset.link];
+  a.href = url;
+  // Real web addresses open in a new tab; '#' placeholders and mailto: stay in place.
+  if (/^https?:/.test(url)) {
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
+  }
 });
 const emailAddress = SITE.links.email.replace(/^mailto:/, '');
 $$('[data-email-text]').forEach((a) => {
@@ -639,9 +661,9 @@ window.matchMedia('(min-width: 64rem)').addEventListener('change', (event) => {
   if (event.matches) setMenu(false);
 });
 
-/* ---- Buttons: hop on hover, landing with a GSAP bounce (transform only, skipped for reduced motion) ---- */
+/* ---- Buttons: hop on hover, landing with a GSAP bounce (transform only, skipped for reduced motion). The form submit button stays still. ---- */
 if (window.gsap && !reducedMotion) {
-  $$('.btn').forEach((button) => {
+  $$('.btn:not([data-form-submit])').forEach((button) => {
     button.addEventListener('mouseenter', () => {
       gsap.killTweensOf(button);
       gsap
@@ -649,6 +671,75 @@ if (window.gsap && !reducedMotion) {
         .to(button, { y: -10, duration: 0.15, ease: 'power2.out' })
         .to(button, { y: 0, duration: 0.8, ease: 'bounce.out' });
     });
+  });
+}
+
+/* ---- Smooth scroll: GSAP eases the real page scroll (wheel and anchor links), so the native scrollbar, keyboard, sticky header and touch keep working. Skipped for reduced motion. ---- */
+if (window.gsap && window.ScrollToPlugin && !reducedMotion) {
+  gsap.registerPlugin(ScrollToPlugin);
+  const root = document.documentElement;
+  root.setAttribute('data-smooth', '');
+
+  const maxScroll = () => root.scrollHeight - window.innerHeight;
+  const clamp = (value) => Math.max(0, Math.min(value, maxScroll()));
+  let target = window.scrollY;
+  let tweening = false;
+
+  const scrollToY = (y, duration) => {
+    target = clamp(y);
+    tweening = true;
+    gsap.to(window, {
+      scrollTo: { y: target, autoKill: false },
+      duration,
+      ease: 'power3.out',
+      overwrite: true,
+      onComplete: () => { tweening = false; },
+    });
+  };
+
+  // Scrolling by other means (keyboard, scrollbar, touch, browser find) takes over from the tween
+  window.addEventListener('scroll', () => {
+    if (!tweening) target = window.scrollY;
+  }, { passive: true });
+  ['keydown', 'pointerdown', 'touchstart'].forEach((type) => {
+    window.addEventListener(type, () => {
+      gsap.killTweensOf(window);
+      tweening = false;
+      target = window.scrollY;
+    }, { passive: true });
+  });
+
+  // A mouse wheel moves the target and the tween catches up. Leave zoom, sideways scroll and inner scroll areas alone.
+  const scrollsInside = (element, deltaY) => {
+    for (let node = element; node && node !== document.body; node = node.parentElement) {
+      const { overflowY } = getComputedStyle(node);
+      if (!/(auto|scroll)/.test(overflowY) || node.scrollHeight <= node.clientHeight) continue;
+      const atTop = node.scrollTop <= 0 && deltaY < 0;
+      const atBottom = node.scrollTop + node.clientHeight >= node.scrollHeight - 1 && deltaY > 0;
+      if (!atTop && !atBottom) return true;
+    }
+    return false;
+  };
+  window.addEventListener('wheel', (event) => {
+    if (event.ctrlKey || Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
+    if (scrollsInside(event.target, event.deltaY)) return;
+    event.preventDefault();
+    const unit = event.deltaMode === 1 ? 40 : event.deltaMode === 2 ? window.innerHeight : 1;
+    scrollToY(target + event.deltaY * unit, 0.8);
+  }, { passive: false });
+
+  // Anchor links glide to their section, leaving room for the sticky header
+  document.addEventListener('click', (event) => {
+    const link = event.target.closest('a[href^="#"]');
+    if (!link || event.defaultPrevented || event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0) return;
+    const hash = link.getAttribute('href');
+    if (hash === '#') return;
+    const section = document.getElementById(decodeURIComponent(hash.slice(1)));
+    if (!section) return;
+    event.preventDefault();
+    const headerOffset = parseFloat(getComputedStyle(root).scrollPaddingTop) || 0;
+    scrollToY(section.id === 'top' ? 0 : section.getBoundingClientRect().top + window.scrollY - headerOffset, 0.9);
+    history.pushState(null, '', hash);
   });
 }
 
