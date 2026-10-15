@@ -110,6 +110,7 @@ const SITE = {
 const TRANSLATIONS = {
   en: {
     'meta.title': 'Samuel Dutra | Front-end developer for websites, stores and dashboards',
+    'intro.welcome': 'Welcome',
     skip: 'Skip to content',
 
     'nav.label': 'Main',
@@ -247,6 +248,7 @@ const TRANSLATIONS = {
   pt: {
     'meta.title':
       'Samuel Dutra | Desenvolvedor front-end de sites, lojas virtuais e dashboards',
+    'intro.welcome': 'Seja bem-vindo',
     skip: 'Pular para o conteúdo',
 
     'nav.label': 'Principal',
@@ -781,6 +783,103 @@ const syncHeaderLine = () => header.toggleAttribute('data-scrolled', window.scro
 window.addEventListener('scroll', syncHeaderLine, { passive: true });
 syncHeaderLine();
 
+/*
+ * ---- Opening animation: plays once per visit, on top of the page (CSS in style.css, "Opening animation") ----
+ * 1. A welcome message fades in letter by letter. Under it an amber line is drawn (with a dot at its tip, like the
+ *    lines in "How it works") while a number counts from 0 to 100%.
+ * 2. The count holds at 90% until the page has finished loading (at most 4 s), then it reaches 100% and the
+ *    ink panel lifts away with the message.
+ * Returns a promise that resolves while the panel is leaving, so the hero can start building.
+ * Without the data-intro attribute (seen already, reduced motion, link to a section) it does nothing.
+ */
+function playIntro() {
+  const root = document.documentElement;
+  if (!root.hasAttribute('data-intro') || !window.gsap || reducedMotion) {
+    root.removeAttribute('data-intro');
+    return Promise.resolve();
+  }
+
+  const screen = $('[data-intro-screen]');
+  const panel = $('[data-intro-panel]', screen);
+  const message = $('.intro-message', screen);
+  const track = $('.intro-track', screen);
+  const line = $('.intro-line', screen);
+  const head = $('.intro-dot', screen);
+  const percent = $('.intro-percent', screen);
+
+  // The text follows the saved language. It is set here (not with data-i18n) because it is split into letters
+  const chars = [...TRANSLATIONS[getSavedLang()]['intro.welcome']].map((char) => {
+    const span = document.createElement('span');
+    span.textContent = char;
+    return span;
+  });
+  message.append(...chars);
+
+  // Nothing behind the panel can be reached with the keyboard while it covers the page
+  const behind = [...document.body.children].filter((el) => el !== screen && el.tagName !== 'SCRIPT');
+  behind.forEach((el) => (el.inert = true));
+
+  const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  const loaded =
+    document.readyState === 'complete'
+      ? Promise.resolve()
+      : new Promise((resolve) => window.addEventListener('load', resolve, { once: true }));
+  const run = (timeline) => new Promise((resolve) => timeline.eventCallback('onComplete', resolve));
+
+  let release;
+  const released = new Promise((resolve) => (release = resolve));
+
+  (async () => {
+    try {
+      await sequence();
+    } finally {
+      // Also runs if something above throws, so the page is never left covered or unreachable
+      behind.forEach((el) => (el.inert = false));
+      root.removeAttribute('data-intro');
+      screen.remove();
+      release();
+    }
+  })();
+
+  async function sequence() {
+    await Promise.race([document.fonts.ready, wait(1500)]);
+
+    // The line, the dot and the number all follow one value
+    const progress = { value: 0 };
+    const width = track.offsetWidth;
+    const draw = () => {
+      line.style.clipPath = `inset(0 ${100 - progress.value}% 0 0)`;
+      gsap.set(head, { x: (progress.value / 100) * width });
+      percent.textContent = `${Math.round(progress.value)}%`;
+    };
+    draw();
+
+    await run(
+      gsap
+        .timeline()
+        .set(message, { opacity: 1 })
+        .fromTo(message, { yPercent: 35 }, { yPercent: 0, duration: 0.9, ease: 'power3.out' }, 0)
+        .fromTo(chars, { opacity: 0 }, { opacity: 1, duration: 0.3, stagger: 0.05, ease: 'none' }, 0)
+        .fromTo(head, { opacity: 0, scale: 0 }, { opacity: 1, scale: 1, duration: 0.35, ease: 'back.out(2)' }, 0.2)
+        .to(percent, { opacity: 1, duration: 0.3, ease: 'none' }, 0.2)
+        .to(progress, { value: 90, duration: 1.4, ease: 'power2.out', onUpdate: draw }, 0.2),
+    );
+    await Promise.race([loaded, wait(4000)]);
+    await run(gsap.to(progress, { value: 100, duration: 0.4, ease: 'power1.out', onUpdate: draw }));
+    await wait(250);
+
+    await run(
+      gsap
+        .timeline()
+        .to(panel, { y: -panel.offsetHeight, duration: 0.85, ease: 'power3.inOut' })
+        .call(release, null, 0.45),
+    );
+  }
+
+  return released;
+}
+const introDone = playIntro();
+
 /* ---- Hero: how long this page took to be ready, measured in the visitor's browser ---- */
 function measureReadyTime() {
   const [navigation] = performance.getEntriesByType('navigation');
@@ -801,7 +900,9 @@ const mockBuilt = new Promise((resolve) => {
     setTimeout(resolve, reducedMotion ? 0 : BUILD_MS);
   };
   if (reducedMotion) return start();
-  onceVisible(mock, start, { threshold: 0.5 }); // 0.8 could never fire on short viewports (e.g. a phone in landscape)
+  // Waits for the opening animation, so the wireframe doesn't build behind the panel.
+  // 0.8 could never fire on short viewports (e.g. a phone in landscape)
+  introDone.then(() => onceVisible(mock, start, { threshold: 0.5 }));
 });
 
 function showReadyTime() {

@@ -1,6 +1,6 @@
 /*
  * Hand-written CSS for what Tailwind doesn't cover. In page order:
- * font fallback, page reveal, scroll and focus, skip link, mobile menu,
+ * font fallback, page reveal, opening animation, scroll and focus, skip link, mobile menu,
  * the "What you get" rings, project cards, the hero wireframe, the Services
  * reveal, "How it works" (layout, then animation) and reduced motion.
  * Keep it small. Anything that has a Tailwind utility belongs in the HTML.
@@ -52,6 +52,98 @@ body:not([data-ready]) {
     visibility: visible;
     animation: none;
   }
+}
+
+/*
+ * Opening animation. An ink panel with a welcome message covers the page, then lifts away.
+ * The panel and the first paint are CSS only, so there is no flash of the page. main.js
+ * (playIntro) does the motion. Shown only while <html> has data-intro (set in the <head>).
+ */
+.intro {
+  display: none;
+}
+html[data-intro] .intro {
+  display: block;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  visibility: visible; /* the body is still invisible until main.js sets data-ready */
+  pointer-events: none;
+  animation: intro-failsafe 0s 5.5s forwards;
+}
+@keyframes intro-failsafe {
+  to {
+    visibility: hidden;
+  }
+}
+.intro-panel {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: var(--color-ink);
+  color: var(--color-cream);
+  pointer-events: auto; /* blocks clicks while it covers the page */
+}
+.intro-brand {
+  display: grid;
+  justify-items: start;
+}
+.intro-message {
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  font-size: clamp(2.5rem, 10.5vw, 6rem);
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: pre;
+  opacity: 0; /* main.js shows it when the animation starts */
+}
+/* The loading line is drawn like the lines in "How it works": same stroke, amber,
+   with a dot at the tip. The dot travels with the line, and the number below counts with it. */
+.intro-track {
+  --extra: 4.5vw; /* how far the line goes past each side of the word */
+  position: relative;
+  display: block;
+  width: calc(100% + 2 * var(--extra));
+  height: 3.5px;
+  margin: 1.5rem calc(-1 * var(--extra)) 0;
+}
+@media (min-width: 64rem) {
+  .intro-track {
+    --extra: 4rem;
+  }
+}
+.intro-line {
+  display: block;
+  height: 100%;
+  border-radius: 9999px;
+  background: var(--color-amber);
+  clip-path: inset(0 100% 0 0); /* main.js reveals it from the left (clip, so the rounded start never gets squashed) */
+}
+.intro-dot {
+  --dot: 0.875rem;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: var(--dot);
+  height: var(--dot);
+  margin: calc(var(--dot) / -2) 0 0 calc(var(--dot) / -2); /* centers the dot (no translate, GSAP moves it with transform) */
+  border-radius: 9999px;
+  background: var(--color-amber);
+  box-shadow: 0 0 0 4px var(--color-ink); /* a ring of the background keeps the node apart from the line */
+  opacity: 0;
+}
+.intro-percent {
+  display: block;
+  justify-self: center;
+  margin-top: 1.5rem;
+  color: var(--color-cream-muted);
+  font-size: clamp(1.5rem, 5vw, 2.25rem);
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  opacity: 0;
 }
 
 html {
@@ -554,6 +646,9 @@ html[data-smooth] {
   }
   .build {
     animation: none;
+  }
+  html[data-intro] .intro {
+    display: none;
   }
   #mobile-menu,
   #mobile-menu nav > *,

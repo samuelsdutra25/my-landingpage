@@ -14,6 +14,23 @@
 
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 
+  <!-- Opening animation: decides before the first paint, so the page never flashes. It plays once per
+       visit (per tab), never with reduced motion and never when the link points to a section (#projects).
+       main.js plays it (playIntro). The timer is a failsafe in case the script never runs. -->
+  <script>
+    (function () {
+      try {
+        if (matchMedia('(prefers-reduced-motion: reduce)').matches || location.hash || sessionStorage.getItem('intro')) return;
+        sessionStorage.setItem('intro', '1');
+      } catch (error) {
+        return;
+      }
+      var root = document.documentElement;
+      root.setAttribute('data-intro', '');
+      setTimeout(function () { root.removeAttribute('data-intro'); }, 6000);
+    })();
+  </script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Alef:wght@400;700&display=swap" rel="stylesheet">
@@ -25,6 +42,21 @@
   <script src="main.js" defer></script>
 </head>
 <body>
+  <!-- Opening animation (see "Opening animation" in style.css). Hidden unless <html> has data-intro -->
+  <div class="intro" data-intro-screen aria-hidden="true">
+    <div class="intro-panel" data-intro-panel>
+      <div class="intro-brand">
+        <!-- Filled by playIntro() in main.js (text from TRANSLATIONS, key intro.welcome) -->
+        <span class="intro-message"></span>
+        <span class="intro-track">
+          <span class="intro-line"></span>
+          <span class="intro-dot"></span>
+        </span>
+        <span class="intro-percent"></span>
+      </div>
+    </div>
+  </div>
+
   <a href="#main" class="skip-link" data-i18n="skip"></a>
 
   <!-- Header -->

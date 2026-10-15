@@ -108,6 +108,10 @@ To add or change text, edit the key in **both** languages. To add a new text ele
 
 The site copy is final, except the project texts, which live in `SITE.projects`.
 
+### Opening animation
+
+An ink panel with a welcome message ("Welcome" / "Seja bem-vindo", key `intro.welcome` in `TRANSLATIONS`) covers the page while a wide amber line (rounded, going past the word on both sides) is drawn under it, in the style of the lines in "How it works" (with a dot at its tip), and a number counts from 0 to 100% below it. The count holds at 90% until the page has finished loading (at most 4 s), then the panel lifts away. It plays once per visit (per browser tab), and is skipped with reduced motion or when the link points to a section (`#projects`). To see it again, open the site in a new tab or run `sessionStorage.clear()` in the console and reload. The code is `playIntro()` in `main.js`, the styles are under "Opening animation" in `style.css`, and the check that decides whether it plays is the small script in the `<head>` of `index.html`.
+
 ## Design system
 
 Everything lives in the `@theme` block at the top of [src/input.css](src/input.css). Change a value there, rebuild, and it updates across the site.
