@@ -77,6 +77,8 @@
           <button type="button" data-lang="en" aria-pressed="true" class="lang-option">EN</button>
           <button type="button" data-lang="pt" aria-pressed="false" class="lang-option">PT</button>
         </div>
+        <!-- Announces a language change to screen readers. Filled by main.js on click -->
+        <p class="sr-only" role="status" data-lang-announce></p>
         <a href="#contact" class="btn btn-primary hidden px-5 py-2 lg:inline-flex" data-i18n="nav.talk"></a>
         <button type="button" data-menu-button aria-expanded="false" aria-controls="mobile-menu" data-i18n-aria="nav.menu" class="group inline-grid h-11 w-11 place-items-center rounded-button border-2 border-ink lg:hidden">
           <svg class="col-start-1 row-start-1 h-5 w-5 transition duration-200 group-aria-expanded:rotate-90 group-aria-expanded:opacity-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>

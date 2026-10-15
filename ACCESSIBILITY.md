@@ -14,11 +14,14 @@ Status date: 2026-10-15.
 
 ## Fixed
 
-- WhatsApp (and Gmail, Instagram) hover/focus colors in `src/input.css`: the official WhatsApp green had 1.8:1 contrast on cream. The three are now darkened to at least 3.85:1 on cream and sand (1.4.11).
 - Form fields: focus now uses the same global 3px ring as every other control, instead of only changing the border to orange.
 - Hero at 320px: the grid column of the hero mock was 312px wide inside a 280px container, so the page scrolled sideways by 12px (1.4.10 Reflow). Fixed with `min-w-0` on the two hero columns.
 - EN/PT options are 44x39px (were 44x28px).
+- Language change: a visually hidden `role="status"` region announces "Language changed to English." / "Idioma alterado para português." on click (4.1.3).
+- While the opening animation covers the page, `<main>` itself is no longer `inert` (only its children), so tools that read the page meanwhile still find the main landmark. PageSpeed reported "Document does not have a main landmark"; it could not be reproduced locally (Lighthouse 13.5, accessibility 100, even with real throttling), so this is a precaution. Re-run PageSpeed on the deployed URL.
 - Windows high contrast (`forced-colors`): the selected chip and the selected language use system colors, so the state stays visible.
+
+Decided to keep as is: the hover/focus colors of the contact icons are the official brand colors (Samuel prefers them). The WhatsApp green is 1.8:1 on cream, below the 3:1 of 1.4.11. The icons keep their 2px border and the 3px focus ring, so the control is still visible; only the icon color is weak on hover.
 
 Not a problem after checking: `hover:text-orange-deep` is only used on cream (the project card and the form panel are cream even inside sand sections), where it has 4.64:1.
 
@@ -30,6 +33,10 @@ Not a problem after checking: `hover:text-orange-deep` is only used on cream (th
 - Target size: every link, button, field and chip is at least 24x24px.
 - Focus not obscured: tabbing through the whole page at 1280px, no focused element sits behind the sticky header (the skip link shows above it on purpose).
 - Reduced motion: no intro, the three rings show their final numbers (92, 100, 100), all four process boxes are visible.
+
+## Deferred
+
+The contact form is not finished (Samuel will build it later), so every form item below (1.3.1 labels, 1.3.4, 3.3.1 to 3.3.4, 3.3.7, 4.1.3 status) must be tested again when it is done.
 
 ## 1. Perceivable
 
@@ -119,7 +126,7 @@ Not a problem after checking: `hover:text-orange-deep` is only used on cream (th
 - [x] 4.1.2 Name, role, value: `aria-expanded` and `aria-controls` on menu and project toggles, `aria-pressed` on EN/PT.
 - [ ] 4.1.2 The project toggle sits inside an `<h3>` and its card has an `aria-hidden` visual cue. Confirm a screen reader announces "button, collapsed" with the title.
 - [x] 4.1.3 Status messages: `role="status"` on the form status.
-- [ ] 4.1.3 The EN/PT change does not announce anything; decide if that is acceptable (the `lang` and the visible change are enough for most users).
+- [x] 4.1.3 The EN/PT change is announced (see "Fixed"). Confirm with a screen reader.
 
 ## Motion and preferences (not a separate SC, but the project rule)
 

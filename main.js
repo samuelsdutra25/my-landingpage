@@ -121,6 +121,7 @@ const TRANSLATIONS = {
     'nav.talk': 'Talk to me',
     'nav.menu': 'Menu',
     'lang.label': 'Language',
+    'lang.changed': 'Language changed to English.',
 
     'hero.title': 'I build the websites, stores and dashboards your customers use.',
     'hero.text':
@@ -259,6 +260,7 @@ const TRANSLATIONS = {
     'nav.talk': 'Fale comigo',
     'nav.menu': 'Menu',
     'lang.label': 'Idioma',
+    'lang.changed': 'Idioma alterado para português.',
 
     'hero.title': 'Eu construo os sites, lojas e painéis que os seus clientes usam.',
     'hero.text':
@@ -557,6 +559,8 @@ $$('[data-lang]').forEach((button) => {
     $('[data-lang-switch]').setAttribute('data-animate', '');
     saveLang(button.dataset.lang);
     applyLanguage(button.dataset.lang);
+    // Screen readers hear the change (the page itself changes silently). Only on a click, not when the page loads.
+    $('[data-lang-announce]').textContent = TRANSLATIONS[button.dataset.lang]['lang.changed'];
   });
 });
 
@@ -816,7 +820,10 @@ function playIntro() {
   message.append(...chars);
 
   // Nothing behind the panel can be reached with the keyboard while it covers the page
-  const behind = [...document.body.children].filter((el) => el !== screen && el.tagName !== 'SCRIPT');
+  // (main itself stays outside the inert part: an inert <main> is not a landmark for a tool that reads the page meanwhile)
+  const behind = [...document.body.children]
+    .filter((el) => el !== screen && el.tagName !== 'SCRIPT')
+    .flatMap((el) => (el.tagName === 'MAIN' ? [...el.children] : [el]));
   behind.forEach((el) => (el.inert = true));
 
   const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));

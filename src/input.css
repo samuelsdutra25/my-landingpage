@@ -121,11 +121,10 @@
     @apply grid h-12 w-12 place-items-center rounded-xl border-2 border-current text-ink hover:scale-110;
     transition: transform 150ms, color 150ms;
   }
-  /* Icons are ink at rest and take their brand color on hover and focus (outside the palette on purpose, like the hero dots).
-     The brand colors are darkened until each one has at least 3:1 on cream and sand (WCAG 1.4.11): the official WhatsApp green had 1.8:1 */
-  .social-link[data-link="gmail"]:is(:hover, :focus-visible) { color: #C5221F; }
-  .social-link[data-link="whatsapp"]:is(:hover, :focus-visible) { color: #0B7A55; }
-  .social-link[data-link="instagram"]:is(:hover, :focus-visible) { color: #C13584; }
+  /* Icons are ink at rest and take their brand color on hover and focus (outside the palette on purpose, like the hero dots) */
+  .social-link[data-link="gmail"]:is(:hover, :focus-visible) { color: #EA4335; }
+  .social-link[data-link="whatsapp"]:is(:hover, :focus-visible) { color: #25D366; }
+  .social-link[data-link="instagram"]:is(:hover, :focus-visible) { color: #E4405F; }
   .social-link[data-link="github"]:is(:hover, :focus-visible) { color: #181717; }
   .social-link[data-link="linkedin"]:is(:hover, :focus-visible) { color: #0A66C2; }
   /* Contact form: text fields share the button's radius and 2px ink border */
