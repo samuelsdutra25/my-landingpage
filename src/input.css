@@ -37,7 +37,7 @@
   --color-check-soft: #B4E5BB; /* pastel green behind the Lighthouse label */
 
   /* Font */
-  --font-sans: "Alef", "Alef Fallback", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Hind", "Hind Fallback", ui-sans-serif, system-ui, sans-serif;
 
   /* Type scale */
   --text-display: clamp(2.5rem, 1rem + 6vw, 4.75rem);
@@ -94,7 +94,7 @@
 }
 
 /*
- * Buttons. Labels are Alef bold at 1.2rem (about 19px), which counts as large
+ * Buttons. Labels are Hind bold at 1.2rem (about 19px), which counts as large
  * text, so cream on orange (3.4:1) passes WCAG AA.
  */
 @layer components {
@@ -164,15 +164,16 @@
   .nav-link:hover::after {
     @apply scale-x-100;
   }
-  /* EN/PT switch: an ink thumb slides between two equal cells, with a small overshoot like a toggle.
-     Transitions only start after the first click (data-animate), so a saved PT choice doesn't slide in on load. */
+  /* EN/PT switch: two links (one page per language) with an ink thumb under the current one.
+     On a click the thumb slides over, with a small overshoot like a toggle, before the other page opens.
+     Transitions only start on that click (data-animate), so the PT page doesn't slide in on load. */
   .lang-switch {
     @apply relative inline-grid grid-cols-2 rounded-button border-2 border-ink p-0.5;
   }
   .lang-thumb {
     @apply absolute top-0.5 bottom-0.5 left-0.5 w-[calc((100%-4px)/2)] rounded-[7px] bg-ink;
   }
-  .lang-switch:has([data-lang="pt"][aria-pressed="true"]) .lang-thumb {
+  .lang-switch:has([data-lang="pt"][aria-current="true"]) .lang-thumb {
     @apply translate-x-full;
   }
   .lang-switch[data-animate] .lang-thumb {
@@ -184,10 +185,10 @@
   .lang-switch[data-animate] .lang-option {
     @apply transition-colors duration-300;
   }
-  .lang-option[aria-pressed="true"] {
+  .lang-option[aria-current="true"] {
     @apply text-cream;
   }
-  .lang-option[aria-pressed="false"]:hover {
+  .lang-option[aria-current="false"]:hover {
     @apply bg-linen;
   }
 
@@ -200,7 +201,7 @@
       color: HighlightText;
       forced-color-adjust: none;
     }
-    .lang-option[aria-pressed="true"] {
+    .lang-option[aria-current="true"] {
       color: HighlightText;
     }
   }

@@ -19,9 +19,10 @@ Thumbs.db
 *.swp
 *~
 
-# Deploy tooling (created by the Vercel and Netlify CLIs)
+# Deploy tooling (created by the Vercel, Netlify and Cloudflare CLIs)
 .vercel/
 .netlify/
+.wrangler/
 
 # Claude Code: personal settings stay local. The project skill in
 # .claude/skills/ and CLAUDE.md are meant to be committed.

@@ -1,0 +1,12 @@
+{
+  // Cloudflare Workers with static assets (no Worker script): serves this folder as the site.
+  // The name must match the Worker name in the Cloudflare dashboard.
+  "name": "samueldutra",
+  "compatibility_date": "2026-10-15",
+  "assets": {
+    // The project root is the site. Files that must not be public are listed in .assetsignore.
+    "directory": "./",
+    // A wrong address gets the nearest 404.html with a real 404 status (/pt/... gets pt/404.html)
+    "not_found_handling": "404-page"
+  }
+}

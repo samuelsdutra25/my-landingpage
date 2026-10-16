@@ -1,0 +1,5 @@
+# The whole site is open to search engines
+User-agent: *
+Allow: /
+
+Sitemap: https://samueldutra.com.br/sitemap.xml

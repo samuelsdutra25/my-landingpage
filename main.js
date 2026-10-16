@@ -2,6 +2,10 @@
    1. SITE: everything Samuel replaces lives here. Edit this object only.
    ========================================================================== */
 const SITE = {
+  // Public address of the site, with the final slash. Canonical links, share previews, the sitemap and the
+  // structured data are built from it (npm run build). The Portuguese page lives at url + 'pt/'.
+  url: 'https://samueldutra.com.br/',
+
   // Shown in the About section until a photo exists.
   initials: 'SD',
   photo: '', // TODO: e.g. 'assets/samuel.jpg'
@@ -22,10 +26,11 @@ const SITE = {
 
   stack: ['HTML', 'CSS', 'Tailwind', 'JavaScript', 'GSAP', 'React'],
 
-  // Lighthouse scores of THIS page (mobile, 0 to 100). Measured 2026-10-13 on a local server
-  // (8 runs: performance 92 to 93, accessibility 100, SEO 100). The lowest performance run is shown.
+  // Lighthouse scores of THIS page (mobile, 0 to 100). Measured 2026-10-15 on a local server with
+  // Lighthouse 12.2.1 (6 runs, English and Portuguese pages: performance 85 in every run, accessibility 100,
+  // SEO 100), after the switch to Hind and the text written into the HTML.
   // TODO: run Lighthouse again on the deployed URL and update these. null shows "--" and leaves the ring empty.
-  scores: { performance: 92, accessibility: 100, seo: 100 },
+  scores: { performance: 85, accessibility: 100, seo: 100 },
 
   // TODO: three real projects (a website, an online store and a dashboard).
   // The text below says what each one will prove. Replace titles, text and url when the project exists,
@@ -109,9 +114,19 @@ const SITE = {
    ========================================================================== */
 const TRANSLATIONS = {
   en: {
-    'meta.title': 'Samuel Dutra | Front-end developer for websites, stores and dashboards',
+    'meta.title': 'Samuel Dutra, freelance front-end developer',
+    'meta.description':
+      'Front-end developer for websites, online stores and dashboards. Fast, responsive and accessible, with a clear estimate and two weeks of support after delivery.',
+    'meta.jobTitle': 'Front-end developer',
     'intro.welcome': 'Welcome',
     skip: 'Skip to content',
+
+    // 404 page (404.html)
+    'notfound.meta': 'Page not found | Samuel Dutra',
+    'notfound.title': 'Page not found',
+    'notfound.text': 'The address may have a typo, or the page may have moved. The home page has everything you need.',
+    'notfound.cta': 'Go to the home page',
+    'notfound.mockAria': 'Illustration of a browser window with an empty page',
 
     'nav.label': 'Main',
     'nav.services': 'Services',
@@ -121,7 +136,6 @@ const TRANSLATIONS = {
     'nav.talk': 'Talk to me',
     'nav.menu': 'Menu',
     'lang.label': 'Language',
-    'lang.changed': 'Language changed to English.',
 
     'hero.title': 'I build the websites, stores and dashboards your customers use.',
     'hero.text':
@@ -247,10 +261,19 @@ const TRANSLATIONS = {
   },
 
   pt: {
-    'meta.title':
-      'Samuel Dutra | Desenvolvedor front-end de sites, lojas virtuais e dashboards',
+    'meta.title': 'Samuel Dutra, programador front-end freelancer',
+    'meta.description':
+      'Desenvolvedor front-end de sites, lojas virtuais e dashboards. Rápidos, responsivos e acessíveis, com orçamento claro e duas semanas de suporte depois da entrega.',
+    'meta.jobTitle': 'Desenvolvedor front-end',
     'intro.welcome': 'Seja bem-vindo',
     skip: 'Pular para o conteúdo',
+
+    // Página 404 (404.html)
+    'notfound.meta': 'Página não encontrada | Samuel Dutra',
+    'notfound.title': 'Página não encontrada',
+    'notfound.text': 'O endereço pode ter um erro de digitação, ou a página pode ter mudado de lugar. A página inicial tem tudo o que você precisa.',
+    'notfound.cta': 'Ir para a página inicial',
+    'notfound.mockAria': 'Ilustração de uma janela de navegador com uma página vazia',
 
     'nav.label': 'Principal',
     'nav.services': 'Serviços',
@@ -260,7 +283,6 @@ const TRANSLATIONS = {
     'nav.talk': 'Fale comigo',
     'nav.menu': 'Menu',
     'lang.label': 'Idioma',
-    'lang.changed': 'Idioma alterado para português.',
 
     'hero.title': 'Eu construo os sites, lojas e painéis que os seus clientes usam.',
     'hero.text':
@@ -387,6 +409,8 @@ const TRANSLATIONS = {
 
 /* ==========================================================================
    3. Behavior. Nothing below needs editing to change content.
+   scripts/build-html.mjs reads everything above this banner (SITE and
+   TRANSLATIONS) and writes the text into the HTML (npm run build).
    ========================================================================== */
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
@@ -418,65 +442,27 @@ function animateProgress(duration, render) {
   requestAnimationFrame(tick);
 }
 
-/* ---- Language ---- */
-function getSavedLang() {
-  try {
-    const saved = localStorage.getItem('lang');
-    return Object.hasOwn(TRANSLATIONS, saved) ? saved : 'en';
-  } catch {
-    return 'en'; // storage can be blocked (private window, file://)
-  }
-}
+/* ---- Language ----
+   Each language is its own page, / (English) and /pt/ (Portuguese), and the build has already written the
+   text into it. main.js only needs the translations for what it shows later (form messages, the intro). */
+const LANG = document.documentElement.lang.slice(0, 2); // 'en', or 'pt' from 'pt-BR'
+const T = TRANSLATIONS[LANG];
 
-function saveLang(lang) {
-  try {
-    localStorage.setItem('lang', lang);
-  } catch {
-    /* ignore: the choice just won't be remembered */
-  }
-}
+// The EN/PT switch is two links. On a click the thumb slides to the new language, then the other page opens
+// (keeping the section in the address). Ctrl/Cmd/Shift-click opens it the browser's way.
+$$('[data-lang]').forEach((link) => {
+  // Opened straight from the folder (file://), "pt/" would list the folder instead of opening the page
+  if (location.protocol === 'file:' && link.getAttribute('href').endsWith('/')) link.href += 'index.html';
 
-/* ---- Content rendered from SITE ---- */
-// Fills each project card from SITE.projects[n], where n is the card's data-project. Runs on every language change.
-function renderProjects(lang) {
-  const t = TRANSLATIONS[lang];
-  $$('[data-project]').forEach((card) => {
-    const project = SITE.projects[Number(card.dataset.project)];
-    if (!project) return;
-
-    $('[data-project-type]', card).textContent = project.type[lang];
-    $('[data-project-title]', card).textContent = project.title[lang];
-    $('[data-project-text]', card).textContent = project.text[lang];
-    $('[data-project-about]', card).textContent = project.details.about[lang];
-    $('[data-project-role]', card).textContent = project.details.role[lang];
-    $('[data-project-stack]', card).replaceChildren(
-      ...project.details.stack.map((name) => {
-        const item = document.createElement('li');
-        item.className = 'rounded-full bg-sand px-3 py-1 text-small font-bold';
-        item.textContent = name;
-        return item;
-      })
-    );
-    $('[data-project-link]', card).href = project.url;
-    $('[data-project-badge]', card).hidden = !project.placeholder;
-
-    const media = $('[data-project-media]', card);
-    media.replaceChildren();
-    if (project.image) {
-      const img = document.createElement('img');
-      img.src = project.image;
-      img.alt = project.title[lang];
-      img.loading = 'lazy';
-      img.className = 'h-full w-full object-cover';
-      media.append(img);
-    } else {
-      const label = document.createElement('span');
-      label.className = 'text-small';
-      label.textContent = t['projects.image'];
-      media.append(label);
-    }
+  link.addEventListener('click', (event) => {
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0) return;
+    event.preventDefault();
+    if (link.getAttribute('aria-current') === 'true') return; // already on this language
+    $('[data-lang-switch]').setAttribute('data-animate', '');
+    $$('[data-lang]').forEach((a) => a.setAttribute('aria-current', String(a === link)));
+    setTimeout(() => window.location.assign(link.href + location.hash), reducedMotion ? 0 : 250);
   });
-}
+});
 
 /* ---- Project cards: click anywhere on a card to open or close its details ---- */
 $$('[data-project]').forEach((card) => {
@@ -488,100 +474,10 @@ $$('[data-project]').forEach((card) => {
   });
 });
 
-/* Screen reader text for the gauges. The visible numbers animate, so they are hidden from assistive tech. */
-function renderScores(lang) {
-  const t = TRANSLATIONS[lang];
-  $$('[data-gauge]').forEach((gauge) => {
-    const score = SITE.scores[gauge.dataset.gauge];
-    $('[data-gauge-sr]', gauge).textContent = score === null ? '' : `${score} ${t['included.outOf']}`;
-  });
-}
-
-// Pastel background per technology in the About stack (full class names so Tailwind finds them)
-const STACK_COLORS = {
-  HTML: 'bg-score-soft',
-  CSS: 'bg-tag-blue',
-  Tailwind: 'bg-tag-pink',
-  JavaScript: 'bg-tag-yellow',
-  GSAP: 'bg-tag-purple',
-  React: 'bg-check-soft',
-};
-
-// Photo (or the initials until there is one) and the stack chips. Language-independent, so it runs once.
-function renderAbout() {
-  const photo = $('[data-about-photo]');
-  photo.replaceChildren();
-  if (SITE.photo) {
-    const img = document.createElement('img');
-    img.src = SITE.photo;
-    img.alt = 'Samuel Dutra';
-    img.className = 'h-full w-full object-cover';
-    photo.append(img);
-  } else {
-    photo.setAttribute('aria-hidden', 'true');
-    photo.textContent = SITE.initials;
-  }
-
-  $('[data-stack]').replaceChildren(
-    ...SITE.stack.map((name) => {
-      const item = document.createElement('li');
-      item.className = `rounded-full px-3 py-1 text-small font-bold ${STACK_COLORS[name] || 'bg-sand'}`;
-      item.textContent = name;
-      return item;
-    })
-  );
-}
-
-// Fills every [data-i18n] element (text) and [data-i18n-aria] element (aria-label) in the chosen language
-function applyLanguage(lang) {
-  const t = TRANSLATIONS[lang];
-
-  document.documentElement.lang = lang;
-  document.title = t['meta.title'];
-
-  $$('[data-i18n]').forEach((el) => {
-    el.textContent = t[el.dataset.i18n];
-  });
-  $$('[data-i18n-aria]').forEach((el) => {
-    el.setAttribute('aria-label', t[el.dataset.i18nAria]);
-  });
-  $$('[data-lang]').forEach((button) => {
-    button.setAttribute('aria-pressed', String(button.dataset.lang === lang));
-  });
-
-  renderProjects(lang);
-  renderScores(lang);
-}
-
-$$('[data-lang]').forEach((button) => {
-  button.addEventListener('click', () => {
-    // Enable the switch transitions only after the first click, not on page load
-    $('[data-lang-switch]').setAttribute('data-animate', '');
-    saveLang(button.dataset.lang);
-    applyLanguage(button.dataset.lang);
-    // Screen readers hear the change (the page itself changes silently). Only on a click, not when the page loads.
-    $('[data-lang-announce]').textContent = TRANSLATIONS[button.dataset.lang]['lang.changed'];
-  });
-});
-
-/* ---- Links from SITE.links ---- */
-$$('[data-link]').forEach((a) => {
-  const url = SITE.links[a.dataset.link];
-  a.href = url;
-  // Real web addresses open in a new tab; '#' placeholders and mailto: stay in place.
-  if (/^https?:/.test(url)) {
-    a.target = '_blank';
-    a.rel = 'noopener noreferrer';
-  }
-});
 const emailAddress = SITE.links.email.replace(/^mailto:/, '');
-$$('[data-email-text]').forEach((a) => {
-  a.textContent = emailAddress;
-});
 
 /* ---- Contact form ----
-   Validation is ours (the form has novalidate) so the messages follow the EN/PT toggle.
-   Messages are set through data-i18n, so applyLanguage() translates them when the language changes. */
+   Validation is ours (the form has novalidate) so the messages are in the language of the page. */
 const form = $('[data-contact-form]');
 const formStatus = $('[data-form-status]', form);
 const formSubmit = $('[data-form-submit]', form);
@@ -589,7 +485,7 @@ const formSubmit = $('[data-form-submit]', form);
 function setI18n(el, key) {
   if (key) {
     el.dataset.i18n = key;
-    el.textContent = TRANSLATIONS[document.documentElement.lang][key];
+    el.textContent = T[key];
   } else {
     delete el.dataset.i18n;
     el.textContent = '';
@@ -630,16 +526,15 @@ form.addEventListener('input', (event) => {
 });
 
 function sendByMailto(data) {
-  const t = TRANSLATIONS[document.documentElement.lang];
   const chip = $('input[name="type"]:checked', form);
   const body = [
-    `${t['form.name']}: ${data.get('name')}`,
-    `${t['form.email']}: ${data.get('email')}`,
-    ...(chip ? [`${t['form.type']}: ${chip.nextElementSibling.textContent}`] : []),
+    `${T['form.name']}: ${data.get('name')}`,
+    `${T['form.email']}: ${data.get('email')}`,
+    ...(chip ? [`${T['form.type']}: ${chip.nextElementSibling.textContent}`] : []),
     '',
     data.get('message'),
   ].join('\n');
-  const subject = `${t['form.mailSubject']} ${data.get('name')}`;
+  const subject = `${T['form.mailSubject']} ${data.get('name')}`;
   window.location.href = `mailto:${emailAddress}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   showStatus('form.mailto', true);
 }
@@ -811,8 +706,8 @@ function playIntro() {
   const head = $('.intro-dot', screen);
   const percent = $('.intro-percent', screen);
 
-  // The text follows the saved language. It is set here (not with data-i18n) because it is split into letters
-  const chars = [...TRANSLATIONS[getSavedLang()]['intro.welcome']].map((char) => {
+  // Set here (not written by the build) because it is split into letters
+  const chars = [...T['intro.welcome']].map((char) => {
     const span = document.createElement('span');
     span.textContent = char;
     return span;
@@ -1015,8 +910,5 @@ function playReport(report) {
   onceVisible(frame, () => frame.setAttribute('data-visible', ''), { rootMargin: '0px 0px -20% 0px' });
 })();
 
-/* ---- Start ---- */
-renderAbout();
-applyLanguage(getSavedLang());
+/* ---- Footer year: the build writes it too; this keeps it right when the page was not rebuilt in a new year ---- */
 $('[data-copyright]').textContent = `© ${new Date().getFullYear()} Samuel Dutra`;
-document.body.setAttribute('data-ready', ''); // reveals the page, see style.css

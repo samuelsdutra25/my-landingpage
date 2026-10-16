@@ -1,6 +1,6 @@
 /*
  * Hand-written CSS for what Tailwind doesn't cover. In page order:
- * font fallback, page reveal, opening animation, scroll and focus, skip link, mobile menu,
+ * fonts, opening animation, scroll and focus, skip link, mobile menu,
  * the "What you get" rings, project cards, the hero wireframe, the Services
  * reveal, "How it works" (layout, then animation) and reduced motion.
  * Keep it small. Anything that has a Tailwind utility belongs in the HTML.
@@ -8,50 +8,53 @@
  */
 
 /*
- * Fallback for Alef while it loads. Arial is resized and re-spaced to match
- * Alef's width and line height (measured from the font files), so the swap
- * doesn't move the layout (Cumulative Layout Shift). Used in --font-sans.
+ * Hind, hosted with the site (assets/fonts, latin subset: covers Portuguese accents and
+ * typographic quotes; license in assets/fonts/OFL.txt). Only 400 and 700 are used.
+ * Hind's own vertical metrics are tall (it also covers Devanagari), which would sit the
+ * text high in buttons and chips. The overrides give it the ascent and descent the page
+ * was designed with (Alef's), so text stays centered and nothing moves.
  */
 @font-face {
-  font-family: "Alef Fallback";
-  src: local("Arial"), local("Liberation Sans");
+  font-family: "Hind";
+  src: url("assets/fonts/hind-400.woff2") format("woff2");
   font-weight: 400;
-  size-adjust: 103.4%;
-  ascent-override: 97.6%;
-  descent-override: 34.1%;
+  font-display: swap;
+  ascent-override: 101%;
+  descent-override: 35%;
   line-gap-override: 0%;
 }
 @font-face {
-  font-family: "Alef Fallback";
-  src: local("Arial Bold"), local("Arial"), local("Liberation Sans Bold");
+  font-family: "Hind";
+  src: url("assets/fonts/hind-700.woff2") format("woff2");
   font-weight: 700;
-  size-adjust: 103.9%;
-  ascent-override: 97.2%;
-  descent-override: 33.9%;
+  font-display: swap;
+  ascent-override: 101%;
+  descent-override: 35%;
   line-gap-override: 0%;
 }
 
 /*
- * All text is filled in by main.js (the HTML is empty on purpose). If the browser
- * painted before the script ran, the page would show empty boxes and then jump
- * when the text arrives (a large layout shift). So the page stays invisible until
- * main.js sets data-ready on <body>. Without JavaScript, or if the script fails,
- * it shows after 3 seconds anyway.
+ * Fallback while Hind loads. Arial is resized and re-spaced to match Hind's width
+ * (measured from the font files) and the metrics above, so the swap doesn't move
+ * the layout (Cumulative Layout Shift). Used in --font-sans.
  */
-body:not([data-ready]) {
-  visibility: hidden;
-  animation: show-page 0s 3s forwards;
+@font-face {
+  font-family: "Hind Fallback";
+  src: local("Arial"), local("Liberation Sans");
+  font-weight: 400;
+  size-adjust: 95.2%;
+  ascent-override: 106.1%;
+  descent-override: 36.8%;
+  line-gap-override: 0%;
 }
-@keyframes show-page {
-  to {
-    visibility: visible;
-  }
-}
-@media (scripting: none) {
-  body:not([data-ready]) {
-    visibility: visible;
-    animation: none;
-  }
+@font-face {
+  font-family: "Hind Fallback";
+  src: local("Arial Bold"), local("Arial"), local("Liberation Sans Bold");
+  font-weight: 700;
+  size-adjust: 93.7%;
+  ascent-override: 107.8%;
+  descent-override: 37.4%;
+  line-gap-override: 0%;
 }
 
 /*
@@ -67,7 +70,6 @@ html[data-intro] .intro {
   position: fixed;
   inset: 0;
   z-index: 100;
-  visibility: visible; /* the body is still invisible until main.js sets data-ready */
   pointer-events: none;
   animation: intro-failsafe 0s 5.5s forwards;
 }

@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-Single-page portfolio landing site for Samuel Dutra, a freelance front-end developer. The site builds trust with small clients and sends them to contact him (with a contact form that opens his email app until a form endpoint is set). This file is the full brief and the source of truth. If something it doesn't cover comes up, ask Samuel.
+Single-page portfolio landing site for Samuel Dutra, a freelance front-end developer, at https://samueldutra.com.br/ (English) and https://samueldutra.com.br/pt/ (Portuguese). The site builds trust with small clients and sends them to contact him (with a contact form that opens his email app until a form endpoint is set). This file is the full brief and the source of truth. If something it doesn't cover comes up, ask Samuel.
 
 **Scope of the work he sells:** the whole front end, not only websites: websites and landing pages, online stores (e-commerce), dashboards and web apps, and tweaks to existing front ends. Site copy talks about "interfaces" and "projects", not only "sites". Samuel also knows React and uses it when an interface has a lot of state. This portfolio itself stays plain HTML on purpose, because a simple page doesn't need a framework.
 
@@ -12,7 +12,7 @@ Single-page portfolio landing site for Samuel Dutra, a freelance front-end devel
 
 ## Fixed constraints vs. design freedom
 
-**Fixed (this file wins, do not change without asking):** the stack, the five palette tokens (extra transition tones are allowed, see "Design tokens"), the Alef font, English as default language with EN/PT toggle, the order of the sections, the single-page scope, and the "Never do" list (nothing invented).
+**Fixed (this file wins, do not change without asking):** the stack, the five palette tokens (extra transition tones are allowed, see "Design tokens"), the Hind font, English as default language with EN/PT toggle, the order of the sections, the single-page scope (one page, in two languages, plus the 404 page), and the "Never do" list (nothing invented).
 
 **Free (the `frontend-design` skill decides):** how each section looks and behaves: hero treatment, layout, card shapes, labels, typographic details, motion and microcopy. The style reference and the section descriptions below are a starting point, not a recipe. If a detail in them reads as a generic default, propose something more specific to Samuel and his work, and say what you changed and why.
 
@@ -31,17 +31,18 @@ At the end of each piece of work, give Samuel a short summary of the design deci
 
 - Plain HTML, CSS and JavaScript plus **Tailwind CSS via the CLI**.
 - No React, TypeScript, Next.js or any framework **in this site**. No complex build. (Samuel knows React and offers it to clients, see the scope above. The rule is about this page only.)
-- Files: `index.html`, `main.js`, `style.css` (only what Tailwind can't cover), `assets/`, plus the Tailwind input at `src/input.css`.
-- The compiled Tailwind output is **committed** (`assets/tailwind.css`), so `index.html` still opens directly in the browser and deploys to Vercel or Netlify with no build step or config. Keep the CLI to one documented command (e.g. an npm script `build:css`, plus a `watch` variant), and document it in the README.
-- Tailwind v4 (`@tailwindcss/cli`). Design tokens (colors, font) live in a single place: the `@theme` block in `src/input.css`. Add any transition tones there. Rebuild with `npm run build:css` (or `npm run watch` while working) and commit the result.
+- Files: `index.html`, `main.js`, `style.css` (only what Tailwind can't cover), `assets/` (fonts in `assets/fonts/`), the Tailwind input at `src/input.css`, the HTML build at `scripts/build-html.mjs`, and the Cloudflare config `wrangler.jsonc` plus `.assetsignore` (the list of internal files that must not be published; add any new internal file or folder there). Generated and committed: `assets/tailwind.css`, `pt/index.html`, `pt/404.html`, `sitemap.xml` and `robots.txt` (plus the text inside `index.html` and `404.html`). `404.html` is the English error page and, like `index.html`, both the template and the page.
+- One command builds everything: `npm run build` (= `build:css` then `build:html`), plus `npm run watch` for the CSS while working. The output is **committed**, so `index.html` still opens directly in the browser and deploys to Cloudflare (Workers with static assets) with no build step. Document any change to this in the README.
+- `scripts/build-html.mjs` is plain Node with no dependencies. It reads `SITE` and `TRANSLATIONS` from `main.js` and writes the text into `index.html` (English, in place: it is both the template and the page) and `pt/index.html` (Portuguese, generated: never edit by hand), the `<head>` block between the `build:head` comments (title, description, canonical, hreflang, Open Graph, JSON-LD), the sitemap, `robots.txt` and the `?v=` fingerprints on local CSS and JS. Running it twice changes nothing.
+- Tailwind v4 (`@tailwindcss/cli`). Design tokens (colors, font) live in a single place: the `@theme` block in `src/input.css`. Add any transition tones there. Rebuild with `npm run build` (or `npm run watch` while working) and commit the result.
 - No libraries beyond Tailwind and GSAP unless Samuel agrees. GSAP is approved (vendored at `assets/gsap.min.js` and `assets/ScrollToPlugin.min.js`, both refreshed with `npm run vendor:gsap`) and only for animations CSS can't do, see "Light animations only". Today it drives the button bounce and the smooth scroll.
 
 ## Code conventions
 
-- **`main.js` order:** `SITE` (editable data), `TRANSLATIONS`, then behavior. Shared helpers sit at the top of the behavior part: `$`, `$$`, `reducedMotion`, `onceVisible(element, callback, options)` and `animateProgress(duration, render)`.
+- **`main.js` order:** `SITE` (editable data), `TRANSLATIONS`, then behavior. The build reads everything above the "3. Behavior" banner, so keep that part pure data. Rendering content (text, projects, links, photo, stack) is the build's job; `main.js` only handles what happens after load (form, animations, the language links), using `T`, the translations of the page's language. Shared helpers sit at the top of the behavior part: `$`, `$$`, `reducedMotion`, `onceVisible(element, callback, options)` and `animateProgress(duration, render)`.
 - **Scroll-triggered animations** (hero wireframe, rings, Services rows, How it works) all use `onceVisible()`. Don't write a new `IntersectionObserver` by hand. Counters use `animateProgress()`, which already respects reduced motion.
 - **Anchor links and focus:** the GSAP smooth scroll cancels the browser's own anchor jump, so it moves focus to the target by hand (`tabindex="-1"`, no outline, see `style.css`). Keep that when touching the scroll code, or the skip link breaks for keyboard users.
-- **Data attributes are the JS hooks.** They are unique per purpose: `data-ready` on `<body>` reveals the page, `data-ready-time` is the hero load-time line. Don't reuse a name for two things.
+- **Data attributes are the JS hooks.** They are unique per purpose: `data-i18n` is filled with text by the build, `data-lang` marks the two language links, `data-ready-time` is the hero load-time line. Don't reuse a name for two things.
 - **Tokens:** only add a token to `@theme` when something uses it, and comment why it exists. Same for components in `src/input.css`: delete them when the markup stops using them (the old terminal's `text-code` and `btn-secondary-dark` were removed this way).
 - **`style.css`** has a table of contents in its top comment. Layout properties shared by every breakpoint go on the base rule, not repeated in each media query.
 - **Project cards:** only project 0 is in the HTML; cards 1 and 2 are commented out in `index.html` and their texts stay in `SITE.projects`.
@@ -63,17 +64,17 @@ Transition colors: if more are needed, create intermediate tones derived from th
 Contrast rules:
 
 - Measured contrast of cream with `#D4621A` is 3.44:1 (the briefing's 3.8:1 and 4.7:1 were wrong). Never use `#D4621A` as small text on cream. Only buttons, large headings or icons.
-- Cream text on `#D4621A` passes AA only as large text, so button labels are Alef bold at 1.2rem (about 19px) or larger. Hover uses `orange-deep` (4.6:1).
+- Cream text on `#D4621A` passes AA only as large text, so button labels are Hind bold at 1.2rem (about 19px) or larger. Hover uses `orange-deep` (4.6:1).
 - `#F4AE52` is for dark backgrounds. On cream, only large decorative elements.
 - Every link and button has a visible focus state.
 
 ## Typography
 
-- **Alef** from Google Fonts, weights 400 and 700 only (the only ones that exist), loaded with `display=swap`.
-- Alef everywhere.
+- **Hind**, weights 400 and 700 only, everywhere. Chosen by Samuel (2026-10-15) to replace Alef, whose apostrophe and quotes are drawn as large curly commas. It is hosted with the site (`assets/fonts/`, latin subset, license in `OFL.txt`), with `font-display: swap` and the bold preloaded in the `<head>`.
+- Hind's own vertical metrics are tall (it also covers Devanagari), so the `@font-face` rules in `style.css` override its ascent and descent to the values the page was designed with. `Hind Fallback` (Arial resized to Hind's width and those metrics) keeps the swap from moving the layout. Recompute both if the font changes.
 - Headings use `text-wrap: balance`. Body text is at most about 65 characters wide.
 - Define the type scale (sizes, weights, line height, spacing) in the design plan, following the `frontend-design` skill, and keep it consistent across the page. Don't change it later without saying so.
-- The logo is the text "Samuel Dutra" in Alef bold. No image.
+- The logo is the text "Samuel Dutra" in Hind bold. No image.
 
 ## Style reference
 
@@ -99,23 +100,23 @@ Structure and feel follow https://weaveos.com. The palette does **not**.
 ## Content and i18n
 
 - English by default, EN/PT toggle in the header.
-- All text lives in one translations object in `main.js`. The only text allowed directly in the HTML is the logo.
-- The toggle saves the choice in `localStorage` and updates `<html lang>`.
+- All text lives in one translations object in `main.js` (project texts in `SITE.projects`). The build writes it into the HTML so crawlers and visitors get it without JavaScript. Never type text into `index.html` or `pt/index.html` by hand; the only text written directly in the HTML is the logo.
+- Each language is its own page: `/` (`lang="en"`) and `/pt/` (`lang="pt-BR"`), each with its own canonical, `hreflang` to both (plus `x-default` to English) and its own title, description and share image. The EN/PT toggle is a pair of links (the thumb slides, then the other page opens on the same section). No automatic redirect by language and no saved choice: Google advises against redirecting by language, and the address already says which one it is.
 
 ## Placeholders
 
 Everything Samuel will replace lives in one object (e.g. `const SITE = {...}` in `main.js`), so he never has to hunt through the HTML. Keep placeholders obvious and easy to swap. Still **PENDING**:
 
 - Photo: neutral shape with initials "SD" until it arrives.
-- Links: GitHub, LinkedIn, email (use `#` or an example `mailto:` marked TODO).
+- Links: GitHub, LinkedIn, email (use `#` or an example `mailto:` marked TODO). Real `https` profile links also go into the structured data (`sameAs`) on the next build.
 - The 3 projects (type, title, description, image, link).
-- Real metrics (years of experience, projects). The Lighthouse scores in "What you get" are already real, but were measured locally: re-measure on the deployed site.
+- Real metrics (years of experience, projects). The Lighthouse scores in "What you get" are already real, but were measured locally (2026-10-15): re-measure on the deployed site.
 
 ## Quality bar
 
 - Mobile first. Check around 400px with no horizontal scroll.
 - Accessibility: semantic HTML, correct heading hierarchy, `alt` on images, visible focus, keyboard navigation, respect `prefers-reduced-motion`.
-- SEO basics: `<title>`, meta description, Open Graph, correct `lang`, simple favicon.
+- SEO: see `SEO.md` (checklist, with what is done and what is pending). The build covers title, description, canonical, hreflang, Open Graph, JSON-LD, sitemap and robots; keep it that way rather than adding tags by hand.
 - Performance: light images, no unnecessary libraries.
 - Light animations only: always prefer lightweight animations. Animate `transform` and `opacity`, avoid layout-triggering properties, keep durations short, and prefer CSS when it is enough. Use GSAP only when CSS can't do the job.
 - Motion: one orchestrated moment (likely in the hero) plus feedback for user actions (EN/PT toggle, menu, button hover and focus). No fade-and-slide entrance on every section and no hover effect on every card. Always respect `prefers-reduced-motion`. Nothing that hurts reading.
@@ -126,15 +127,15 @@ Everything Samuel will replace lives in one object (e.g. `const SITE = {...}` in
 - Do not change the five palette tokens, the font or the default language without asking. Adding transition tones is fine.
 - No emojis as section markers.
 - No lorem ipsum. The site copy was written and approved by Samuel (2026-10-13). Facts in it (two weeks of support, contract, estimate, monthly hours) come from Samuel, so don't change them without asking. Avoid coach-style words, humor, em dashes in short copy, and any mention of being new to the field. Don't state an hourly rate on the site. The project texts are still pending and will be written once the projects exist.
-- No extra pages. It is one page.
-- No fixed text in the HTML outside the translations object (except the logo).
+- No extra pages. It is one page, in two languages (`/` and `/pt/`). The only exception is the error page, `404.html` and `pt/404.html`: it is not linked from the site, not in the sitemap and `noindex`.
+- No hand-written text in the HTML: it comes from the translations object through the build (except the logo).
 
 ## Git
 
 - The repo uses git. Make small, descriptive commits in English, and only when Samuel asks.
-- Commit the compiled `assets/tailwind.css` along with the source changes that produced it.
+- Commit the generated files (`assets/tailwind.css`, `index.html`, `404.html`, `pt/index.html`, `pt/404.html`, `sitemap.xml`, `robots.txt`) along with the source changes that produced them. Run `npm run build` first.
 
 ## Deliverables
 
 - Organized code, commented where it isn't obvious.
-- A short `README` covering: how to open locally, how to rebuild the CSS, where to change the photo, links and projects, and how to publish on Vercel or Netlify.
+- A short `README` covering: how to open locally, how to rebuild (`npm run build`), where to change the photo, links and projects, and how to publish on Cloudflare.

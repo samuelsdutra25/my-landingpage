@@ -17,7 +17,7 @@ Status date: 2026-10-15.
 - Form fields: focus now uses the same global 3px ring as every other control, instead of only changing the border to orange.
 - Hero at 320px: the grid column of the hero mock was 312px wide inside a 280px container, so the page scrolled sideways by 12px (1.4.10 Reflow). Fixed with `min-w-0` on the two hero columns.
 - EN/PT options are 44x39px (were 44x28px).
-- Language change: a visually hidden `role="status"` region announces "Language changed to English." / "Idioma alterado para português." on click (4.1.3).
+- Language change (updated 2026-10-15): each language is now its own page (`/` and `/pt/`), so EN/PT are links and choosing one opens the other page, which screen readers announce like any new page (title and `lang`). The old `role="status"` announcement was removed with the in-place switch.
 - While the opening animation covers the page, `<main>` itself is no longer `inert` (only its children), so tools that read the page meanwhile still find the main landmark. PageSpeed reported "Document does not have a main landmark"; it could not be reproduced locally (Lighthouse 13.5, accessibility 100, even with real throttling), so this is a precaution. Re-run PageSpeed on the deployed URL.
 - Windows high contrast (`forced-colors`): the selected chip and the selected language use system colors, so the state stays visible.
 
@@ -26,6 +26,8 @@ Decided to keep as is: the hover/focus colors of the contact icons are the offic
 Not a problem after checking: `hover:text-orange-deep` is only used on cream (the project card and the form panel are cream even inside sand sections), where it has 4.64:1.
 
 ## Tested (2026-10-15, Playwright and axe-core 4.10.2)
+
+- After the font change (Hind), the text written into the HTML and the `/pt/` page: axe **0 violations** on `/` at 1280px and on `/pt/` at 320px, and no horizontal scroll on `/pt/` at 320px (the longer Portuguese text).
 
 - axe with the WCAG 2.0/2.1/2.2 A and AA tags plus best practices: **0 violations** in PT (project expanded), EN, and EN on a 390px screen with the mobile menu open.
 - Reflow: no horizontal scroll at 320, 360, 400 and 768px.
@@ -82,7 +84,7 @@ The contact form is not finished (Samuel will build it later), so every form ite
 
 ### Navigable
 - [x] 2.4.1 Bypass blocks: skip link `#main`, and the smooth scroll moves focus to the target by hand.
-- [x] 2.4.2 Page titled, and updated with the language (`document.title`).
+- [x] 2.4.2 Page titled: each language page has its own `<title>`, written by the build.
 - [ ] 2.4.3 Focus order: Tab order follows the visual order; closed mobile menu is out of the order (`visibility: hidden`); the intro and the honeypot are out too.
 - [x] 2.4.4 Link purpose: links read well alone. Icon-only links have `aria-label`.
 - [ ] 2.4.4 Placeholder `href="#"` links (social, project) must be replaced before launch.
@@ -94,7 +96,7 @@ The contact form is not finished (Samuel will build it later), so every form ite
 ### Input modalities
 - [x] 2.5.1 Pointer gestures: no multi-point or path gestures.
 - [x] 2.5.2 Pointer cancellation: only native `click`.
-- [ ] 2.5.3 Label in name: visible text of buttons and links appears in the accessible name. Check the EN/PT toggle (`aria-label` of the group vs. the visible "EN"/"PT") and the project toggle.
+- [ ] 2.5.3 Label in name: visible text of buttons and links appears in the accessible name. The EN/PT links have no `aria-label`, so their name is the visible "EN"/"PT" (the group is labelled "Language"). Check the project toggle.
 - [x] 2.5.4 Motion actuation: none.
 - [x] **2.5.7 (new) Dragging movements**: nothing needs dragging.
 - [x] **2.5.8 (new) Target size (minimum 24x24px)**: measured, all targets pass.
@@ -102,12 +104,12 @@ The contact form is not finished (Samuel will build it later), so every form ite
 ## 3. Understandable
 
 ### Readable
-- [x] 3.1.1 Language of page: `<html lang>` updates with the toggle.
+- [x] 3.1.1 Language of page: `lang="en"` on `/`, `lang="pt-BR"` on `/pt/`. The EN and PT links carry their own `lang` and `hreflang`.
 - [ ] 3.1.2 Language of parts: any English term inside the PT text (for example "front-end", stack names) is fine as a proper name; check the longer ones.
 
 ### Predictable
 - [x] 3.2.1 On focus: nothing changes on focus.
-- [x] 3.2.2 On input: the EN/PT toggle is a button, the radio chips only select.
+- [x] 3.2.2 On input: the EN/PT toggle is a pair of links (a click opens the other page, which is expected of a link), the radio chips only select.
 - [x] 3.2.3 Consistent navigation, 3.2.4 consistent identification: header and footer are the same everywhere (one page).
 - [x] **3.2.6 (new, A) Consistent help**: the contact link is in the header and the footer in the same place. Nothing else to do.
 
@@ -123,10 +125,10 @@ The contact form is not finished (Samuel will build it later), so every form ite
 ## 4. Robust
 
 - [x] ~~4.1.1 Parsing~~ was removed from WCAG 2.2. Still validate the HTML (W3C validator) for duplicate ids.
-- [x] 4.1.2 Name, role, value: `aria-expanded` and `aria-controls` on menu and project toggles, `aria-pressed` on EN/PT.
+- [x] 4.1.2 Name, role, value: `aria-expanded` and `aria-controls` on menu and project toggles, `aria-current="true"` on the EN/PT link of the current page.
 - [ ] 4.1.2 The project toggle sits inside an `<h3>` and its card has an `aria-hidden` visual cue. Confirm a screen reader announces "button, collapsed" with the title.
 - [x] 4.1.3 Status messages: `role="status"` on the form status.
-- [x] 4.1.3 The EN/PT change is announced (see "Fixed"). Confirm with a screen reader.
+- [x] 4.1.3 The EN/PT change opens a new page, announced by the screen reader itself (see "Fixed").
 
 ## Motion and preferences (not a separate SC, but the project rule)
 

@@ -1,0 +1,24 @@
+# Files Cloudflare must NOT publish. Everything else in the project root is the site.
+# Syntax is the same as .gitignore.
+
+# Project notes and docs (internal)
+CLAUDE.md
+README.md
+SEO.md
+ACCESSIBILITY.md
+
+# Source and build tooling
+src/
+scripts/
+package.json
+package-lock.json
+node_modules/
+
+# Tooling and deploy config
+.claude/
+.git/
+.gitignore
+.assetsignore
+wrangler.jsonc
+.wrangler/
+.playwright-mcp/
