@@ -99,9 +99,9 @@ Google asks for good Core Web Vitals: **LCP ≤ 2.5 s, INP < 200 ms, CLS < 0.1**
 
 - [x] `viewport` meta, no horizontal scroll from 320px, on both pages.
 - [x] Font hosted with the site (2 files of 16 KB, bold preloaded) with a metric-matched fallback. The Google Fonts stylesheet and its two connections are gone.
-- [x] Measured 2026-10-15 on a local server, Lighthouse 12.2.1 mobile, 6 runs on `/` and `/pt/`: performance 85, accessibility 100, SEO 100; LCP 2.3 to 2.5 s, CLS 0.001, Total Blocking Time 470 to 490 ms. `SITE.scores` was updated to these numbers.
-  - The same tool on the previous version gave 86 to 88, with LCP 2.9 to 3.1 s and TBT 100 to 210 ms. The page now shows its content about a second earlier, but the start-up JavaScript (the GSAP opening animation and `main.js`) now runs while the page is already visible, so it counts as blocking time.
-- [ ] **Later (Samuel asked to leave optimization for later).** Cut the blocking time: two long tasks of about 360 ms (GSAP, the opening animation) and 230 ms (`main.js`) under Lighthouse's slowed-down phone.
+- [x] Measured 2026-10-15 on a local server, Lighthouse 12.2.1 mobile, 6 runs on `/` and `/pt/`: performance 85, accessibility 100, SEO 100; LCP 2.3 to 2.5 s, CLS 0.001, Total Blocking Time 470 to 490 ms.
+- [x] Blocking time cut (2026-10-15). A trace showed both long tasks were the same thing: `main.js` measured the "How it works" lines at load with 720 `getPointAtLength()` calls (80 ms on a desktop with no slowdown), then a second time when its `ResizeObserver` started. The lines are now sampled once per shape (5 shapes, 24 points) and only when the section is about a screen away. Lighthouse 12.8.2 mobile on `wrangler dev`, 6 runs on `/` and `/pt/`: performance 100, accessibility 100, best practices 100, SEO 100; FCP 1.2 to 1.3 s, LCP 1.5 to 1.6 s, TBT 0 to 10 ms, CLS 0.002. Desktop 100. `SITE.scores` was updated to these numbers.
+  - Lighthouse runs on a fast connection vary by a few points between runs. Before the fix, the same page on GitHub Pages gave 89 to 97 on mobile depending on the run, always because of TBT.
 - [ ] **After deploy.** Run PageSpeed Insights on the real address (mobile) and update `SITE.scores` (CLAUDE.md rule). Field data appears only after the site has traffic.
 
 ## 10. Promotion (off the page)

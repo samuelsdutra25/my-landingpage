@@ -100,7 +100,7 @@ const SITE = {
   links: { github: '#', linkedin: '#', instagram: '#', whatsapp: '#', email: 'mailto:hello@example.com' },
   stack: ['HTML', 'CSS', 'Tailwind', 'JavaScript', 'GSAP', 'React'], // chips in About
   form: { action: '' },         // contact form endpoint, see below
-  scores: { performance: 85, accessibility: 100, seo: 100 },   // real Lighthouse scores of this page
+  scores: { performance: 100, accessibility: 100, seo: 100 },   // real Lighthouse scores of this page
   projects: [ { placeholder: true, image: '', url: '#', type: { en, pt }, title: { en, pt }, text: { en, pt },
                 details: { about: { en, pt }, role: { en, pt }, stack: [] } }, /* ... */ ],
 };

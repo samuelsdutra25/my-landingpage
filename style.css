@@ -588,9 +588,9 @@ html[data-smooth] {
 }
 .steps-anim :is(.step-leg, .step-arc, .step-link) path {
   /* --len is the length of the line in screen pixels, measured by main.js (the strokes do not scale,
-     so a dash is measured in screen pixels too) */
-  stroke-dasharray: var(--len, 0px);
-  stroke-dashoffset: var(--len, 0px);
+     so a dash is measured in screen pixels too). Until it is measured, a dash longer than any line keeps it hidden. */
+  stroke-dasharray: var(--len, 9999px);
+  stroke-dashoffset: var(--len, 9999px);
 }
 /* The transitions live only on the visible state, so hiding is instant and only showing is animated */
 .steps-anim[data-visible] .step-box {

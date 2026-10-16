@@ -26,11 +26,12 @@ const SITE = {
 
   stack: ['HTML', 'CSS', 'Tailwind', 'JavaScript', 'GSAP', 'React'],
 
-  // Lighthouse scores of THIS page (mobile, 0 to 100). Measured 2026-10-15 on a local server with
-  // Lighthouse 12.2.1 (6 runs, English and Portuguese pages: performance 85 in every run, accessibility 100,
-  // SEO 100), after the switch to Hind and the text written into the HTML.
+  // Lighthouse scores of THIS page (mobile, 0 to 100). Measured 2026-10-15 with Lighthouse 12.8.2 on the
+  // local Cloudflare server (wrangler dev), 6 runs on the English and Portuguese pages: performance 100 in
+  // every run, accessibility 100, SEO 100. Before, the "How it works" lines were measured during the page
+  // load and performance was 85 to 89; now they are measured when the section gets close.
   // TODO: run Lighthouse again on the deployed URL and update these. null shows "--" and leaves the ring empty.
-  scores: { performance: 85, accessibility: 100, seo: 100 },
+  scores: { performance: 100, accessibility: 100, seo: 100 },
 
   // TODO: three real projects (a website, an online store and a dashboard).
   // The text below says what each one will prove. Replace titles, text and url when the project exists,
@@ -876,38 +877,52 @@ function playReport(report) {
 (function setupProcess() {
   if (reducedMotion || !('IntersectionObserver' in window)) return; // everything just stays visible
   const frame = $('.steps-frame');
+  const paths = $$('svg path', frame);
 
   // The lines are drawn with a dash as long as the line itself. The strokes keep their width when the
   // SVG is stretched, so the dash is measured in screen pixels: sample the path and scale each point.
+  // getPointAtLength() is slow (about 0.5 ms a call), so each shape is sampled once, in viewBox units
+  // (the 9 lines share 5 shapes), and when the screen changes size only those points are rescaled.
+  const SAMPLES = 24; // within a fraction of a pixel of the real length, and --len rounds up anyway
+  const shapes = new Map();
+  const pointsOf = (path) => {
+    const d = path.getAttribute('d');
+    if (!shapes.has(d)) {
+      const total = path.getTotalLength();
+      shapes.set(d, Array.from({ length: SAMPLES + 1 }, (_, i) => path.getPointAtLength((total * i) / SAMPLES)));
+    }
+    return shapes.get(d);
+  };
   const measure = () => {
-    $$('svg path', frame).forEach((path) => {
+    const lengths = paths.map((path) => {
       const svg = path.ownerSVGElement;
       const box = svg.getBoundingClientRect();
       const view = svg.viewBox.baseVal;
       const kx = box.width / view.width;
       const ky = box.height / view.height;
-      const total = path.getTotalLength();
-      const SAMPLES = 80;
+      const points = pointsOf(path);
       let length = 0;
-      let prev = path.getPointAtLength(0);
-      for (let i = 1; i <= SAMPLES; i += 1) {
-        const point = path.getPointAtLength((total * i) / SAMPLES);
-        length += Math.hypot((point.x - prev.x) * kx, (point.y - prev.y) * ky);
-        prev = point;
+      for (let i = 1; i < points.length; i += 1) {
+        length += Math.hypot((points[i].x - points[i - 1].x) * kx, (points[i].y - points[i - 1].y) * ky);
       }
-      path.style.setProperty('--len', `${Math.ceil(length) + 1}px`);
+      return length;
     });
+    // Written after all the reads, so setting one line does not force a new layout to read the next
+    paths.forEach((path, i) => path.style.setProperty('--len', `${Math.ceil(lengths[i]) + 1}px`));
   };
-  // Measured now (not only in the observer, which fires later) so --len exists before the hidden first frame
-  measure();
-  // The lines change length with the width of the screen; arcs hidden on mobile measure 0 until they show
-  new ResizeObserver(measure).observe(frame);
 
-  frame.classList.add('steps-anim');
-  void frame.offsetHeight; // compute the hidden first frame now, so the transitions always play
+  frame.classList.add('steps-anim'); // the hidden first frame (lines stay hidden until measured, see style.css)
 
-  // Starts once the first box is well inside the screen
-  onceVisible(frame, () => frame.setAttribute('data-visible', ''), { rootMargin: '0px 0px -20% 0px' });
+  // Measuring waits until the row is about a screen away, so it stays out of the page load
+  onceVisible(frame, () => {
+    measure();
+    // The lines change length with the width of the screen; arcs hidden on mobile measure 0 until they show
+    new ResizeObserver(measure).observe(frame);
+    void frame.offsetHeight; // compute the hidden first frame with the real lengths, so the transitions always play
+
+    // Starts once the first box is well inside the screen
+    onceVisible(frame, () => frame.setAttribute('data-visible', ''), { rootMargin: '0px 0px -20% 0px' });
+  }, { rootMargin: '100% 0px' });
 })();
 
 /* ---- Footer year: the build writes it too; this keeps it right when the page was not rebuilt in a new year ---- */
