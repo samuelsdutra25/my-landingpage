@@ -8,7 +8,8 @@
  * can run any number of times. Outputs:
  *   index.html     English, served at /
  *   pt/index.html  Portuguese, served at /pt/ (generated: never edit it by hand)
- *   404.html       English error page. Same idea: it is the template and the English page
+ *   404.html       English error page. Same idea: it is the template and the English page. Its header and footer
+ *                  (between the build:header and build:footer comments) are copied from index.html
  *   pt/404.html    Portuguese error page (generated). Cloudflare serves the nearest one to a wrong address
  *   sitemap.xml, robots.txt
  * Plain Node, no dependencies.
@@ -29,7 +30,7 @@ const DEFAULT_LANG = 'en';
 
 // Pastel background per technology in the About stack (full class names, so Tailwind finds them)
 const STACK_COLORS = {
-  HTML: 'bg-score-soft',
+  HTML: 'bg-tag-red',
   CSS: 'bg-tag-blue',
   Tailwind: 'bg-tag-pink',
   JavaScript: 'bg-tag-yellow',
@@ -104,7 +105,7 @@ function head(lang) {
   const t = TRANSLATIONS[lang];
   const url = pageUrl(lang);
   const others = Object.keys(LOCALES).filter((code) => code !== lang);
-  const sameAs = [SITE.links.linkedin, SITE.links.github, SITE.links.instagram].filter((link) => /^https?:/.test(link));
+  const sameAs = [SITE.links.github, SITE.links.instagram].filter((link) => /^https?:/.test(link));
 
   // Only what the page shows: name, role, the stack in About, the photo and the real profile links
   const person = {
@@ -158,7 +159,7 @@ function head(lang) {
     `<meta property="og:image" content="${SITE.url}assets/og-image-${lang}.png">`,
     '<meta property="og:image:width" content="1200">',
     '<meta property="og:image:height" content="630">',
-    `<meta property="og:image:alt" content="${escapeHtml(`${NAME}. ${t['hero.title']}`)}">`,
+    `<meta property="og:image:alt" content="${escapeHtml(t['meta.ogAlt'])}">`,
     '<meta name="twitter:card" content="summary_large_image">',
     '',
     '<script type="application/ld+json">',
@@ -174,6 +175,24 @@ function head(lang) {
 // The error page's <head>: only a title and noindex (the address the visitor typed is not a page to index)
 function notFoundHead(lang) {
   return [`  <title>${escapeHtml(TRANSLATIONS[lang]['notfound.meta'])}</title>`, '  <meta name="robots" content="noindex">'].join('\n');
+}
+
+// The error page wears the site's own header and footer: they are copied from index.html (between the
+// build:header and build:footer comments of 404.html), so the two never drift apart. This page is served at any
+// wrong address, so section links go through data-home (filled in by renderPage) and the language links point
+// to the two home pages. "Back to top" makes no sense here, so it is left out.
+function withSiteChrome(notFound, home) {
+  const piece = (tag) => home.match(new RegExp(`<${tag}\\b[\\s\\S]*?</${tag}>`))[0];
+  const adapt = (html) =>
+    html
+      .replace(/href="#top"/g, 'href="/" data-home=""')
+      .replace(/href="(#[a-z-]+)"/g, (all, hash) => `href="/${hash}" data-home="${hash}"`)
+      .replace(/href="\.\/"/g, 'href="/"')
+      .replace(/href="pt\/"/g, 'href="/pt/"')
+      .replace(/\s*<a href="\/" data-home="" class="footer-link[\s\S]*?<\/a>/, '');
+  const swap = (html, name, block) =>
+    html.replace(new RegExp(`(<!-- build:${name}[\\s\\S]*?-->)[\\s\\S]*?(\\n[ \\t]*<!-- /build:${name} -->)`), (all, open, close) => `${open}\n  ${block}${close}`);
+  return swap(swap(notFound, 'header', adapt(piece('header'))), 'footer', adapt(piece('footer')));
 }
 
 /* ---- One page ---- */
@@ -225,7 +244,7 @@ function renderPage(template, lang, headBlock = head) {
   // About: the photo (or the initials until there is one) and the stack chips
   html = eachElement(html, 'data-about-photo', (tag) =>
     SITE.photo
-      ? [setAttr(tag, 'aria-hidden', null), `<img src="${escapeHtml(SITE.photo)}" alt="${NAME}" class="h-full w-full object-cover">`]
+      ? [setAttr(tag, 'aria-hidden', null), `<img src="${escapeHtml(SITE.photo)}" alt="${escapeHtml(text('about.photoAlt'))}" width="1254" height="1254" loading="lazy" decoding="async" class="h-full w-full object-cover">`]
       : [setAttr(tag, 'aria-hidden', 'true'), escapeHtml(SITE.initials)],
   );
   html = eachElement(html, 'data-stack', (tag) => [
@@ -237,8 +256,10 @@ function renderPage(template, lang, headBlock = head) {
 
   // Links from SITE.links. Real web addresses open in a new tab; '#' placeholders and mailto: stay in place.
   html = eachElement(html, 'data-link', (tag, inner) => {
-    const url = SITE.links[attrValue(tag, 'data-link')];
+    let url = SITE.links[attrValue(tag, 'data-link')];
     if (url === undefined) throw new Error(`SITE.links has no "${attrValue(tag, 'data-link')}"`);
+    // WhatsApp opens with a ready message, in the page's language
+    if (attrValue(tag, 'data-link') === 'whatsapp' && /^https?:/.test(url)) url += `?text=${encodeURIComponent(text('whatsapp.message'))}`;
     const external = /^https?:/.test(url);
     tag = setAttr(tag, 'href', url);
     tag = setAttr(tag, 'target', external ? '_blank' : null);
@@ -283,7 +304,7 @@ function moveDown(html, file) {
 /* ---- Build ---- */
 console.log('build:html');
 for (const [file, headBlock] of [['index.html', head], ['404.html', notFoundHead]]) {
-  const template = read(file);
+  const template = file === '404.html' ? withSiteChrome(read(file), read('index.html')) : read(file);
   for (const lang of Object.keys(LOCALES)) {
     const { path } = LOCALES[lang];
     const html = renderPage(template, lang, headBlock);

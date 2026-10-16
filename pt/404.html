@@ -15,75 +15,169 @@
   <link rel="icon" href="/assets/favicon-192.png" type="image/png" sizes="192x192">
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
 
-  <link rel="stylesheet" href="/assets/tailwind.css?v=695a3ea7">
-  <link rel="stylesheet" href="/style.css?v=f6ffb24c">
+  <link rel="stylesheet" href="/assets/tailwind.css?v=de864505">
+  <link rel="stylesheet" href="/style.css?v=67df47ec">
 </head>
 <body class="flex min-h-screen flex-col">
   <!-- The error page of the site. The Portuguese one (pt/404.html) is generated from this file by
        scripts/build-html.mjs, like pt/index.html. Text comes from main.js (npm run build). -->
   <a href="#main" class="skip-link" data-i18n="skip">Pular para o conteúdo</a>
 
-  <header class="border-b border-line bg-cream">
+  <!-- build:header. Copied from index.html by scripts/build-html.mjs: change it there. -->
+  <header data-header class="sticky top-0 z-50 border-b border-transparent bg-cream transition-colors duration-200 data-scrolled:border-line">
     <div class="wrap flex h-16 items-center justify-between gap-4 md:h-18">
       <a href="/pt/" data-home="" class="text-xl font-bold transition-colors duration-150 hover:text-orange">Samuel Dutra</a>
-      <a href="/pt/#contact" data-home="#contact" class="btn btn-primary px-5 py-2" data-i18n="nav.talk">Fale comigo</a>
+
+      <nav class="hidden items-center gap-8 lg:flex" data-i18n-aria="nav.label" aria-label="Principal">
+        <a href="/pt/#services" data-home="#services" class="nav-link" data-i18n="nav.services">Serviços</a>
+        <a href="/pt/#projects" data-home="#projects" class="nav-link" data-i18n="nav.projects">Projetos</a>
+        <a href="/pt/#process" data-home="#process" class="nav-link" data-i18n="nav.process">Como funciona</a>
+        <a href="/pt/#contact" data-home="#contact" class="nav-link" data-i18n="nav.contact">Contato</a>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <!-- Links to the two language pages. The build marks the current one with aria-current="true" -->
+        <div class="lang-switch" role="group" data-lang-switch data-i18n-aria="lang.label" aria-label="Idioma">
+          <span class="lang-thumb" aria-hidden="true"></span>
+          <a href="/" hreflang="en" lang="en" data-lang="en" aria-current="false" class="lang-option">EN</a>
+          <a href="/pt/" hreflang="pt-BR" lang="pt-BR" data-lang="pt" aria-current="true" class="lang-option">PT</a>
+        </div>
+        <a href="/pt/#contact" data-home="#contact" class="btn btn-primary hidden px-5 py-2 lg:inline-flex" data-i18n="nav.talk">Fale comigo</a>
+        <button type="button" data-menu-button aria-expanded="false" aria-controls="mobile-menu" data-i18n-aria="nav.menu" class="group inline-grid h-11 w-11 place-items-center rounded-button border-2 border-ink lg:hidden" aria-label="Menu">
+          <svg class="col-start-1 row-start-1 h-5 w-5 transition duration-200 group-aria-expanded:rotate-90 group-aria-expanded:opacity-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+          <svg class="col-start-1 row-start-1 h-5 w-5 -rotate-90 opacity-0 transition duration-200 group-aria-expanded:rotate-0 group-aria-expanded:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="absolute inset-x-0 top-full -mt-px border-y border-line bg-cream lg:hidden">
+      <nav class="wrap flex flex-col gap-1 py-4" data-i18n-aria="nav.label" aria-label="Principal">
+        <a href="/pt/#services" data-home="#services" class="py-3 text-body font-bold" data-i18n="nav.services">Serviços</a>
+        <a href="/pt/#projects" data-home="#projects" class="py-3 text-body font-bold" data-i18n="nav.projects">Projetos</a>
+        <a href="/pt/#process" data-home="#process" class="py-3 text-body font-bold" data-i18n="nav.process">Como funciona</a>
+        <a href="/pt/#contact" data-home="#contact" class="py-3 text-body font-bold" data-i18n="nav.contact">Contato</a>
+        <a href="/pt/#contact" data-home="#contact" class="btn btn-primary mt-3 self-start" data-i18n="nav.talk">Fale comigo</a>
+      </nav>
     </div>
   </header>
+  <!-- /build:header -->
 
-  <main id="main" class="flex-1">
-    <section class="pt-[clamp(3rem,8vw,6rem)] pb-[clamp(4rem,10vw,8rem)]" aria-labelledby="notfound-title">
-      <div class="wrap grid items-center gap-12 lg:grid-cols-12 lg:gap-8">
-        <div class="min-w-0 lg:col-span-6">
-          <h1 id="notfound-title" class="text-display font-bold" data-i18n="notfound.title">Página não encontrada</h1>
-          <p class="mt-6 max-w-[min(80%,65ch)] text-ink-soft" data-i18n="notfound.text">O endereço pode ter um erro de digitação, ou a página pode ter mudado de lugar. A página inicial tem tudo o que você precisa.</p>
-          <div class="mt-8 flex flex-wrap gap-3">
-            <a href="/pt/" data-home="" class="btn btn-primary" data-i18n="notfound.cta">Ir para a página inicial</a>
-            <a href="/pt/#contact" data-home="#contact" class="btn btn-secondary" data-i18n="hero.cta">Conte sobre o seu projeto</a>
-          </div>
+  <main id="main" class="flex flex-1 items-center">
+    <section class="w-full py-[clamp(3rem,9vw,7rem)] text-center" aria-labelledby="notfound-title">
+      <div class="wrap">
+        <!-- The one memorable thing: the 0 is a Lighthouse ring, the same one as in "What you get", that starts to
+             fill and stops before it closes. Decorative: the heading below says what happened. -->
+        <p class="notfound-digits flex items-baseline justify-center font-bold text-ink" aria-hidden="true">
+          <span>4</span>
+          <svg class="notfound-ring" viewBox="0 0 100 100" fill="none" stroke-width="9">
+            <circle cx="50" cy="50" r="45" class="fill-score-soft stroke-score/30"/>
+            <circle cx="50" cy="50" r="45" pathLength="100" stroke-linecap="round" class="notfound-arc stroke-score"/>
+          </svg>
+          <span>4</span>
+        </p>
+
+        <!-- The address the visitor typed, with the wrong part underlined like a spell checker does.
+             The build writes the domain; the script below fills in the path -->
+        <p class="mx-auto mt-8 flex w-fit max-w-full items-baseline rounded-full border border-line bg-linen px-4 py-1 text-small">
+          <span data-address class="shrink-0 text-ink-soft">samueldutra.com.br</span>
+          <span data-address-path class="notfound-path min-w-0 truncate font-bold"></span>
+        </p>
+
+        <h1 id="notfound-title" class="mt-6 text-title font-bold" data-i18n="notfound.title">Página não encontrada</h1>
+        <p class="mx-auto mt-4 max-w-[46ch] text-ink-soft" data-i18n="notfound.text">O endereço pode ter um erro de digitação, ou a página pode ter mudado de lugar. A página inicial tem tudo o que você precisa.</p>
+        <div class="mt-8 flex flex-wrap justify-center gap-3">
+          <a href="/pt/" data-home="" class="btn btn-primary" data-i18n="notfound.cta">Ir para a página inicial</a>
+          <a href="/pt/#contact" data-home="#contact" class="btn btn-secondary" data-i18n="hero.cta">Conte sobre o seu projeto</a>
         </div>
 
-        <!-- The hero window, with the address the visitor typed and an empty page where the content should be -->
-        <div class="min-w-0 lg:col-span-6">
-          <div class="overflow-hidden rounded-tile border-2 border-ink bg-linen shadow-window" role="img" data-i18n-aria="notfound.mockAria" aria-label="Ilustração de uma janela de navegador com uma página vazia">
-            <div class="flex items-center gap-2 bg-ink px-4 py-3">
-              <span class="h-2.5 w-2.5 shrink-0 rounded-full bg-dot-red"></span>
-              <span class="h-2.5 w-2.5 shrink-0 rounded-full bg-dot-yellow"></span>
-              <span class="h-2.5 w-2.5 shrink-0 rounded-full bg-dot-green"></span>
-              <!-- The build writes the domain; the script below replaces it with the address that was typed -->
-              <span data-address class="ml-3 min-w-0 truncate rounded-full bg-ink-raised px-3 py-0.5 text-small text-cream-muted">samueldutra.com.br</span>
-            </div>
-            <div class="space-y-6 p-5 sm:p-6" aria-hidden="true">
-              <div class="flex items-center justify-between gap-4">
-                <span class="h-3 w-20 rounded bg-ink"></span>
-                <span class="flex gap-3">
-                  <span class="h-2 w-10 rounded bg-ink-soft/50"></span>
-                  <span class="h-2 w-10 rounded bg-ink-soft/50"></span>
-                  <span class="hidden h-2 w-10 rounded bg-ink-soft/50 sm:block"></span>
-                </span>
-                <span class="h-6 w-16 rounded-md bg-orange"></span>
-              </div>
-              <div class="grid h-44 place-items-center rounded-lg border-2 border-dashed border-line text-display font-bold text-ink-soft sm:h-52">404</div>
-            </div>
-          </div>
-        </div>
+        <nav class="mx-auto mt-12 max-w-xl border-t border-line pt-6" aria-labelledby="notfound-jump">
+          <h2 id="notfound-jump" class="text-small text-ink-soft" data-i18n="notfound.jump">Ou vá direto para</h2>
+          <ul class="mt-2 flex flex-wrap justify-center gap-x-6">
+            <li><a href="/pt/#services" data-home="#services" class="notfound-link" data-i18n="nav.services">Serviços</a></li>
+            <li><a href="/pt/#projects" data-home="#projects" class="notfound-link" data-i18n="nav.projects">Projetos</a></li>
+            <li><a href="/pt/#process" data-home="#process" class="notfound-link" data-i18n="nav.process">Como funciona</a></li>
+            <li><a href="/pt/#contact" data-home="#contact" class="notfound-link" data-i18n="nav.contact">Contato</a></li>
+          </ul>
+        </nav>
       </div>
     </section>
   </main>
 
+  <!-- build:footer. Copied from index.html by scripts/build-html.mjs: change it there. -->
   <footer class="on-dark border-t border-cream/15 bg-ink text-cream">
-    <div class="wrap flex flex-col gap-4 py-8 sm:flex-row sm:items-center sm:justify-between">
-      <p class="text-small text-cream-muted" data-copyright>© 2026 Samuel Dutra</p>
-      <ul class="flex flex-wrap gap-x-6 gap-y-1">
-        <li><a href="mailto:hello@example.com" data-link="email" data-email-text class="footer-link break-all">hello@example.com</a></li>
-        <li><a href="#" data-link="linkedin" class="footer-link" data-i18n="footer.linkedin">LinkedIn</a></li>
-        <li><a href="#" data-link="github" class="footer-link" data-i18n="footer.github">GitHub</a></li>
-      </ul>
+    <div class="wrap pt-14 pb-8 md:pt-16">
+      <div class="grid gap-12 lg:grid-cols-[1fr_auto] lg:gap-16">
+        <div>
+          <a href="/pt/" data-home="" class="text-xl font-bold">Samuel Dutra</a>
+          <p class="mt-4 max-w-[34ch] text-cream-muted" data-i18n="footer.tagline">Front-end para sites, lojas virtuais e painéis.</p>
+        </div>
+
+        <div class="grid grid-cols-2 gap-x-8 gap-y-10 sm:grid-cols-[repeat(3,auto)] sm:justify-start sm:gap-x-12 lg:gap-x-16">
+          <nav data-i18n-aria="footer.menuLabel" aria-label="Rodapé">
+            <h2 class="footer-heading" data-i18n="footer.menu">Menu</h2>
+            <ul class="mt-4 space-y-1">
+              <li><a href="/pt/#services" data-home="#services" class="footer-link" data-i18n="nav.services">Serviços</a></li>
+              <li><a href="/pt/#projects" data-home="#projects" class="footer-link" data-i18n="nav.projects">Projetos</a></li>
+              <li><a href="/pt/#process" data-home="#process" class="footer-link" data-i18n="nav.process">Como funciona</a></li>
+              <li><a href="/pt/#about" data-home="#about" class="footer-link" data-i18n="about.title">Sobre</a></li>
+              <li><a href="/pt/#contact" data-home="#contact" class="footer-link" data-i18n="nav.contact">Contato</a></li>
+            </ul>
+          </nav>
+
+          <div>
+            <h2 class="footer-heading" data-i18n="services.title">Serviços</h2>
+            <ul class="mt-4 space-y-1">
+              <li><a href="/pt/#services" data-home="#services" class="footer-link" data-i18n="services.1.title">Sites e landing pages</a></li>
+              <li><a href="/pt/#services" data-home="#services" class="footer-link" data-i18n="services.2.title">Lojas virtuais</a></li>
+              <li><a href="/pt/#services" data-home="#services" class="footer-link" data-i18n="services.3.title">Dashboards e aplicações web</a></li>
+              <li><a href="/pt/#services" data-home="#services" class="footer-link" data-i18n="services.4.title">Ajustes e manutenção</a></li>
+            </ul>
+          </div>
+
+          <div class="col-span-2 sm:col-span-1">
+            <h2 class="footer-heading" data-i18n="nav.contact">Contato</h2>
+            <ul class="mt-4 space-y-1">
+              <li><a href="mailto:samuelsdutra25@gmail.com" data-link="email" data-email-text class="footer-link break-all">samuelsdutra25@gmail.com</a></li>
+              <li><a href="https://wa.me/5551989602193?text=Ol%C3%A1!%20Vi%20seu%20site%20e%20gostaria%20de%20conversar%20sobre%20um%20projeto." data-link="whatsapp" class="footer-link" data-i18n="footer.whatsapp" target="_blank" rel="noopener noreferrer">WhatsApp</a></li>
+              <li><a href="https://www.instagram.com/sdutra404/" data-link="instagram" class="footer-link" data-i18n="footer.instagram" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+              <li><a href="https://github.com/samuelsdutra25" data-link="github" class="footer-link" data-i18n="footer.github" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-14 flex flex-col gap-4 border-t border-cream/15 pt-6 sm:flex-row sm:items-center sm:justify-between">
+        <p class="text-small text-cream-muted" data-copyright>© 2026 Samuel Dutra</p>
+      </div>
     </div>
   </footer>
+  <!-- /build:footer -->
 
   <script>
-    // Show the address the visitor typed in the window (textContent, so it cannot add markup)
-    document.querySelector('[data-address]').textContent = location.host + location.pathname;
+    // Mobile menu, the same as the one in main.js (this page does not load main.js)
+    (function () {
+      var button = document.querySelector('[data-menu-button]');
+      var menu = document.getElementById('mobile-menu');
+      function setMenu(open) {
+        menu.toggleAttribute('data-open', open);
+        button.setAttribute('aria-expanded', String(open));
+      }
+      button.addEventListener('click', function () { setMenu(!menu.hasAttribute('data-open')); });
+      menu.addEventListener('click', function (event) { if (event.target.closest('a')) setMenu(false); });
+      document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape' && menu.hasAttribute('data-open')) { setMenu(false); button.focus(); }
+      });
+      window.matchMedia('(min-width: 64rem)').addEventListener('change', function (event) { if (event.matches) setMenu(false); });
+    })();
+
+    // Show the address the visitor typed (textContent, so it cannot add markup)
+    document.querySelector('[data-address]').textContent = location.host;
+    if (location.pathname !== '/') {
+      var path = document.querySelector('[data-address-path]');
+      path.textContent = location.pathname;
+      path.setAttribute('data-wrong', '');
+    }
   </script>
 </body>
 </html>

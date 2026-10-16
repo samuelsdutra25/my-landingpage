@@ -8,15 +8,15 @@ const SITE = {
 
   // Shown in the About section until a photo exists.
   initials: 'SD',
-  photo: '', // TODO: e.g. 'assets/samuel.jpg'
+  photo: 'assets/samuel-dutra.avif', // square, 1254x1254 (the build writes these sizes into the <img>)
 
-  // TODO: replace every '#' and the example e-mail with the real links.
+  // The e-mail is temporary (Samuel has no professional address yet).
   links: {
-    github: '#',
-    linkedin: '#',
-    instagram: '#',
-    whatsapp: '#', // TODO: e.g. 'https://wa.me/5511999999999' (country code + number, digits only)
-    email: 'mailto:hello@example.com',
+    github: 'https://github.com/samuelsdutra25',
+    instagram: 'https://www.instagram.com/sdutra404/',
+    // Country code + number, digits only. The build adds the ready message ('whatsapp.message') in each language.
+    whatsapp: 'https://wa.me/5551989602193',
+    email: 'mailto:samuelsdutra25@gmail.com',
   },
 
   // Contact form. Without an action it opens the visitor's email app with the message ready (mailto).
@@ -119,6 +119,8 @@ const TRANSLATIONS = {
     'meta.description':
       'Front-end developer for websites, online stores and dashboards. Fast, responsive and accessible, with a clear estimate and two weeks of support after delivery.',
     'meta.jobTitle': 'Front-end developer',
+    // Describes the share image (assets/og-image-en.png), which has this text baked in
+    'meta.ogAlt': 'Samuel Dutra. Freelance front-end developer. Websites, online stores and dashboards.',
     'intro.welcome': 'Welcome',
     skip: 'Skip to content',
 
@@ -127,7 +129,7 @@ const TRANSLATIONS = {
     'notfound.title': 'Page not found',
     'notfound.text': 'The address may have a typo, or the page may have moved. The home page has everything you need.',
     'notfound.cta': 'Go to the home page',
-    'notfound.mockAria': 'Illustration of a browser window with an empty page',
+    'notfound.jump': 'Or go straight to',
 
     'nav.label': 'Main',
     'nav.services': 'Services',
@@ -146,8 +148,6 @@ const TRANSLATIONS = {
     'hero.stack': 'Built with HTML, Tailwind, JavaScript and GSAP.',
     'hero.mockLabel': 'Your site',
     'hero.mockAria': 'Illustration of a small website being built',
-    'hero.ready': 'This page was ready in',
-    'hero.ms': 'ms',
 
     'included.title': 'What you get',
     'included.lead':
@@ -200,6 +200,7 @@ const TRANSLATIONS = {
     'projects.about': 'About the project',
     'projects.role': 'What I did',
     'projects.stack': 'Stack',
+    'projects.cta': 'Like what you see? Tell me about yours.',
 
     'process.title': 'How it works',
     'process.lead':
@@ -225,6 +226,8 @@ const TRANSLATIONS = {
     'about.text3':
       "Liked what you saw? Get in touch and let's talk about your project.",
     'about.stack': 'Tech stack',
+    'about.photoAlt':
+      'Portrait of Samuel Dutra: a smiling man with short curly dark hair, round glasses and a mustache, in a beige linen shirt, outdoors in a forest at golden hour.',
 
     'contact.title': "Let's talk?",
     'contact.text':
@@ -255,10 +258,10 @@ const TRANSLATIONS = {
     'footer.menu': 'Menu',
     'footer.menuLabel': 'Footer',
     'footer.top': 'Back to top',
-    'footer.linkedin': 'LinkedIn',
     'footer.github': 'GitHub',
     'footer.instagram': 'Instagram',
     'footer.whatsapp': 'WhatsApp',
+    'whatsapp.message': "Hi, I saw your website and I'd like to talk about a project.",
   },
 
   pt: {
@@ -266,6 +269,7 @@ const TRANSLATIONS = {
     'meta.description':
       'Desenvolvedor front-end de sites, lojas virtuais e dashboards. Rápidos, responsivos e acessíveis, com orçamento claro e duas semanas de suporte depois da entrega.',
     'meta.jobTitle': 'Desenvolvedor front-end',
+    'meta.ogAlt': 'Samuel Dutra. Desenvolvedor front-end freelancer. Sites, lojas virtuais e dashboards.',
     'intro.welcome': 'Seja bem-vindo',
     skip: 'Pular para o conteúdo',
 
@@ -274,7 +278,7 @@ const TRANSLATIONS = {
     'notfound.title': 'Página não encontrada',
     'notfound.text': 'O endereço pode ter um erro de digitação, ou a página pode ter mudado de lugar. A página inicial tem tudo o que você precisa.',
     'notfound.cta': 'Ir para a página inicial',
-    'notfound.mockAria': 'Ilustração de uma janela de navegador com uma página vazia',
+    'notfound.jump': 'Ou vá direto para',
 
     'nav.label': 'Principal',
     'nav.services': 'Serviços',
@@ -293,8 +297,6 @@ const TRANSLATIONS = {
     'hero.stack': 'Feito com HTML, Tailwind, JavaScript e GSAP.',
     'hero.mockLabel': 'Seu site',
     'hero.mockAria': 'Ilustração de um site pequeno sendo montado',
-    'hero.ready': 'Esta página ficou pronta em',
-    'hero.ms': 'ms',
 
     'included.title': 'O que você recebe',
     'included.lead':
@@ -346,6 +348,7 @@ const TRANSLATIONS = {
     'projects.about': 'Sobre o projeto',
     'projects.role': 'O que fiz',
     'projects.stack': 'Tecnologias',
+    'projects.cta': 'Gostou do que viu? Vamos conversar sobre o seu projeto.',
 
     'process.title': 'Como funciona',
     'process.lead':
@@ -370,6 +373,8 @@ const TRANSLATIONS = {
       'Para isso, trabalho com as tecnologias mais atuais e busco o máximo de eficiência. Nem todo projeto precisa de ferramentas complexas, que acabam encarecendo o projeto e aumentando o tempo de produção. Além disso, busco sempre a excelência, entregando os detalhes que fazem a diferença no final.',
     'about.text3': 'Se você gostou do que viu, entre em contato comigo e vamos conversar sobre seu projeto.',
     'about.stack': 'Tecnologias',
+    'about.photoAlt':
+      'Retrato de Samuel Dutra: um homem sorrindo, de cabelo escuro curto e cacheado, óculos redondos e bigode, com camisa de linho bege, ao ar livre numa floresta na hora dourada.',
 
     'contact.title': 'Vamos conversar?',
     'contact.text':
@@ -401,10 +406,10 @@ const TRANSLATIONS = {
     'footer.menu': 'Menu',
     'footer.menuLabel': 'Rodapé',
     'footer.top': 'Voltar ao topo',
-    'footer.linkedin': 'LinkedIn',
     'footer.github': 'GitHub',
     'footer.instagram': 'Instagram',
     'footer.whatsapp': 'WhatsApp',
+    'whatsapp.message': 'Olá! Vi seu site e gostaria de conversar sobre um projeto.',
   },
 };
 
@@ -783,45 +788,18 @@ function playIntro() {
 }
 const introDone = playIntro();
 
-/* ---- Hero: how long this page took to be ready, measured in the visitor's browser ---- */
-function measureReadyTime() {
-  const [navigation] = performance.getEntriesByType('navigation');
-  const ms = navigation ? Math.round(navigation.domContentLoadedEventEnd) : 0;
-  return ms > 0 ? ms : null;
-}
-
 /*
  * The wireframe only builds once it is on screen (on phones and tablets it
- * sits below the fold). mockBuilt resolves when the animation has finished.
- * BUILD_MS = initial delay + 12 steps + duration, as set in style.css.
+ * sits below the fold), and not before the opening animation is done, so it
+ * doesn't build behind the panel.
  */
-const BUILD_MS = 250 + 12 * 110 + 600;
 const mock = $('[data-mock]');
-const mockBuilt = new Promise((resolve) => {
-  const start = () => {
-    mock.setAttribute('data-visible', '');
-    setTimeout(resolve, reducedMotion ? 0 : BUILD_MS);
-  };
-  if (reducedMotion) return start();
-  // Waits for the opening animation, so the wireframe doesn't build behind the panel.
-  // 0.8 could never fire on short viewports (e.g. a phone in landscape)
-  introDone.then(() => onceVisible(mock, start, { threshold: 0.5 }));
-});
-
-function showReadyTime() {
-  const ms = measureReadyTime();
-  if (ms === null) return; // can't measure: the line stays invisible
-  const readout = $('[data-ready-time]');
-  readout.classList.remove('invisible');
-  // Wait for the wireframe to finish building, then count up to the real number.
-  const number = $('[data-ms]', readout);
-  mockBuilt.then(() => animateProgress(800, (p) => (number.textContent = Math.round(ms * p))));
-}
-
-if (document.readyState === 'complete') {
-  showReadyTime();
+const startMock = () => mock.setAttribute('data-visible', '');
+if (reducedMotion) {
+  startMock();
 } else {
-  window.addEventListener('load', () => setTimeout(showReadyTime, 0));
+  // 0.8 could never fire on short viewports (e.g. a phone in landscape)
+  introDone.then(() => onceVisible(mock, startMock, { threshold: 0.5 }));
 }
 
 /* ---- What you get: rings fill and numbers count up once the panel is on screen ---- */

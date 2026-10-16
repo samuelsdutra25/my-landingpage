@@ -30,6 +30,7 @@
   --color-dot-yellow: #F4BF4F;
   --color-dot-green: #61C554;
   --color-check: #7BD389; /* light green check icons in "What you get" (test) */
+  --color-tag-red: #F4A596;    /* salmon red behind HTML in the About stack, stronger than the other pastels */
   --color-tag-blue: #D3E6F5;   /* pastel blue behind CSS in the About stack */
   --color-tag-yellow: #F7E8A8; /* pastel yellow behind JavaScript in the About stack */
   --color-tag-pink: #F6D5E3;   /* pastel pink behind Tailwind in the About stack */
@@ -122,11 +123,10 @@
     transition: transform 150ms, color 150ms;
   }
   /* Icons are ink at rest and take their brand color on hover and focus (outside the palette on purpose, like the hero dots) */
-  .social-link[data-link="gmail"]:is(:hover, :focus-visible) { color: #EA4335; }
+  .social-link[data-link="email"]:is(:hover, :focus-visible) { color: #EA4335; }
   .social-link[data-link="whatsapp"]:is(:hover, :focus-visible) { color: #25D366; }
   .social-link[data-link="instagram"]:is(:hover, :focus-visible) { color: #E4405F; }
   .social-link[data-link="github"]:is(:hover, :focus-visible) { color: #181717; }
-  .social-link[data-link="linkedin"]:is(:hover, :focus-visible) { color: #0A66C2; }
   /* Contact form: text fields share the button's radius and 2px ink border */
   .field {
     @apply block w-full rounded-button border-2 border-ink bg-cream px-4 py-3 text-body;

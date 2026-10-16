@@ -65,7 +65,7 @@ Google asks "who made this, how, and why" [G]. For a portfolio that means proof,
 
 - [x] The name is on the page (logo, About, footer) and the copy talks to the client in plain words.
 - [x] Nothing is hidden from users, and bots and visitors get the same page (no cloaking) [G].
-- [ ] **Samuel.** A real photo (`SITE.photo`) and the real About text. A real face and a clear author are trust signals [G].
+- [~] **Samuel.** The real photo is in (`SITE.photo`, with a descriptive alt in `about.photoAlt`); the About text is still to confirm. A real face and a clear author are trust signals [G].
 - [ ] **Samuel.** The three real projects, each with the problem, what he built, the stack and a live link or repo. First-hand detail is what tells a portfolio apart from a template [G].
 - [ ] **Samuel.** Real links in `SITE.links` (today `#`). On the next build they also go into the structured data (`sameAs`).
 - [ ] Project details open on a click. Google indexes them, but "Read more" deep links work best with text that is visible without a click [G]. The title and short text are visible, which is enough.
@@ -82,14 +82,14 @@ Google asks "who made this, how, and why" [G]. For a portfolio that means proof,
 
 ## 7. Images (when the photo and project images arrive)
 
-- [x] The build writes them as `<img>` with `alt` (the project title, or "Samuel Dutra" for the photo). Google does not index CSS background images [G].
+- [x] The build writes them as `<img>` with `alt` (the project title, or `about.photoAlt` for the photo). Google does not index CSS background images [G].
 - [ ] Descriptive file names: `samuel-dutra.jpg`, `online-store-product-page.webp`, not `IMG_0023.jpg` [G].
 - [ ] WebP or AVIF, sized for the layout (about 1200px wide for the project card), and add `width` and `height` to avoid layout shift [G, P]. The project images are `loading="lazy"`; the photo should not be lazy if it ever moves above the fold [P].
 
 ## 8. Icon and share previews
 
 - [x] PNG icon `assets/favicon-192.png` (Google does not list SVG as a favicon format) and `assets/apple-touch-icon.png` (180x180), next to the SVG for browsers [G, P].
-- [x] Share images `assets/og-image-en.png` and `assets/og-image-pt.png` (1200x630, about 50 KB each): the hero title next to the small site window from the hero, in the page palette, with the domain.
+- [x] Share images `assets/og-image-en.png` and `assets/og-image-pt.png` (1200x630, about 50 KB each): "Front-end developer" in large type with the three services under it (websites, online stores, dashboards), in the page palette, with the name and the domain. The text is baked into the PNG, so `meta.ogAlt` (the `og:image:alt`) must be updated with it.
 - [x] `og:type`, `og:site_name`, `og:locale` (+ alternate), `og:url`, `og:title`, `og:description`, `og:image` with size and `alt`, `twitter:card` = `summary_large_image`, per language [P].
 - [ ] **After deploy.** Test the preview in the LinkedIn Post Inspector and by sending the link on WhatsApp (both cache old previews) [P].
 
