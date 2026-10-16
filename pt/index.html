@@ -106,11 +106,11 @@
        hero title uses it; the regular is found early anyway through the CSS -->
   <link rel="preload" href="../assets/fonts/hind-700.woff2" as="font" type="font/woff2" crossorigin>
 
-  <link rel="stylesheet" href="../assets/tailwind.css?v=de864505">
-  <link rel="stylesheet" href="../style.css?v=67df47ec">
+  <link rel="stylesheet" href="../assets/tailwind.css?v=31c61159">
+  <link rel="stylesheet" href="../style.css?v=431e7d53">
   <script src="../assets/gsap.min.js?v=92bb9a96" defer></script>
   <script src="../assets/ScrollToPlugin.min.js?v=07cfd328" defer></script>
-  <script src="../main.js?v=95651199" defer></script>
+  <script src="../main.js?v=75a65ab1" defer></script>
 </head>
 <body>
   <!-- The text inside the data-i18n, data-link, data-project-* and similar hooks is written by
@@ -119,15 +119,10 @@
   <!-- Opening animation (see "Opening animation" in style.css). Hidden unless <html> has data-intro -->
   <div class="intro" data-intro-screen aria-hidden="true">
     <div class="intro-panel" data-intro-panel>
-      <div class="intro-brand">
-        <!-- Filled by playIntro() in main.js (text from TRANSLATIONS, key intro.welcome) -->
-        <span class="intro-message"></span>
-        <span class="intro-track">
-          <span class="intro-line"></span>
-          <span class="intro-dot"></span>
-        </span>
-        <span class="intro-percent"></span>
-      </div>
+      <!-- Two identical layers; the second one is revealed from the left as the page loads.
+           The words are filled by playIntro() in main.js (text from TRANSLATIONS, key intro.welcome) -->
+      <div class="intro-layer"><span class="intro-message"></span></div>
+      <div class="intro-layer intro-layer-fill" data-intro-fill><span class="intro-message"></span></div>
     </div>
   </div>
 
@@ -551,8 +546,8 @@
     <!-- About -->
     <section id="about" class="section-y" aria-labelledby="about-title">
       <div class="wrap grid items-center gap-10 lg:grid-cols-12 lg:gap-8">
-        <div data-about-photo class="flex aspect-square max-w-sm items-center justify-center overflow-hidden rounded-tile bg-sand text-[6rem] font-bold text-ink lg:col-span-4"><img src="../assets/samuel-dutra.avif" alt="Retrato de Samuel Dutra: um homem sorrindo, de cabelo escuro curto e cacheado, óculos redondos e bigode, com camisa de linho bege, ao ar livre numa floresta na hora dourada." width="1254" height="1254" loading="lazy" decoding="async" class="h-full w-full object-cover"></div>
-        <div class="lg:col-span-7 lg:col-start-6">
+        <div data-about-photo class="mx-auto flex aspect-square w-full max-w-sm items-center justify-center overflow-hidden rounded-tile bg-sand text-[6rem] font-bold text-ink lg:col-span-5 lg:mx-0 lg:max-w-[24rem]"><img src="../assets/samuel-dutra.avif" alt="Retrato de Samuel Dutra: um homem sorrindo, de cabelo escuro curto e cacheado, óculos redondos e bigode, com camisa de linho bege, ao ar livre numa floresta na hora dourada." width="1254" height="1254" loading="lazy" decoding="async" class="h-full w-full object-cover"></div>
+        <div class="max-lg:mx-auto max-lg:w-full max-lg:max-w-[65ch] lg:col-span-7 lg:col-start-6">
           <h2 id="about-title" class="text-title font-bold" data-i18n="about.title">Sobre</h2>
           <p class="mt-4 max-w-[65ch]" data-i18n="about.text1">Sou o Samuel, desenvolvedor front-end. Sou o responsável pela ponte entre o sistema e o seu cliente, garantindo que ele tenha uma ótima experiência e que tudo funcione bem.</p>
           <p class="mt-4 max-w-[65ch]" data-i18n="about.text2">Para isso, trabalho com as tecnologias mais atuais e busco o máximo de eficiência. Nem todo projeto precisa de ferramentas complexas, que acabam encarecendo o projeto e aumentando o tempo de produção. Além disso, busco sempre a excelência, entregando os detalhes que fazem a diferença no final.</p>

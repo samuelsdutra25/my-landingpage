@@ -690,9 +690,9 @@ syncHeaderLine();
 
 /*
  * ---- Opening animation: plays once per visit, on top of the page (CSS in style.css, "Opening animation") ----
- * 1. A welcome message fades in letter by letter. Under it an amber line is drawn (with a dot at its tip, like the
- *    lines in "How it works") while a number counts from 0 to 100%.
- * 2. The count holds at 90% until the page has finished loading (at most 4 s), then it reaches 100% and the
+ * 1. A big welcome word (ink on cream) fades in. Then the background turns ink from left to right, and the word
+ *    turns amber with it: a second, identical layer is revealed with a clip-path.
+ * 2. The reveal runs in one go to 100%. If the page is still loading by then, it waits (at most 4 s), then the
  *    ink panel lifts away with the message.
  * Returns a promise that resolves while the panel is leaving, so the hero can start building.
  * Without the data-intro attribute (seen already, reduced motion, link to a section) it does nothing.
@@ -706,19 +706,11 @@ function playIntro() {
 
   const screen = $('[data-intro-screen]');
   const panel = $('[data-intro-panel]', screen);
-  const message = $('.intro-message', screen);
-  const track = $('.intro-track', screen);
-  const line = $('.intro-line', screen);
-  const head = $('.intro-dot', screen);
-  const percent = $('.intro-percent', screen);
+  const fill = $('[data-intro-fill]', screen);
+  const messages = $$('.intro-message', screen);
 
-  // Set here (not written by the build) because it is split into letters
-  const chars = [...T['intro.welcome']].map((char) => {
-    const span = document.createElement('span');
-    span.textContent = char;
-    return span;
-  });
-  message.append(...chars);
+  // Set here (not written by the build) so both layers always carry the same text
+  messages.forEach((message) => (message.textContent = T['intro.welcome']));
 
   // Nothing behind the panel can be reached with the keyboard while it covers the page
   // (main itself stays outside the inert part: an inert <main> is not a landmark for a tool that reads the page meanwhile)
@@ -752,28 +744,20 @@ function playIntro() {
   async function sequence() {
     await Promise.race([document.fonts.ready, wait(1500)]);
 
-    // The line, the dot and the number all follow one value
+    // How much of the ink layer is revealed, from the left
     const progress = { value: 0 };
-    const width = track.offsetWidth;
     const draw = () => {
-      line.style.clipPath = `inset(0 ${100 - progress.value}% 0 0)`;
-      gsap.set(head, { x: (progress.value / 100) * width });
-      percent.textContent = `${Math.round(progress.value)}%`;
+      fill.style.clipPath = `inset(0 ${100 - progress.value}% 0 0)`;
     };
-    draw();
 
     await run(
       gsap
         .timeline()
-        .set(message, { opacity: 1 })
-        .fromTo(message, { yPercent: 35 }, { yPercent: 0, duration: 0.9, ease: 'power3.out' }, 0)
-        .fromTo(chars, { opacity: 0 }, { opacity: 1, duration: 0.3, stagger: 0.05, ease: 'none' }, 0)
-        .fromTo(head, { opacity: 0, scale: 0 }, { opacity: 1, scale: 1, duration: 0.35, ease: 'back.out(2)' }, 0.2)
-        .to(percent, { opacity: 1, duration: 0.3, ease: 'none' }, 0.2)
-        .to(progress, { value: 90, duration: 1.4, ease: 'power2.out', onUpdate: draw }, 0.2),
+        .fromTo(messages, { yPercent: 25, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.8, ease: 'power3.out' }, 0)
+        .to(progress, { value: 100, duration: 1.8, ease: 'power2.inOut', onUpdate: draw }, 0.5),
     );
+    // Only if the page is still loading once the screen is full, it waits here (at most 4 s)
     await Promise.race([loaded, wait(4000)]);
-    await run(gsap.to(progress, { value: 100, duration: 0.4, ease: 'power1.out', onUpdate: draw }));
     await wait(250);
 
     await run(

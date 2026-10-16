@@ -58,7 +58,9 @@
 }
 
 /*
- * Opening animation. An ink panel with a welcome message covers the page, then lifts away.
+ * Opening animation. A cream screen with a big welcome word (orange) covers the page. The loading is the
+ * background turning ink from left to right, and the word turning cream with it: two identical layers
+ * on top of each other, and the top one (ink, cream word) is revealed with a clip-path.
  * The panel and the first paint are CSS only, so there is no flash of the page. main.js
  * (playIntro) does the motion. Shown only while <html> has data-intro (set in the <head>).
  */
@@ -81,71 +83,36 @@ html[data-intro] .intro {
 .intro-panel {
   position: absolute;
   inset: 0;
-  display: grid;
-  place-items: center;
-  background: var(--color-ink);
-  color: var(--color-cream);
   pointer-events: auto; /* blocks clicks while it covers the page */
 }
-.intro-brand {
+.intro-layer {
+  position: absolute;
+  inset: 0;
   display: grid;
-  justify-items: start;
+  place-items: center;
+  padding-inline: 1rem;
+  background: var(--color-cream);
+  color: var(--color-orange); /* huge text, so the 3.4:1 contrast is enough */
+}
+.intro-layer-fill {
+  background: var(--color-ink);
+  color: var(--color-cream);
+  clip-path: inset(0 100% 0 0); /* main.js reveals it from the left */
 }
 .intro-message {
   display: block;
   width: max-content;
   max-width: 100%;
-  font-size: clamp(2.5rem, 10.5vw, 6rem);
+  /* Sized so the longest word of each language fills most of the width (checked at 360px and up) */
+  font-size: clamp(3.5rem, 21vw, 17rem);
   font-weight: 700;
   line-height: 1.2;
+  letter-spacing: -0.02em;
   white-space: pre;
   opacity: 0; /* main.js shows it when the animation starts */
 }
-/* The loading line is drawn like the lines in "How it works": same stroke, amber,
-   with a dot at the tip. The dot travels with the line, and the number below counts with it. */
-.intro-track {
-  --extra: 4.5vw; /* how far the line goes past each side of the word */
-  position: relative;
-  display: block;
-  width: calc(100% + 2 * var(--extra));
-  height: 3.5px;
-  margin: 1.5rem calc(-1 * var(--extra)) 0;
-}
-@media (min-width: 64rem) {
-  .intro-track {
-    --extra: 4rem;
-  }
-}
-.intro-line {
-  display: block;
-  height: 100%;
-  border-radius: 9999px;
-  background: var(--color-amber);
-  clip-path: inset(0 100% 0 0); /* main.js reveals it from the left (clip, so the rounded start never gets squashed) */
-}
-.intro-dot {
-  --dot: 0.875rem;
-  position: absolute;
-  top: 50%;
-  left: 0;
-  width: var(--dot);
-  height: var(--dot);
-  margin: calc(var(--dot) / -2) 0 0 calc(var(--dot) / -2); /* centers the dot (no translate, GSAP moves it with transform) */
-  border-radius: 9999px;
-  background: var(--color-amber);
-  box-shadow: 0 0 0 4px var(--color-ink); /* a ring of the background keeps the node apart from the line */
-  opacity: 0;
-}
-.intro-percent {
-  display: block;
-  justify-self: center;
-  margin-top: 1.5rem;
-  color: var(--color-cream-muted);
-  font-size: clamp(1.5rem, 5vw, 2.25rem);
-  font-weight: 700;
-  line-height: 1;
-  font-variant-numeric: tabular-nums;
-  opacity: 0;
+.intro-message:lang(pt) {
+  font-size: clamp(2.5rem, 13vw, 12rem);
 }
 
 html {
