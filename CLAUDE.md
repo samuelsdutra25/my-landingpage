@@ -186,7 +186,7 @@ Everything still to do, reviewed on 2026-10-20 and grouped by when it happens: *
 
 **Last step**
 
-- [ ] `npm run build`, then commit everything pending, when Samuel asks. Nothing since `d812387` is committed, and `_headers` and `assets/project-website-figma.avif` are untracked.
+- [x] (2026-10-20) Build and commit everything pending (commits `93f39eb`, `7912f26` and `86bba8b`). Not pushed yet.
 
 ### B. During the deploy
 
