@@ -202,9 +202,9 @@ The order matters. Do these one after another.
 8. [x] (2026-10-20) Redirect Rule from the Cloudflare template "Redirect from WWW to root" (`https://www.*` to `https://${1}`, 301, query string kept). Tested: `www` and `www/pt/?a=1` redirect to the apex.
 9. [x] (2026-10-20) The `*.workers.dev` and preview URLs are turned off (both return 404).
 10. [x] (2026-10-20) Checked on the live domain: the HTML is identical to `index.html`, no Cloudflare script injected, the `mailto:` links are intact and not obfuscated.
-11. [x] (2026-10-20) AI crawlers: Cloudflare added its managed block to `robots.txt` (`ai-train=no` and Disallow for training crawlers such as GPTBot, ClaudeBot and Google-Extended); search crawlers stay allowed and our `Allow: /` and sitemap line are still there. Matches what was recommended. Change it in AI Crawl Control if Samuel wants otherwise.
-12. [ ] DNS: turn on DNSSEC (Cloudflare, then the DS record at Registro.br). The "no mail" records (null MX, SPF `-all`, DMARC `p=reject`) already exist in the zone (kept from the old account, 2026-10-20); replace them with the real ones when Email Routing is set up.
-13. [ ] HSTS, only after HTTPS is confirmed on the live domain: turn it on in Cloudflare (SSL/TLS > Edge Certificates) or add `Strict-Transport-Security` to `_headers` through the build. Also check "Always Use HTTPS" is on. Always Use HTTPS is on (2026-10-20, `http://` redirects with 301). HSTS itself is still off.
+11. [x] (2026-10-20) AI crawlers: Cloudflare added its managed block to `robots.txt` (`ai-train=no` and Disallow for training crawlers such as GPTBot, ClaudeBot and Google-Extended); search crawlers stay allowed and our `Allow: /` and sitemap line are still there. Later the same day this turned out to be wrong: the rule "Block AI training crawlers - BOBA-199" (Cloudflare Bot Management rules) was blocking the real Googlebot (IPs `66.249.x.x`, Googlebot Smartphone user agent), including on `/`, and Search Console got a 403 on `sitemap.xml`. Samuel changed the AI bot policy in Security > Settings > Bot traffic > Configure AI bot policies to allow them, and the `robots.txt` is back to our own two lines. Keep checking Security > Analytics > Events for blocks from Google IPs.
+12. [x] (2026-10-20) DNS: DNSSEC is on. The DS record is published at the `.br` registry and Google (8.8.8.8) and Quad9 (9.9.9.9) answer with the `ad` flag (validated). The "no mail" records (null MX, SPF `-all`, DMARC `p=reject`) already exist in the zone (kept from the old account, 2026-10-20); replace them with the real ones when Email Routing is set up.
+13. [x] (2026-10-20) HSTS: `Strict-Transport-Security: max-age=31536000` (one year, no includeSubDomains, no preload, on purpose) added to `_headers` by the build; Cloudflare's own HSTS setting stays off so the header comes from one place. Always Use HTTPS is on (`http://` redirects with 301). Check with `curl -sI https://samueldutra.com.br/` after the deploy.
 
 After this, every push to `main` publishes by itself.
 
@@ -216,21 +216,22 @@ After this, every push to `main` publishes by itself.
 
 - [x] (2026-10-20) Live checks: `/` and `/pt/` 200 over HTTPS, `http://` and `www` redirect (301), `/x` and `/pt/x` 404 in the right language, `/CLAUDE.md`, `/README.md`, `/package.json` 404, `/.well-known/security.txt` 200 as plain text, workers.dev off.
 - [x] (2026-10-20) No CSP violation or console error on both pages (Lighthouse "errors in console" passes, before cookies are accepted). Cloudflare's Web Analytics beacon was being injected and blocked by the CSP; fixed with `Cache-Control: ... no-transform` in `_headers`. Not yet checked after accepting the cookies.
+- [ ] (2026-10-20) Compression. `no-transform` also stops Cloudflare from compressing, so nothing was sent with Brotli or gzip (275 KB on the wire). Local Lighthouse, mobile, 3 runs each: uncompressed 95 to 97 (LCP 2.2 to 2.6 s, 275 KB), everything compressed 100 (LCP 1.4 to 1.5 s, 107 KB). In the dashboard the account has no Web Analytics site and the zone's RUM (Speed > Observatory) is off, so the build no longer sends `Cache-Control` at all (Cloudflare's default applies). After the deploy: `curl -s --compressed https://samueldutra.com.br/ | grep cloudflareinsights` finds nothing, and `curl -sI -H 'Accept-Encoding: br' https://samueldutra.com.br/` shows `content-encoding`. Then re-run Lighthouse and update `SITE.scores`.
 - [~] (2026-10-20) Live headers checked with curl (CSP, nosniff, Referrer-Policy, Permissions-Policy, Cache-Control, `robots.txt` with Cloudflare's block). Mozilla Observatory / securityheaders.com not run.
 - [x] (2026-10-20) Real form send with Turnstile on: the email arrives. `generate_lead` in GA4 not checked yet.
-- [ ] Analytics in a normal tab: accept the notice, see the visit in GA4 > Reports > Realtime, then test `contact_click` (email, WhatsApp) and `project_open`. Decline in another browser and check that no request goes to Google.
+- [~] (2026-10-20) Analytics in a normal tab: after accepting, GA4 Realtime shows `page_view`, `first_visit`, `session_start`, `scroll`, `click`, `contact_click` and `project_open`. Console after accepting: only harmless noise (Firefox's `_ga` "invalid domain" probing on `.com.br`, and warnings from inside the Turnstile iframe). Still to do: `generate_lead` (nobody has sent the form since the tag went live) and declining in another browser to confirm no request goes to Google.
 - [x] (2026-10-20) Lighthouse on the live site (mobile, 12 runs): performance 92 to 98 (median 97), accessibility 100, best practices 100, SEO 100. `SITE.scores` updated to 97, 100, 100. PageSpeed Insights not run.
-- [ ] axe on the deployed pages with the notice open (still untested), plus the mobile menu open and a project expanded.
+- [x] (2026-10-20) axe 4.x on the deployed `/` and `/pt/` (390px and 1280px; notice open, notice answered, mobile menu open, project expanded; WCAG 2.2 A/AA plus best practices): 0 violations in every state. Left for review by axe, not failures: the three gauge numbers (text too short to judge; measured by hand at 5.3:1) and the notice text (it overlaps the page, on its own cream panel). During the intro the page is inert on purpose, so run axe after it ends.
 - [ ] Real phones again on the live site, and the Turnstile challenge by keyboard if it appears.
 
 **Search and sharing**
 
-- [ ] **Samuel.** Google Search Console: Domain property verified by a DNS record (in Cloudflare DNS), submit `sitemap.xml`, URL Inspection > Test live URL on `/` and `/pt/` (check the screenshot is not hidden by the intro), request indexing.
-- [ ] **Samuel.** Link GA4 and Search Console (GA4 Admin > Product links).
-- [ ] **Samuel.** Bing Webmaster Tools: import from Search Console.
+- [x] (2026-10-20) **Samuel.** Google Search Console: the Domain property already existed and is verified. `sitemap.xml` submitted (the Domain property needs the full URL; the first fetch got a 403 from Cloudflare's AI bot block, see step 11, and works after the fix, status processed). URL Inspection live test passed on `/pt/` (and `/`), indexing requested.
+- [x] (2026-10-20) **Samuel.** GA4 linked to Search Console (data shows up in a day or two).
+- [ ] **Samuel.** Bing Webmaster Tools: import from Search Console. Postponed by Samuel (2026-10-20).
 - [ ] Validate the JSON-LD with the Schema Markup Validator and the Rich Results Test.
 - [ ] Test the share preview on WhatsApp and the LinkedIn Post Inspector, EN and PT.
-- [ ] **Samuel.** Link the site from GitHub (profile and repository), Instagram bio, WhatsApp Business, email signature and Upwork profile, with the same name and role everywhere.
+- [x] (2026-10-20) **Samuel.** Site linked from GitHub, Instagram, WhatsApp Business, email signature and Upwork.
 
 **Google Analytics settings (Samuel, in GA4)**
 
