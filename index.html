@@ -109,7 +109,7 @@
   <link rel="stylesheet" href="style.css?v=78040f1b">
   <script src="assets/gsap.min.js?v=92bb9a96" defer></script>
   <script src="assets/ScrollToPlugin.min.js?v=07cfd328" defer></script>
-  <script src="main.js?v=c7cd0178" defer></script>
+  <script src="main.js?v=46def5e4" defer></script>
 </head>
 <body>
   <!-- The text inside the data-i18n, data-link, data-project-* and similar hooks is written by
@@ -573,7 +573,9 @@
         </div>
 
         <!-- The form is the briefing (step 1 of "How it works"): who you are, what kind of project, what you need -->
-        <form data-contact-form method="post" enctype="text/plain" class="relative rounded-tile border border-line bg-cream p-6 sm:p-8 lg:col-span-6 lg:col-start-7" action="mailto:samuelsdutra25@gmail.com">
+        <form data-contact-form novalidate method="dialog" class="relative rounded-tile border border-line bg-cream p-6 sm:p-8 lg:col-span-6 lg:col-start-7" action="mailto:samuelsdutra25@gmail.com">
+          <!-- Without script the form cannot send (method="dialog" makes the browser do nothing on submit, so no field ends up in the address bar): this note points to the email instead -->
+          <noscript><p class="mb-6 font-bold"><span data-i18n="form.noscript">The form needs JavaScript. Write to</span> <a href="mailto:samuelsdutra25@gmail.com" data-link="email" data-email-text class="underline underline-offset-4 hover:text-orange-deep">samuelsdutra25@gmail.com</a>.</p></noscript>
           <div class="grid gap-5 sm:grid-cols-2">
             <div>
               <label for="f-name" class="block font-bold" data-i18n="form.name">Name</label>
@@ -610,8 +612,8 @@
             <p data-count-live class="sr-only" aria-live="polite"></p>
           </div>
 
-          <!-- Honeypot: people never see it, bots fill it. main.js names it _gotcha (Formspree drops those too); without script it has no name, so it stays out of the mailto fallback -->
-          <input type="text" data-honeypot tabindex="-1" autocomplete="off" aria-hidden="true" class="absolute left-[-9999px]">
+          <!-- Honeypot: people never see it, bots fill it. Named _gotcha so Formspree drops it too (and browsers don't autofill it) -->
+          <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" class="absolute left-[-9999px]">
 
           <!-- Cloudflare Turnstile widget (main.js, only with SITE.form.turnstile). Invisible unless a click is needed -->
           <div data-turnstile class="data-interactive:mt-6"></div>

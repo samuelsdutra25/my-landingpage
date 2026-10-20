@@ -274,8 +274,6 @@ function renderPage(template, lang, headBlock = head) {
     return [tag, inner];
   });
   html = fillText(html, 'data-email-text', () => emailAddress);
-  // The form posts to a mailto: when script does not run (main.js takes over otherwise)
-  html = eachElement(html, 'data-contact-form', (tag, inner) => [setAttr(tag, 'action', `mailto:${emailAddress}`), inner]);
   html = fillText(html, 'data-copyright', () => `© ${new Date().getFullYear()} ${NAME}`);
 
   // Error page: links back to this language's home page (the value is an optional #section), and the
@@ -393,7 +391,7 @@ const csp = [
   "font-src 'self'",
   `connect-src ${["'self'", ...formOrigin, turnstile, ...googleHits].join(' ')}`,
   `frame-src ${turnstile}`,
-  "form-action 'self' mailto:", // mailto: for the contact form when script does not run
+  "form-action 'self'",
   "base-uri 'self'",
   "object-src 'none'",
   "frame-ancestors 'none'",

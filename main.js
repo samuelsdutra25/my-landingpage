@@ -266,6 +266,7 @@ const TRANSLATIONS = {
     'form.error.messageShort': 'Write at least 10 characters.',
     'form.privacy':
       "Your message reaches my email through Formspree and goes through Cloudflare's anti-bot check, both US services. I use it only to reply to you. To delete it, just ask by email.",
+    'form.noscript': 'The form needs JavaScript. Write to',
     'form.count': '{n} characters left',
     'form.countOne': '1 character left',
     'form.sending': 'Sending...',
@@ -435,6 +436,7 @@ const TRANSLATIONS = {
     'form.error.messageShort': 'Escreva pelo menos 10 caracteres.',
     'form.privacy':
       'Sua mensagem chega ao meu e-mail pelo Formspree e passa pela verificação anti-robô do Cloudflare, dois serviços dos EUA. Uso só para responder você. Para apagar, é só pedir por e-mail.',
+    'form.noscript': 'O formulário precisa de JavaScript. Escreva para',
     'form.count': 'Restam {n} caracteres',
     'form.countOne': 'Resta 1 caractere',
     'form.sending': 'Enviando...',
@@ -540,13 +542,9 @@ $$('[data-project]').forEach((card) => {
 const emailAddress = SITE.links.email.replace(/^mailto:/, '');
 
 /* ---- Contact form ----
-   Validation is ours (novalidate is set below) so the messages are in the language of the page.
+   Validation is ours (the form has novalidate) so the messages are in the language of the page.
    The length limits are maxlength attributes in index.html (name 100, email 254, message 3000). */
 const form = $('[data-contact-form]');
-// Without script the form posts to a mailto: (set by the build), which the browser opens as an email, and the
-// browser's own validation applies. With script the validation is ours, so turn the browser's off.
-form.noValidate = true;
-$('[data-honeypot]', form).name = '_gotcha';
 const formStatus = $('[data-form-status]', form); // role="status": always in the page, so screen readers announce changes
 const formSubmit = $('[data-form-submit]', form);
 const message = $('#f-message');
