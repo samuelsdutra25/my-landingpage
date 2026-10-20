@@ -40,12 +40,12 @@ const SITE = {
 
   stack: ['HTML', 'CSS', 'Tailwind', 'JavaScript', 'GSAP', 'React'],
 
-  // Lighthouse scores of THIS page (mobile, 0 to 100). Measured 2026-10-15 with Lighthouse 12.8.2 on the
-  // local Cloudflare server (wrangler dev), 6 runs on the English and Portuguese pages: performance 100 in
-  // every run, accessibility 100, SEO 100. Before, the "How it works" lines were measured during the page
-  // load and performance was 85 to 89; now they are measured when the section gets close.
-  // TODO: run Lighthouse again on the deployed URL and update these. null shows "--" and leaves the ring empty.
-  scores: { performance: 100, accessibility: 100, seo: 100 },
+  // Lighthouse scores of THIS page (mobile, 0 to 100). Measured 2026-10-20 on the live site
+  // (https://samueldutra.com.br/ and /pt/) with Lighthouse 13.5.0, mobile preset with its default throttling,
+  // headless Chrome, 3 runs per language, as a first-time visitor (the cookie notice appears after the load that
+  // is measured). Performance: EN 97, 97, 98; PT 98, 98, 95 (FCP 1.7 s, LCP 1.7 to 2.1 s, TBT 0 to 20 ms, CLS 0),
+  // so 97 is shown. Accessibility 100 and SEO 100 in all six runs. null shows "--" and leaves the ring empty.
+  scores: { performance: 97, accessibility: 100, seo: 100 },
 
   // Project 1 (website) is real: a concept project built from a Figma design, live on GitHub Pages.
   // TODO: the online store and the dashboard. Their texts below say what each one will prove. Replace titles,
