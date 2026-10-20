@@ -11,7 +11,9 @@
  *   404.html       English error page. Same idea: it is the template and the English page. Its header and footer
  *                  (between the build:header and build:footer comments) are copied from index.html
  *   pt/404.html    Portuguese error page (generated). Cloudflare serves the nearest one to a wrong address
- *   sitemap.xml, robots.txt
+ *   sitemap.xml, robots.txt, .well-known/security.txt
+ *   _headers       Security headers for Cloudflare. The Content-Security-Policy lists the hash of each inline script,
+ *                  so it is generated here (editing an inline script by hand would silently break it)
  * Plain Node, no dependencies.
  */
 import { createHash } from 'node:crypto';
@@ -180,7 +182,7 @@ function notFoundHead(lang) {
 // The error page wears the site's own header and footer: they are copied from index.html (between the
 // build:header and build:footer comments of 404.html), so the two never drift apart. This page is served at any
 // wrong address, so section links go through data-home (filled in by renderPage) and the language links point
-// to the two home pages. "Back to top" makes no sense here, so it is left out.
+// to the two home pages. "Back to top" makes no sense here, so it is left out, and so is "Cookie settings": this page does not load main.js, so the button would do nothing.
 function withSiteChrome(notFound, home) {
   const piece = (tag) => home.match(new RegExp(`<${tag}\\b[\\s\\S]*?</${tag}>`))[0];
   const adapt = (html) =>
@@ -189,7 +191,8 @@ function withSiteChrome(notFound, home) {
       .replace(/href="(#[a-z-]+)"/g, (all, hash) => `href="/${hash}" data-home="${hash}"`)
       .replace(/href="\.\/"/g, 'href="/"')
       .replace(/href="pt\/"/g, 'href="/pt/"')
-      .replace(/\s*<a href="\/" data-home="" class="footer-link[\s\S]*?<\/a>/, '');
+      .replace(/\s*<a href="\/" data-home="" class="footer-link[\s\S]*?<\/a>/, '')
+      .replace(/\s*<button type="button" data-consent-open[\s\S]*?<\/button>/, '');
   const swap = (html, name, block) =>
     html.replace(new RegExp(`(<!-- build:${name}[\\s\\S]*?-->)[\\s\\S]*?(\\n[ \\t]*<!-- /build:${name} -->)`), (all, open, close) => `${open}\n  ${block}${close}`);
   return swap(swap(notFound, 'header', adapt(piece('header'))), 'footer', adapt(piece('footer')));
@@ -224,12 +227,16 @@ function renderPage(template, lang, headBlock = head) {
       ul,
       project.details.stack.map((name) => `<li class="rounded-full bg-sand px-3 py-1 text-small font-bold">${escapeHtml(name)}</li>`).join(''),
     ]);
-    inner = eachElement(inner, 'data-project-link', (a, content) => [setAttr(a, 'href', project.url), content]);
+    // Real project sites open in a new tab so the visitor keeps this page
+    inner = eachElement(inner, 'data-project-link', (a, content) => {
+      a = setAttr(a, 'href', project.url);
+      return [project.url.startsWith('http') ? setAttr(setAttr(a, 'target', '_blank'), 'rel', 'noopener') : a, content];
+    });
     inner = eachElement(inner, 'data-project-badge', (span, content) => [setAttr(span, 'hidden', project.placeholder ? null : true), content]);
     inner = eachElement(inner, 'data-project-media', (div) => [
       div,
       project.image
-        ? `<img src="${escapeHtml(project.image)}" alt="${escapeHtml(project.title[lang])}" loading="lazy" class="h-full w-full object-cover">`
+        ? `<img src="${escapeHtml(project.image)}" alt="${escapeHtml(project.title[lang])}"${project.imageSize ? ` width="${project.imageSize[0]}" height="${project.imageSize[1]}"` : ''} loading="lazy" decoding="async" class="h-full w-full object-cover">`
         : `<span class="text-small">${escapeHtml(text('projects.image'))}</span>`,
     ]);
     return [tag, inner];
@@ -244,7 +251,7 @@ function renderPage(template, lang, headBlock = head) {
   // About: the photo (or the initials until there is one) and the stack chips
   html = eachElement(html, 'data-about-photo', (tag) =>
     SITE.photo
-      ? [setAttr(tag, 'aria-hidden', null), `<img src="${escapeHtml(SITE.photo)}" alt="${escapeHtml(text('about.photoAlt'))}" width="1254" height="1254" loading="lazy" decoding="async" class="h-full w-full object-cover">`]
+      ? [setAttr(tag, 'aria-hidden', null), `<img src="${escapeHtml(SITE.photo)}" alt="${escapeHtml(text('about.photoAlt'))}" width="800" height="800" loading="lazy" decoding="async" class="h-full w-full object-cover">`]
       : [setAttr(tag, 'aria-hidden', 'true'), escapeHtml(SITE.initials)],
   );
   html = eachElement(html, 'data-stack', (tag) => [
@@ -267,6 +274,8 @@ function renderPage(template, lang, headBlock = head) {
     return [tag, inner];
   });
   html = fillText(html, 'data-email-text', () => emailAddress);
+  // The form posts to a mailto: when script does not run (main.js takes over otherwise)
+  html = eachElement(html, 'data-contact-form', (tag, inner) => [setAttr(tag, 'action', `mailto:${emailAddress}`), inner]);
   html = fillText(html, 'data-copyright', () => `© ${new Date().getFullYear()} ${NAME}`);
 
   // Error page: links back to this language's home page (the value is an optional #section), and the
@@ -303,12 +312,15 @@ function moveDown(html, file) {
 
 /* ---- Build ---- */
 console.log('build:html');
+const pages = [];
 for (const [file, headBlock] of [['index.html', head], ['404.html', notFoundHead]]) {
   const template = file === '404.html' ? withSiteChrome(read(file), read('index.html')) : read(file);
   for (const lang of Object.keys(LOCALES)) {
     const { path } = LOCALES[lang];
     const html = renderPage(template, lang, headBlock);
-    write(`${path}${file}`, path ? moveDown(html, file) : html);
+    const page = path ? moveDown(html, file) : html;
+    pages.push(page);
+    write(`${path}${file}`, page);
   }
 }
 
@@ -330,5 +342,67 @@ User-agent: *
 Allow: /
 
 Sitemap: ${SITE.url}sitemap.xml
+`,
+);
+
+// security.txt (RFC 9116): where to report a security problem. Expires must be less than a year ahead, so it is set to
+// the start of the month 11 months from now: a build every few months keeps it valid, and a site nobody touches stops
+// claiming a contact that may be gone. It changes once a month, so the build is still safe to run twice.
+const expires = new Date();
+expires.setUTCDate(1);
+expires.setUTCHours(0, 0, 0, 0);
+expires.setUTCMonth(expires.getUTCMonth() + 11);
+write(
+  '.well-known/security.txt',
+  `Contact: mailto:${emailAddress}
+Expires: ${expires.toISOString().replace('.000', '')}
+Preferred-Languages: ${Object.values(LOCALES).map((locale) => locale.htmlLang).join(', ')}
+Canonical: ${SITE.url}.well-known/security.txt
+`,
+);
+
+/*
+ * Security headers (Cloudflare reads _headers from the site root). The page only loads its own files, the
+ * Turnstile widget and the form endpoint, so the policy names exactly those. Inline scripts are allowed by
+ * hash, taken from the pages written above; the JSON-LD block is data, not a script, so it needs none.
+ * Inline style attributes (the hero wireframe's --i) are allowed on their own, with style-src-attr.
+ */
+const inlineScripts = pages.flatMap((html) => [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].map((match) => match[1]));
+const scriptHashes = [...new Set(inlineScripts)].map((code) => `'sha256-${createHash('sha256').update(code).digest('base64')}'`);
+const turnstile = 'https://challenges.cloudflare.com';
+const formOrigin = SITE.form.action ? [new URL(SITE.form.action).origin] : [];
+
+// Google Tag Manager and GA4, allowed only when a container ID is set. The tag script comes from googletagmanager.com;
+// GA4 sends its hits to the google-analytics.com / analytics.google.com hosts (any region). Custom HTML tags in the
+// container would need inline scripts and stay blocked on purpose: use the built-in tag templates.
+if (SITE.tracking.gtm && !/^GTM-[A-Z0-9]{4,}$/.test(SITE.tracking.gtm)) throw new Error("SITE.tracking.gtm must look like 'GTM-XXXXXXX'.");
+const googleScripts = SITE.tracking.gtm ? ['https://www.googletagmanager.com'] : [];
+const googleHits = SITE.tracking.gtm
+  ? ['https://www.googletagmanager.com', 'https://*.google-analytics.com', 'https://*.analytics.google.com']
+  : [];
+
+const csp = [
+  "default-src 'self'",
+  `script-src ${["'self'", ...scriptHashes, turnstile, ...googleScripts].join(' ')}`,
+  "style-src 'self'",
+  "style-src-attr 'unsafe-inline'",
+  `img-src ${["'self'", ...googleHits].join(' ')}`,
+  "font-src 'self'",
+  `connect-src ${["'self'", ...formOrigin, turnstile, ...googleHits].join(' ')}`,
+  `frame-src ${turnstile}`,
+  "form-action 'self' mailto:", // mailto: for the contact form when script does not run
+  "base-uri 'self'",
+  "object-src 'none'",
+  "frame-ancestors 'none'",
+].join('; ');
+
+write(
+  '_headers',
+  `# Security headers, generated by scripts/build-html.mjs (do not edit: change the build and run npm run build)
+/*
+  Content-Security-Policy: ${csp}
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
 `,
 );

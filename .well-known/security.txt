@@ -1,0 +1,4 @@
+Contact: mailto:samuelsdutra25@gmail.com
+Expires: 2027-09-01T00:00:00Z
+Preferred-Languages: en, pt-BR
+Canonical: https://samueldutra.com.br/.well-known/security.txt

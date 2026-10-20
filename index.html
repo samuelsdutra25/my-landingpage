@@ -105,11 +105,11 @@
        hero title uses it; the regular is found early anyway through the CSS -->
   <link rel="preload" href="assets/fonts/hind-700.woff2" as="font" type="font/woff2" crossorigin>
 
-  <link rel="stylesheet" href="assets/tailwind.css?v=31c61159">
-  <link rel="stylesheet" href="style.css?v=431e7d53">
+  <link rel="stylesheet" href="assets/tailwind.css?v=1d5c213b">
+  <link rel="stylesheet" href="style.css?v=78040f1b">
   <script src="assets/gsap.min.js?v=92bb9a96" defer></script>
   <script src="assets/ScrollToPlugin.min.js?v=07cfd328" defer></script>
-  <script src="main.js?v=75a65ab1" defer></script>
+  <script src="main.js?v=e0798a17" defer></script>
 </head>
 <body>
   <!-- The text inside the data-i18n, data-link, data-project-* and similar hooks is written by
@@ -339,11 +339,11 @@
 
         <div class="mt-12 grid items-start gap-6 md:grid-cols-2">
           <article data-project="0" class="project relative overflow-hidden rounded-3xl md:col-span-2 border border-line bg-cream">
-            <div data-project-media class="flex aspect-16/10 md:aspect-21/9 items-center justify-center bg-linen text-ink-soft"><span class="text-small">Project image</span></div>
+            <div data-project-media class="flex aspect-16/10 md:aspect-21/9 items-center justify-center bg-linen text-ink-soft"><img src="assets/project-website-figma.avif" alt="Website built from a Figma design" width="1600" height="900" loading="lazy" decoding="async" class="h-full w-full object-cover"></div>
             <div class="p-6 md:p-8">
               <div class="flex flex-wrap items-center gap-3">
-                <span data-project-badge class="inline-block rounded-full bg-amber px-3 py-0.5 text-small font-bold text-ink" data-i18n="projects.placeholder">Example</span>
-                <span data-project-type class="text-small text-ink-soft">Website</span>
+                <span data-project-badge class="inline-block rounded-full bg-amber px-3 py-0.5 text-small font-bold text-ink" data-i18n="projects.placeholder" hidden>Example</span>
+                <span data-project-type class="text-small text-ink-soft">Website, concept project</span>
               </div>
               <h3 class="mt-3 text-heading font-bold">
                 <button type="button" data-project-toggle data-project-title aria-expanded="false" aria-controls="project-0-more" class="project-toggle text-left">Website built from a Figma design</button>
@@ -361,7 +361,7 @@
                     <dl class="grid gap-6 md:grid-cols-2">
                       <div>
                         <dt class="font-bold" data-i18n="projects.about">About the project</dt>
-                        <dd data-project-about class="mt-1 max-w-[65ch] text-ink-soft">A website built to match a Figma file exactly. The goal is to show that the page you approve in the design is the page you get in the browser.</dd>
+                        <dd data-project-about class="mt-1 max-w-[65ch] text-ink-soft">A concept website, with no client behind it, built to match a Figma file exactly. The goal is to show that the page you approve in the design is the page you get in the browser.</dd>
                       </div>
                       <div>
                         <dt class="font-bold" data-i18n="projects.role">What I did</dt>
@@ -372,7 +372,7 @@
                         <dd class="mt-2"><ul data-project-stack class="flex flex-wrap gap-2"><li class="rounded-full bg-sand px-3 py-1 text-small font-bold">HTML</li><li class="rounded-full bg-sand px-3 py-1 text-small font-bold">Tailwind</li><li class="rounded-full bg-sand px-3 py-1 text-small font-bold">JavaScript</li></ul></dd>
                       </div>
                     </dl>
-                    <a data-project-link href="#" class="mt-6 inline-block font-bold underline underline-offset-4 hover:text-orange-deep" data-i18n="projects.view">View project online</a>
+                    <a data-project-link href="https://samuelsdutra25.github.io/figma-project/" class="mt-6 inline-block font-bold underline underline-offset-4 hover:text-orange-deep" data-i18n="projects.view" target="_blank" rel="noopener">View project online</a>
                   </div>
                 </div>
               </div>
@@ -545,7 +545,7 @@
     <!-- About -->
     <section id="about" class="section-y" aria-labelledby="about-title">
       <div class="wrap grid items-center gap-10 lg:grid-cols-12 lg:gap-8">
-        <div data-about-photo class="mx-auto flex aspect-square w-full max-w-sm items-center justify-center overflow-hidden rounded-tile bg-sand text-[6rem] font-bold text-ink lg:col-span-5 lg:mx-0 lg:max-w-[24rem]"><img src="assets/samuel-dutra.avif" alt="Portrait of Samuel Dutra: a smiling man with short curly dark hair, round glasses and a mustache, in a beige linen shirt, outdoors in a forest at golden hour." width="1254" height="1254" loading="lazy" decoding="async" class="h-full w-full object-cover"></div>
+        <div data-about-photo class="mx-auto flex aspect-square w-full max-w-sm items-center justify-center overflow-hidden rounded-tile bg-sand text-[6rem] font-bold text-ink lg:col-span-5 lg:mx-0 lg:max-w-[24rem]"><img src="assets/samuel-dutra.avif" alt="Portrait of Samuel Dutra: a smiling man with short curly dark hair, round glasses and a mustache, in a beige linen shirt, outdoors in a forest at golden hour." width="800" height="800" loading="lazy" decoding="async" class="h-full w-full object-cover"></div>
         <div class="max-lg:mx-auto max-lg:w-full max-lg:max-w-[65ch] lg:col-span-7 lg:col-start-6">
           <h2 id="about-title" class="text-title font-bold" data-i18n="about.title">About</h2>
           <p class="mt-4 max-w-[65ch]" data-i18n="about.text1">I'm Samuel, a front-end developer. I'm the link between your system and your customer, making sure they get a great experience and everything works smoothly.</p>
@@ -573,16 +573,16 @@
         </div>
 
         <!-- The form is the briefing (step 1 of "How it works"): who you are, what kind of project, what you need -->
-        <form data-contact-form novalidate class="relative rounded-tile border border-line bg-cream p-6 sm:p-8 lg:col-span-6 lg:col-start-7">
+        <form data-contact-form method="post" enctype="text/plain" class="relative rounded-tile border border-line bg-cream p-6 sm:p-8 lg:col-span-6 lg:col-start-7" action="mailto:samuelsdutra25@gmail.com">
           <div class="grid gap-5 sm:grid-cols-2">
             <div>
               <label for="f-name" class="block font-bold" data-i18n="form.name">Name</label>
-              <input id="f-name" name="name" type="text" autocomplete="name" required aria-describedby="f-name-error" class="field mt-2">
+              <input id="f-name" name="name" type="text" autocomplete="name" required maxlength="100" aria-describedby="f-name-error" class="field mt-2">
               <p id="f-name-error" class="field-error"></p>
             </div>
             <div>
               <label for="f-email" class="block font-bold" data-i18n="form.email">Email</label>
-              <input id="f-email" name="email" type="email" autocomplete="email" required aria-describedby="f-email-error" class="field mt-2">
+              <input id="f-email" name="email" type="email" autocomplete="email" required maxlength="254" aria-describedby="f-email-error" class="field mt-2">
               <p id="f-email-error" class="field-error"></p>
             </div>
           </div>
@@ -601,20 +601,29 @@
           <div class="mt-5">
             <label for="f-message" class="block font-bold" data-i18n="form.message">Your message</label>
             <p id="f-message-hint" class="text-small text-ink-soft" data-i18n="form.messageHint">What you need, what already exists and when you need it.</p>
-            <textarea id="f-message" name="message" rows="5" required aria-describedby="f-message-hint f-message-error" class="field mt-2 resize-y"></textarea>
-            <p id="f-message-error" class="field-error"></p>
+            <textarea id="f-message" name="message" rows="5" required maxlength="3000" aria-describedby="f-message-hint f-message-error" class="field mt-2 resize-y"></textarea>
+            <!-- Characters left (main.js): the visible one is hidden from screen readers, which hear the live one after a pause -->
+            <div class="flex items-start justify-between gap-4">
+              <p id="f-message-error" class="field-error"></p>
+              <p data-count class="mt-2 ml-auto shrink-0 text-small text-ink-soft tabular-nums data-full:font-bold data-full:text-orange-deep" aria-hidden="true" hidden></p>
+            </div>
+            <p data-count-live class="sr-only" aria-live="polite"></p>
           </div>
 
-          <!-- Honeypot: people never see it, bots fill it. Only checked when SITE.form.action is set -->
-          <input type="text" name="company" tabindex="-1" autocomplete="off" aria-hidden="true" class="absolute left-[-9999px]">
+          <!-- Honeypot: people never see it, bots fill it. main.js names it _gotcha (Formspree drops those too); without script it has no name, so it stays out of the mailto fallback -->
+          <input type="text" data-honeypot tabindex="-1" autocomplete="off" aria-hidden="true" class="absolute left-[-9999px]">
 
-          <div class="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center">
-            <button type="submit" data-form-submit class="btn btn-primary disabled:opacity-60" data-i18n="contact.cta">Send me a message</button>
-            <p data-form-status role="status" class="text-small font-bold" hidden>
+          <!-- Cloudflare Turnstile widget (main.js, only with SITE.form.turnstile). Invisible unless a click is needed -->
+          <div data-turnstile class="data-interactive:mt-6"></div>
+
+          <div class="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center has-[[data-form-status-text]:empty]:gap-0">
+            <button type="submit" data-form-submit class="btn btn-primary aria-disabled:cursor-wait aria-disabled:opacity-60" data-i18n="contact.cta">Send me a message</button>
+            <p data-form-status role="status" class="text-small font-bold">
               <span data-form-status-text></span>
               <a href="mailto:samuelsdutra25@gmail.com" data-link="email" data-email-text data-form-status-email class="underline underline-offset-4 hover:text-orange-deep" hidden>samuelsdutra25@gmail.com</a>
             </p>
           </div>
+          <p class="mt-4 max-w-[60ch] text-small text-ink-soft" data-i18n="form.privacy">Your message reaches my email through Formspree and goes through Cloudflare's anti-bot check, both US services. I use it only to reply to you. To delete it, just ask by email.</p>
         </form>
       </div>
     </section>
@@ -663,8 +672,14 @@
         </div>
       </div>
 
-      <div class="mt-14 flex flex-col gap-4 border-t border-cream/15 pt-6 sm:flex-row sm:items-center sm:justify-between">
-        <p class="text-small text-cream-muted" data-copyright>© 2026 Samuel Dutra</p>
+      <!-- Accessibility statement: the standard aimed for and where to report a problem (no claim of full conformance) -->
+      <p class="mt-12 max-w-[65ch] text-small text-cream-muted"><span data-i18n="footer.a11y">I aim for this site to meet WCAG 2.2 level AA. If something is hard to use, write to</span> <a href="mailto:samuelsdutra25@gmail.com" data-link="email" data-email-text class="footer-link underline underline-offset-4">samuelsdutra25@gmail.com</a><span data-i18n="footer.a11yEnd"> and I'll fix it.</span></p>
+
+      <div class="mt-8 flex flex-col gap-4 border-t border-cream/15 pt-6 sm:flex-row sm:items-center sm:justify-between">
+        <div class="flex flex-wrap items-center gap-x-6 gap-y-1">
+          <p class="text-small text-cream-muted" data-copyright>© 2026 Samuel Dutra</p>
+          <button type="button" data-consent-open hidden class="footer-link text-small" data-i18n="footer.cookies">Cookie settings</button>
+        </div>
         <a href="#top" class="footer-link inline-flex items-center gap-2 text-small">
           <span data-i18n="footer.top">Back to top</span>
           <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
@@ -672,5 +687,26 @@
       </div>
     </div>
   </footer>
+
+  <!-- Cookie notice: shown by main.js only when SITE.tracking.gtm is set. Both answers are the same size on purpose -->
+  <div data-consent hidden role="region" aria-label="Cookies" data-i18n-aria="consent.label" class="consent">
+    <p class="text-small" data-i18n="consent.text">I use Google Analytics to see how many people visit this site and which parts they use. It sets cookies and sends usage data to Google. Nothing is measured unless you accept. You can change your mind in the footer.</p>
+    <!-- The details the ANPD expects (who, what, how long, where, rights). Native disclosure, so it works without extra script -->
+    <details class="consent-details mt-3 text-small">
+      <summary data-i18n="consent.details">Details</summary>
+      <ul class="mt-2 list-disc space-y-1 pl-5 text-ink-soft">
+        <li data-i18n="consent.who">Responsible: Samuel Dutra.</li>
+        <li data-i18n="consent.what">Google Analytics records the pages you visit, your device type and approximate location.</li>
+        <li data-i18n="consent.keep">The cookie lasts up to 2 years and the data stays 2 months in reports.</li>
+        <li data-i18n="consent.abroad">Google may process this data in other countries.</li>
+        <li data-i18n="consent.rights">You can ask for access to or deletion of your data, and withdraw consent at any time in “Cookie settings” in the footer. You can also block cookies in your browser.</li>
+        <li><span data-i18n="consent.contact">To ask, write to</span> <a href="mailto:samuelsdutra25@gmail.com" data-link="email" data-email-text class="underline underline-offset-4 hover:text-orange-deep">samuelsdutra25@gmail.com</a>.</li>
+      </ul>
+    </details>
+    <div class="mt-4 grid grid-cols-2 gap-3">
+      <button type="button" data-consent-choice="granted" class="btn btn-primary" data-i18n="consent.accept">Accept</button>
+      <button type="button" data-consent-choice="denied" class="btn btn-secondary" data-i18n="consent.decline">Decline</button>
+    </div>
+  </div>
 </body>
 </html>

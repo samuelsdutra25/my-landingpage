@@ -8,7 +8,7 @@ const SITE = {
 
   // Shown in the About section until a photo exists.
   initials: 'SD',
-  photo: 'assets/samuel-dutra.avif', // square, 1254x1254 (the build writes these sizes into the <img>)
+  photo: 'assets/samuel-dutra.avif', // square, 800x800 (the build writes these sizes into the <img>)
 
   // The e-mail is temporary (Samuel has no professional address yet).
   links: {
@@ -19,10 +19,24 @@ const SITE = {
     email: 'mailto:samuelsdutra25@gmail.com',
   },
 
-  // Contact form. Without an action it opens the visitor's email app with the message ready (mailto).
-  // TODO: to receive messages directly, set action to a form endpoint that accepts a POST and answers JSON
-  // (e.g. 'https://formspree.io/f/xxxxxxxx'). The form then sends in the background.
-  form: { action: '' },
+  // Contact form, sent in the background to Formspree (form "Portfolio contact form").
+  // Set action to '' to fall back to opening the visitor's email app with the message ready (mailto).
+  // turnstile: the Cloudflare Turnstile *site* key (public by design). Its secret key goes only in the
+  // Formspree dashboard (form settings > CAPTCHA), never here. Empty: no captcha widget.
+  // Limits match the maxlength attributes in index.html; the counter shows when countFrom characters are left.
+  form: {
+    action: 'https://formspree.io/f/xqpewovl',
+    turnstile: '',
+    messageMin: 10,
+    countFrom: 300,
+  },
+
+  // Analytics. gtm is the Google Tag Manager container ID (looks like 'GTM-XXXXXXX', public by design). The GA4
+  // tag lives inside that container, so no GA4 ID goes here. Empty: no cookie notice and nothing is loaded.
+  // Tag Manager only loads after the visitor accepts the notice (LGPD).
+  tracking: {
+    gtm: 'GTM-5B9PSTB3',
+  },
 
   stack: ['HTML', 'CSS', 'Tailwind', 'JavaScript', 'GSAP', 'React'],
 
@@ -33,25 +47,26 @@ const SITE = {
   // TODO: run Lighthouse again on the deployed URL and update these. null shows "--" and leaves the ring empty.
   scores: { performance: 100, accessibility: 100, seo: 100 },
 
-  // TODO: three real projects (a website, an online store and a dashboard).
-  // The text below says what each one will prove. Replace titles, text and url when the project exists,
-  // then set placeholder to false.
+  // Project 1 (website) is real: a concept project built from a Figma design, live on GitHub Pages.
+  // TODO: the online store and the dashboard. Their texts below say what each one will prove. Replace titles,
+  // text and url when the project exists, set placeholder to false and uncomment its card in index.html.
   projects: [
     {
-      placeholder: true,
-      image: '', // e.g. 'assets/project-1.jpg'
-      url: '#',
-      type: { en: 'Website', pt: 'Site' },
+      placeholder: false,
+      image: 'assets/project-website-figma.avif', // AVIF, about 1600px wide
+      imageSize: [1600, 900], // width and height of the file, so the layout doesn't jump
+      url: 'https://samuelsdutra25.github.io/figma-project/',
+      type: { en: 'Website, concept project', pt: 'Site, projeto conceitual' },
       title: { en: 'Website built from a Figma design', pt: 'Site feito a partir de um design no Figma' },
       text: {
         en: 'A pixel-perfect build of a Figma project: spacing, type and colors match the design, on every screen size.',
         pt: 'Uma implementação pixel a pixel de um projeto do Figma: espaçamentos, tipografia e cores iguais ao design, em qualquer tela.',
       },
-      // Shown when the card is opened. TODO: real overview and what Samuel did.
+      // Shown when the card is opened
       details: {
         about: {
-          en: 'A website built to match a Figma file exactly. The goal is to show that the page you approve in the design is the page you get in the browser.',
-          pt: 'Um site construído para ficar igual a um arquivo do Figma. A ideia é mostrar que a página que você aprova no design é a que você recebe no navegador.',
+          en: 'A concept website, with no client behind it, built to match a Figma file exactly. The goal is to show that the page you approve in the design is the page you get in the browser.',
+          pt: 'Um site conceitual, sem cliente por trás, construído para ficar igual a um arquivo do Figma. A ideia é mostrar que a página que você aprova no design é a que você recebe no navegador.',
         },
         role: {
           en: 'I turned the Figma design into responsive HTML, CSS and JavaScript, checking every detail against the original.',
@@ -248,6 +263,11 @@ const TRANSLATIONS = {
     'form.error.name': 'Enter your name.',
     'form.error.email': 'Enter a valid email address.',
     'form.error.message': 'Write a short message.',
+    'form.error.messageShort': 'Write at least 10 characters.',
+    'form.privacy':
+      "Your message reaches my email through Formspree and goes through Cloudflare's anti-bot check, both US services. I use it only to reply to you. To delete it, just ask by email.",
+    'form.count': '{n} characters left',
+    'form.countOne': '1 character left',
     'form.sending': 'Sending...',
     'form.sent': 'Message sent. I will reply by email.',
     'form.mailto': 'Your email app should open with the message ready. If it does not, write to',
@@ -261,6 +281,22 @@ const TRANSLATIONS = {
     'footer.github': 'GitHub',
     'footer.instagram': 'Instagram',
     'footer.whatsapp': 'WhatsApp',
+    'footer.a11y': 'I aim for this site to meet WCAG 2.2 level AA. If something is hard to use, write to',
+    'footer.a11yEnd': " and I'll fix it.",
+    'footer.cookies': 'Cookie settings',
+    'consent.label': 'Cookies',
+    'consent.text':
+      'I use Google Analytics to see how many people visit this site and which parts they use. It sets cookies and sends usage data to Google. Nothing is measured unless you accept. You can change your mind in the footer.',
+    'consent.details': 'Details',
+    'consent.who': 'Responsible: Samuel Dutra.',
+    'consent.what': 'Google Analytics records the pages you visit, your device type and approximate location.',
+    'consent.keep': 'The cookie lasts up to 2 years and the data stays 2 months in reports.',
+    'consent.abroad': 'Google may process this data in other countries.',
+    'consent.rights':
+      'You can ask for access to or deletion of your data, and withdraw consent at any time in “Cookie settings” in the footer. You can also block cookies in your browser.',
+    'consent.contact': 'To ask, write to',
+    'consent.accept': 'Accept',
+    'consent.decline': 'Decline',
     'whatsapp.message': "Hi, I saw your website and I'd like to talk about a project.",
   },
 
@@ -396,6 +432,11 @@ const TRANSLATIONS = {
     'form.error.name': 'Informe seu nome.',
     'form.error.email': 'Informe um e-mail válido.',
     'form.error.message': 'Escreva uma mensagem curta.',
+    'form.error.messageShort': 'Escreva pelo menos 10 caracteres.',
+    'form.privacy':
+      'Sua mensagem chega ao meu e-mail pelo Formspree e passa pela verificação anti-robô do Cloudflare, dois serviços dos EUA. Uso só para responder você. Para apagar, é só pedir por e-mail.',
+    'form.count': 'Restam {n} caracteres',
+    'form.countOne': 'Resta 1 caractere',
     'form.sending': 'Enviando...',
     'form.sent': 'Mensagem enviada. Respondo por e-mail.',
     'form.mailto': 'Seu app de e-mail deve abrir com a mensagem pronta. Se não abrir, escreva para',
@@ -409,6 +450,22 @@ const TRANSLATIONS = {
     'footer.github': 'GitHub',
     'footer.instagram': 'Instagram',
     'footer.whatsapp': 'WhatsApp',
+    'footer.a11y': 'Busco que este site atenda ao WCAG 2.2 nível AA. Se algo for difícil de usar, escreva para',
+    'footer.a11yEnd': ' e eu corrijo.',
+    'footer.cookies': 'Configurar cookies',
+    'consent.label': 'Cookies',
+    'consent.text':
+      'Uso o Google Analytics para ver quantas pessoas visitam este site e quais partes elas usam. Ele grava cookies e envia dados de uso ao Google. Nada é medido se você não aceitar. Você pode mudar de ideia no rodapé.',
+    'consent.details': 'Detalhes',
+    'consent.who': 'Responsável: Samuel Dutra.',
+    'consent.what': 'O Google Analytics registra as páginas que você visita, o tipo de aparelho e a localização aproximada.',
+    'consent.keep': 'O cookie dura até 2 anos e os dados ficam 2 meses nos relatórios.',
+    'consent.abroad': 'O Google pode tratar esses dados fora do Brasil.',
+    'consent.rights':
+      'Você pode pedir acesso ou exclusão dos seus dados e retirar o consentimento a qualquer momento em “Configurar cookies”, no rodapé. Também pode bloquear cookies no navegador.',
+    'consent.contact': 'Para pedir, escreva para',
+    'consent.accept': 'Aceitar',
+    'consent.decline': 'Recusar',
     'whatsapp.message': 'Olá! Vi seu site e gostaria de conversar sobre um projeto.',
   },
 };
@@ -483,53 +540,141 @@ $$('[data-project]').forEach((card) => {
 const emailAddress = SITE.links.email.replace(/^mailto:/, '');
 
 /* ---- Contact form ----
-   Validation is ours (the form has novalidate) so the messages are in the language of the page. */
+   Validation is ours (novalidate is set below) so the messages are in the language of the page.
+   The length limits are maxlength attributes in index.html (name 100, email 254, message 3000). */
 const form = $('[data-contact-form]');
-const formStatus = $('[data-form-status]', form);
+// Without script the form posts to a mailto: (set by the build), which the browser opens as an email, and the
+// browser's own validation applies. With script the validation is ours, so turn the browser's off.
+form.noValidate = true;
+$('[data-honeypot]', form).name = '_gotcha';
+const formStatus = $('[data-form-status]', form); // role="status": always in the page, so screen readers announce changes
 const formSubmit = $('[data-form-submit]', form);
+const message = $('#f-message');
 
-function setI18n(el, key) {
+// Fills el with the translation of key ({n} replaced by n), or empties it
+function setI18n(el, key, n) {
   if (key) {
     el.dataset.i18n = key;
-    el.textContent = T[key];
+    el.textContent = T[key].replace('{n}', n);
   } else {
     delete el.dataset.i18n;
     el.textContent = '';
   }
 }
 
-function setFieldError(input, key) {
-  setI18n($(`#${input.id}-error`), key);
+function setFieldError(input, key, n) {
+  setI18n($(`#${input.id}-error`), key, n);
   if (key) input.setAttribute('aria-invalid', 'true');
   else input.removeAttribute('aria-invalid');
 }
 
 function showStatus(key, withEmail = false) {
-  formStatus.hidden = !key;
   setI18n($('[data-form-status-text]', form), key);
   $('[data-form-status-email]', form).hidden = !withEmail;
 }
 
-// Returns true when every required field is filled in; focuses the first one that is not
+// name@domain.tld. The browser's own check (typeMismatch) accepts "name@domain", so this adds the dot and a 2+ letter ending.
+const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@.]{2,}$/;
+
+// Returns true when every field is valid; otherwise shows the errors and focuses the first invalid field
 function validateForm() {
   const checks = [
-    [$('#f-name'), (input) => input.value.trim() !== '', 'form.error.name'],
-    [$('#f-email'), (input) => input.value.trim() !== '' && !input.validity.typeMismatch, 'form.error.email'],
-    [$('#f-message'), (input) => input.value.trim() !== '', 'form.error.message'],
+    [$('#f-name'), (value) => (value ? '' : 'form.error.name')],
+    [$('#f-email'), (value, input) => (EMAIL.test(value) && !input.validity.typeMismatch ? '' : 'form.error.email')],
+    [message, (value) => {
+      if (!value) return 'form.error.message';
+      return value.length < SITE.form.messageMin ? 'form.error.messageShort' : '';
+    }],
   ];
   let firstInvalid = null;
-  checks.forEach(([input, isValid, errorKey]) => {
-    const ok = isValid(input);
-    setFieldError(input, ok ? '' : errorKey);
-    if (!ok && !firstInvalid) firstInvalid = input;
+  checks.forEach(([input, check]) => {
+    const errorKey = check(input.value.trim(), input);
+    setFieldError(input, errorKey, SITE.form.messageMin);
+    if (errorKey && !firstInvalid) firstInvalid = input;
   });
   firstInvalid?.focus();
   return !firstInvalid;
 }
 
+/* Characters left in the message, shown once SITE.form.countFrom or fewer are left.
+   The visible counter changes on every key; screen readers get the same text in a separate
+   live region only after a pause in typing, so they are not interrupted on each character. */
+const count = $('[data-count]', form);
+const countLive = $('[data-count-live]', form);
+let countTimer;
+
+function updateCount() {
+  const left = message.maxLength - message.value.length;
+  const shown = left <= SITE.form.countFrom;
+  const text = shown ? (left === 1 ? T['form.countOne'] : T['form.count'].replace('{n}', left)) : '';
+  count.textContent = text;
+  count.hidden = !shown;
+  count.toggleAttribute('data-full', left === 0);
+  clearTimeout(countTimer);
+  countTimer = setTimeout(() => { countLive.textContent = text; }, 1000);
+}
+
 form.addEventListener('input', (event) => {
   if (event.target.hasAttribute('aria-invalid')) setFieldError(event.target, '');
+  if (event.target === message) updateCount();
 });
+
+/* Turnstile (Cloudflare's captcha), only when SITE.form.turnstile has a site key. Its script loads when
+   the form comes near the screen, so it never weighs on the first load or the Lighthouse scores.
+   The widget stays invisible unless Cloudflare needs the visitor to click it. Formspree checks the token
+   (sent as cf-turnstile-response) with the secret key kept in its dashboard. */
+const captcha = $('[data-turnstile]', form);
+let captchaWidget = null;
+let captchaToken = '';
+let captchaFailed = false;
+let captchaWaiter = null; // set while a submit waits for a token: { resolve, reject }
+
+function captchaSettled(token) {
+  captchaToken = token || '';
+  if (!token) captchaFailed = true;
+  if (captchaWaiter) (token ? captchaWaiter.resolve : captchaWaiter.reject)();
+  captchaWaiter = null;
+}
+
+function loadTurnstile() {
+  window.onTurnstileLoad = () => {
+    captchaWidget = window.turnstile.render(captcha, {
+      sitekey: SITE.form.turnstile,
+      appearance: 'interaction-only',
+      theme: 'light',
+      language: document.documentElement.lang.toLowerCase(), // 'en' or 'pt-br'
+      size: captcha.clientWidth < 300 ? 'compact' : 'flexible', // flexible needs 300px; a phone form is narrower
+      callback: (token) => { captchaFailed = false; captchaSettled(token); },
+      'expired-callback': () => { captchaToken = ''; }, // it renews by itself
+      'error-callback': () => { captchaSettled(''); return true; },
+      'timeout-callback': () => captchaSettled(''),
+      // The container only takes space (its top margin) while the widget is actually showing
+      'before-interactive-callback': () => captcha.setAttribute('data-interactive', ''),
+      'after-interactive-callback': () => captcha.removeAttribute('data-interactive'),
+    });
+  };
+  const script = document.createElement('script');
+  script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onTurnstileLoad';
+  script.onerror = () => captchaSettled(''); // blocked or offline: the visitor gets the email link instead
+  document.head.append(script);
+}
+
+// Resolves once there is a token (right away if there is no captcha); rejects if Turnstile failed
+function captchaReady() {
+  if (!SITE.form.turnstile || captchaToken) return Promise.resolve();
+  if (captchaFailed && !captchaWidget) return Promise.reject(new Error('captcha'));
+  if (captchaFailed) window.turnstile.reset(captchaWidget); // try once more
+  captchaFailed = false;
+  return new Promise((resolve, reject) => { captchaWaiter = { resolve, reject }; });
+}
+
+// A token works once, so get a fresh one after each send
+function resetCaptcha() {
+  captchaToken = '';
+  if (captchaWidget !== null) window.turnstile.reset(captchaWidget);
+}
+
+if (SITE.form.action && SITE.form.turnstile) onceVisible(form, loadTurnstile, { rootMargin: '400px 0px' });
 
 function sendByMailto(data) {
   const chip = $('input[name="type"]:checked', form);
@@ -545,10 +690,22 @@ function sendByMailto(data) {
   showStatus('form.mailto', true);
 }
 
+// While sending, the button is aria-disabled rather than disabled: a disabled button drops keyboard focus to the page
+let sending = false;
+
+function setSending(on) {
+  sending = on;
+  if (on) formSubmit.setAttribute('aria-disabled', 'true');
+  else formSubmit.removeAttribute('aria-disabled');
+}
+
 async function sendToEndpoint(data) {
-  formSubmit.disabled = true;
+  data.set('_subject', `${T['form.mailSubject']} ${data.get('name')}`); // Formspree uses this as the email subject
+  setSending(true);
   showStatus('form.sending');
   try {
+    await captchaReady();
+    if (captchaToken) data.set('cf-turnstile-response', captchaToken);
     const response = await fetch(SITE.form.action, {
       method: 'POST',
       body: data,
@@ -556,19 +713,22 @@ async function sendToEndpoint(data) {
     });
     if (!response.ok) throw new Error(String(response.status));
     form.reset();
+    updateCount();
     showStatus('form.sent');
+    track('generate_lead', { form_name: 'contact' }); // defined in the analytics part at the end
   } catch {
     showStatus('form.failed', true);
   } finally {
-    formSubmit.disabled = false;
+    if (SITE.form.turnstile) resetCaptcha();
+    setSending(false);
   }
 }
 
 form.addEventListener('submit', (event) => {
   event.preventDefault();
-  if (!validateForm()) return;
+  if (sending || !validateForm()) return;
   const data = new FormData(form);
-  if (data.get('company')) return; // the hidden field is filled in: a bot
+  if (data.get('_gotcha')) return; // the hidden field is filled in: a bot (Formspree also drops these)
   if (SITE.form.action) sendToEndpoint(data);
   else sendByMailto(data);
 });
@@ -889,3 +1049,121 @@ function playReport(report) {
 
 /* ---- Footer year: the build writes it too; this keeps it right when the page was not rebuilt in a new year ---- */
 $('[data-copyright]').textContent = `© ${new Date().getFullYear()} Samuel Dutra`;
+
+/* ---- Analytics: Google Tag Manager, only after the visitor accepts the notice ----
+   Off when SITE.tracking.gtm is empty (no notice, no script). The choice is kept in localStorage and can be
+   changed from the footer, and expires after CONSENT_MONTHS. Ads stay denied in Consent Mode: only analytics storage is ever granted.
+   Events go to the dataLayer as plain names; the GTM container turns them into GA4 events (see the README). */
+const CONSENT_KEY = 'analytics-consent';
+const CONSENT_DATE_KEY = 'analytics-consent-date';
+const CONSENT_MONTHS = 12; // ask again after this long (common practice, not a legal limit)
+const consentBox = $('[data-consent]');
+const consentReopen = $('[data-consent-open]');
+let analyticsOn = false;
+let consentFromFooter = false;
+
+// The saved choice, or null when there is none, it is older than CONSENT_MONTHS (or has no date), or storage is blocked
+function storedConsent() {
+  try {
+    const choice = localStorage.getItem(CONSENT_KEY);
+    const date = new Date(localStorage.getItem(CONSENT_DATE_KEY));
+    if (!choice || Number.isNaN(date.getTime())) return null;
+    date.setMonth(date.getMonth() + CONSENT_MONTHS);
+    return date > new Date() ? choice : null;
+  } catch {
+    return null; // storage blocked: ask again on every visit
+  }
+}
+
+function storeConsent(value) {
+  try {
+    localStorage.setItem(CONSENT_KEY, value);
+    localStorage.setItem(CONSENT_DATE_KEY, new Date().toISOString());
+  } catch {
+    /* storage blocked: the choice only lasts for this visit */
+  }
+}
+
+// GTM reads the arguments object itself, an array would be ignored
+function gtag() {
+  window.dataLayer.push(arguments);
+}
+
+function track(event, params) {
+  if (analyticsOn) window.dataLayer.push({ event, ...params });
+}
+
+function startAnalytics() {
+  window.dataLayer = window.dataLayer || [];
+  if (analyticsOn) return;
+  analyticsOn = true;
+  const denied = { ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', analytics_storage: 'denied' };
+  gtag('consent', 'default', denied);
+  gtag('consent', 'update', { analytics_storage: 'granted' });
+  window.dataLayer.push({ 'gtm.start': Date.now(), event: 'gtm.js' });
+  const script = document.createElement('script');
+  script.async = true;
+  script.src = `https://www.googletagmanager.com/gtm.js?id=${SITE.tracking.gtm}`;
+  document.head.append(script);
+}
+
+// Changed their mind: tell Google, forget its cookies (_ga, _ga_XXXX) and stop sending events
+function stopAnalytics() {
+  if (!analyticsOn) return;
+  analyticsOn = false;
+  gtag('consent', 'update', { analytics_storage: 'denied' });
+  document.cookie.split(';').forEach((cookie) => {
+    const name = cookie.split('=')[0].trim();
+    if (!name.startsWith('_ga')) return;
+    document.cookie = `${name}=; Max-Age=0; Path=/`;
+    document.cookie = `${name}=; Max-Age=0; Path=/; Domain=.${location.hostname}`;
+  });
+}
+
+function showConsent() {
+  consentBox.hidden = false;
+  void consentBox.offsetHeight; // let the first frame render, so the fade plays
+  consentBox.setAttribute('data-visible', '');
+}
+
+function hideConsent() {
+  consentBox.removeAttribute('data-visible');
+  setTimeout(() => (consentBox.hidden = true), reducedMotion ? 0 : 250);
+}
+
+function chooseConsent(value) {
+  storeConsent(value);
+  if (value === 'granted') startAnalytics();
+  else stopAnalytics();
+  hideConsent();
+  if (consentFromFooter) consentReopen.focus(); // from the footer, put the keyboard back where it was
+  consentFromFooter = false;
+}
+
+if (SITE.tracking.gtm) {
+  consentReopen.hidden = false;
+  consentReopen.addEventListener('click', () => {
+    consentFromFooter = true;
+    showConsent();
+    $('[data-consent-choice]', consentBox).focus();
+  });
+  $$('[data-consent-choice]', consentBox).forEach((button) =>
+    button.addEventListener('click', () => chooseConsent(button.dataset.consentChoice)),
+  );
+
+  const choice = storedConsent();
+  if (choice === 'granted') startAnalytics();
+  // First visit: ask once the opening animation is done, so the notice never competes with it
+  else if (choice !== 'denied') introDone.then(() => setTimeout(showConsent, 600));
+
+  // Conversions. One listener for the contact links (email and WhatsApp) wherever they are on the page
+  document.addEventListener('click', (event) => {
+    const link = event.target.closest('a[data-link="email"], a[data-link="whatsapp"]');
+    if (link) track('contact_click', { contact_method: link.dataset.link });
+  });
+  $$('[data-project-toggle]').forEach((toggle) =>
+    toggle.addEventListener('click', () => {
+      if (toggle.getAttribute('aria-expanded') === 'true') track('project_open', { project_title: toggle.textContent.trim() });
+    }),
+  );
+}

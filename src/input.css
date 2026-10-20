@@ -131,7 +131,7 @@
   .field {
     @apply block w-full rounded-button border-2 border-ink bg-cream px-4 py-3 text-body;
   }
-  /* Focus: the global ring from style.css (3px ink, offset), the same as every other control */
+  /* Focus style for .field lives in style.css (it has to be outside this layer to beat the global ring) */
   .field[aria-invalid="true"] {
     @apply border-orange-deep;
   }
