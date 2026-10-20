@@ -192,10 +192,10 @@ Everything still to do, reviewed on 2026-10-20 and grouped by when it happens: *
 
 The order matters. Do these one after another.
 
-1. [ ] Put the repository on GitHub.
-2. [ ] Cloudflare dashboard > Workers & Pages > Create application > connect GitHub and choose the repository. Worker name `samueldutra` (must match `wrangler.jsonc`), build command empty, default deploy command (`npx wrangler deploy`).
-3. [ ] Open the `*.workers.dev` address and check `/`, `/pt/`, and that `/CLAUDE.md`, `/README.md` and `/package.json` return 404.
-4. [ ] **Samuel.** Turnstile: create the widget in Cloudflare (Managed, domain `samueldutra.com.br`) and put its site key in `SITE.form.turnstile`. Run `npm run build`, commit and deploy. Only after that build is live, paste the secret key in Formspree (Settings > CAPTCHA > Turnstile). The other order breaks real sends.
+1. [x] (2026-10-20) Put the repository on GitHub (`samuelsdutra25/my-landingpage`, pushed).
+2. [x] (2026-10-20) Cloudflare Worker `samueldutra` created from the repository, build command empty. Worker URL: `samueldutra.samuelsdutra25-15f.workers.dev`.
+3. [x] (2026-10-20) Checked on workers.dev: `/` and `/pt/` 200, `/CLAUDE.md`, `/README.md`, `/package.json`, `/_headers` 404, `/.well-known/security.txt` 200 as text/plain, `/x` and `/pt/x` 404 in the right language, security headers present, no injected Cloudflare scripts.
+4. [~] **Samuel.** Turnstile: create the widget in Cloudflare (Managed, domain `samueldutra.com.br`) and put its site key in `SITE.form.turnstile`. Run `npm run build`, commit and deploy. Only after that build is live, paste the secret key in Formspree (Settings > CAPTCHA > Turnstile). The other order breaks real sends. Progress (2026-10-20): widget created (hostnames `samueldutra.com.br` and the workers.dev address, Managed) and the site key is in `SITE.form.turnstile`. Still to do: after that build is live, rotate the secret key (it showed in a screenshot in the chat) and paste the new one in Formspree.
 5. [ ] **Samuel.** Formspree: turn on Restrict to Domain with `samueldutra.com.br`.
 6. [ ] **Samuel.** Domain: add `samueldutra.com.br` to Cloudflare (Free plan) and change the name servers at Registro.br to the two Cloudflare gives. Wait until Cloudflare says the domain is active.
 7. [ ] Worker > Settings > Domains & Routes > Add > Custom Domain > `samueldutra.com.br`.

@@ -26,7 +26,7 @@ const SITE = {
   // Limits match the maxlength attributes in index.html; the counter shows when countFrom characters are left.
   form: {
     action: 'https://formspree.io/f/xqpewovl',
-    turnstile: '',
+    turnstile: '0x4AAAAAAFeG7w3pbl0AkULA',
     messageMin: 10,
     countFrom: 300,
   },
