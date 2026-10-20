@@ -214,12 +214,12 @@ After this, every push to `main` publishes by itself.
 
 **Check the live site**
 
-- [ ] `/` and `/pt/` return 200 over HTTPS; `www` redirects (301); `/x` and `/pt/x` return 404 in the right language. Also `/.well-known/security.txt` returns 200 as plain text (Cloudflare's docs do not say whether dotfile folders are uploaded; if it is 404, ask before changing the config).
-- [ ] Browser console on both pages, before and after accepting cookies: no CSP violations.
-- [ ] Live headers with Mozilla Observatory or securityheaders.com, and the live `/robots.txt`.
-- [ ] Real form send with Turnstile on (the email arrives in Formspree, `generate_lead` shows in GA4).
+- [x] (2026-10-20) Live checks: `/` and `/pt/` 200 over HTTPS, `http://` and `www` redirect (301), `/x` and `/pt/x` 404 in the right language, `/CLAUDE.md`, `/README.md`, `/package.json` 404, `/.well-known/security.txt` 200 as plain text, workers.dev off.
+- [x] (2026-10-20) No CSP violation or console error on both pages (Lighthouse "errors in console" passes, before cookies are accepted). Cloudflare's Web Analytics beacon was being injected and blocked by the CSP; fixed with `Cache-Control: ... no-transform` in `_headers`. Not yet checked after accepting the cookies.
+- [~] (2026-10-20) Live headers checked with curl (CSP, nosniff, Referrer-Policy, Permissions-Policy, Cache-Control, `robots.txt` with Cloudflare's block). Mozilla Observatory / securityheaders.com not run.
+- [x] (2026-10-20) Real form send with Turnstile on: the email arrives. `generate_lead` in GA4 not checked yet.
 - [ ] Analytics in a normal tab: accept the notice, see the visit in GA4 > Reports > Realtime, then test `contact_click` (email, WhatsApp) and `project_open`. Decline in another browser and check that no request goes to Google.
-- [ ] Lighthouse / PageSpeed Insights (mobile) on the real address, with the notice open, in EN and PT. Update `SITE.scores` and its comment (date and conditions), rebuild and redeploy. Never type a score that was not measured.
+- [x] (2026-10-20) Lighthouse on the live site (mobile, 12 runs): performance 92 to 98 (median 97), accessibility 100, best practices 100, SEO 100. `SITE.scores` updated to 97, 100, 100. PageSpeed Insights not run.
 - [ ] axe on the deployed pages with the notice open (still untested), plus the mobile menu open and a project expanded.
 - [ ] Real phones again on the live site, and the Turnstile challenge by keyboard if it appears.
 

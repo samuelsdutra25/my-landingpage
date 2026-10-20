@@ -42,9 +42,10 @@ const SITE = {
 
   // Lighthouse scores of THIS page (mobile, 0 to 100). Measured 2026-10-20 on the live site
   // (https://samueldutra.com.br/ and /pt/) with Lighthouse 13.5.0, mobile preset with its default throttling,
-  // headless Chrome, 3 runs per language, as a first-time visitor (the cookie notice appears after the load that
-  // is measured). Performance: EN 97, 97, 98; PT 98, 98, 95 (FCP 1.7 s, LCP 1.7 to 2.1 s, TBT 0 to 20 ms, CLS 0),
-  // so 97 is shown. Accessibility 100 and SEO 100 in all six runs. null shows "--" and leaves the ring empty.
+  // headless Chrome, as a first-time visitor (the cookie notice appears after the load that is measured).
+  // 12 runs: performance 92 to 98, median 97 (EN 97 to 98, PT 92 to 98; FCP 1.7 s, LCP 1.7 to 2.1 s, TBT 0 to 20 ms,
+  // CLS 0), so 97 is shown. Accessibility 100 and SEO 100 in every run; best practices 100 in the last two runs.
+  // null shows "--" and leaves the ring empty.
   scores: { performance: 97, accessibility: 100, seo: 100 },
 
   // Project 1 (website) is real: a concept project built from a Figma design, live on GitHub Pages.
