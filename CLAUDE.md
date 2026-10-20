@@ -31,11 +31,11 @@ At the end of each piece of work, give Samuel a short summary of the design deci
 
 - Plain HTML, CSS and JavaScript plus **Tailwind CSS via the CLI**.
 - No React, TypeScript, Next.js or any framework **in this site**. No complex build. (Samuel knows React and offers it to clients, see the scope above. The rule is about this page only.)
-- Files: `index.html`, `main.js`, `style.css` (only what Tailwind can't cover), `assets/` (fonts in `assets/fonts/`), the Tailwind input at `src/input.css`, the HTML build at `scripts/build-html.mjs`, and the Cloudflare config `wrangler.jsonc` plus `.assetsignore` (the list of internal files that must not be published; add any new internal file or folder there). Generated and committed: `assets/tailwind.css`, `pt/index.html`, `pt/404.html`, `sitemap.xml` and `robots.txt` (plus the text inside `index.html` and `404.html`). `404.html` is the English error page and, like `index.html`, both the template and the page.
+- Files: `index.html`, `main.js`, `style.css` (only what Tailwind can't cover), `assets/` (fonts in `assets/fonts/`), the Tailwind input at `src/input.css`, the HTML build at `scripts/build-html.mjs`, and the Cloudflare config `wrangler.jsonc` plus `.assetsignore` (the list of internal files that must not be published; add any new internal file or folder there). Generated and committed: `assets/tailwind.css`, `pt/index.html`, `pt/404.html`, `sitemap.xml`, `robots.txt`, `.well-known/security.txt` and `_headers` (Cloudflare security headers, with the Content-Security-Policy; plus the text inside `index.html` and `404.html`). `404.html` is the English error page and, like `index.html`, both the template and the page.
 - One command builds everything: `npm run build` (= `build:css` then `build:html`), plus `npm run watch` for the CSS while working. The output is **committed**, so `index.html` still opens directly in the browser and deploys to Cloudflare (Workers with static assets) with no build step. Document any change to this in the README.
-- `scripts/build-html.mjs` is plain Node with no dependencies. It reads `SITE` and `TRANSLATIONS` from `main.js` and writes the text into `index.html` (English, in place: it is both the template and the page) and `pt/index.html` (Portuguese, generated: never edit by hand), the `<head>` block between the `build:head` comments (title, description, canonical, hreflang, Open Graph, JSON-LD), the sitemap, `robots.txt` and the `?v=` fingerprints on local CSS and JS. Running it twice changes nothing.
+- `scripts/build-html.mjs` is plain Node with no dependencies. It reads `SITE` and `TRANSLATIONS` from `main.js` and writes the text into `index.html` (English, in place: it is both the template and the page) and `pt/index.html` (Portuguese, generated: never edit by hand), the `<head>` block between the `build:head` comments (title, description, canonical, hreflang, Open Graph, JSON-LD), the sitemap, `robots.txt`, `_headers` (the CSP lists the hash of each inline script, so a new outside service or inline script needs the build, not a hand edit) and the `?v=` fingerprints on local CSS and JS. Running it twice changes nothing.
 - Tailwind v4 (`@tailwindcss/cli`). Design tokens (colors, font) live in a single place: the `@theme` block in `src/input.css`. Add any transition tones there. Rebuild with `npm run build` (or `npm run watch` while working) and commit the result.
-- No libraries beyond Tailwind and GSAP unless Samuel agrees. GSAP is approved (vendored at `assets/gsap.min.js` and `assets/ScrollToPlugin.min.js`, both refreshed with `npm run vendor:gsap`) and only for animations CSS can't do, see "Light animations only". Today it drives the button bounce and the smooth scroll.
+- No libraries beyond Tailwind and GSAP unless Samuel agrees. GSAP is approved (vendored at `assets/gsap.min.js` and `assets/ScrollToPlugin.min.js`, both refreshed with `npm run vendor:gsap`) and only for animations CSS can't do, see "Light animations only". Today it drives the button bounce and the smooth scroll. Cloudflare Turnstile is approved (2026-10-16) as the form's anti-bot check: loaded from Cloudflare only when the form nears the screen, never on first load. Samuel declined reCAPTCHA (weight, Google cookies, accessibility). Google Tag Manager with GA4 is approved (2026-10-16) for analytics: it loads only after the visitor accepts the cookie notice, and only when `SITE.tracking.gtm` is set.
 
 ## Code conventions
 
@@ -89,13 +89,13 @@ Structure and feel follow https://weaveos.com. The palette does **not**.
 ## Sections (in this order)
 
 1. **Header** (sticky): logo, anchors (Services, Projects, How it works, Contact), EN/PT toggle, "Talk to me" button linking to contact.
-2. **Hero:** the first thing visitors see, so open with the most characteristic thing in Samuel's world (a headline, a live demo, a code block, a load-speed moment, or something else) and say why you chose it. Don't default to a big number with a small label and a gradient accent. Fixed content: a message about what the client gets (the front end their customers use: websites, online stores and dashboards, fast and easy to use; never promise business results), the buttons "Tell me about your project" (primary, filled, links to email) and "See projects" (secondary, outlined), and a strip with the stack (HTML, CSS, JavaScript, React, Tailwind) instead of client logos. The form is free.
+2. **Hero:** the first thing visitors see, so open with the most characteristic thing in Samuel's world (a headline, a live demo, a code block, a load-speed moment, or something else) and say why you chose it. Don't default to a big number with a small label and a gradient accent. Fixed content: a message about what the client gets (the front end their customers use: websites, online stores and dashboards, fast and easy to use; never promise business results), the buttons "Tell me about your project" (primary, filled, links to email) and "See projects" (secondary, outlined), and a strip with the stack of this page (HTML, Tailwind, JavaScript and GSAP, no React: it is not used here) instead of client logos. The form is free.
 3. **What you get:** a report-style panel with performance, SEO and accessibility as rings that fill while the number counts up. Below the panel, three plain items: responsive on every screen, clean maintainable code and delivery with support. The ring numbers are **real Lighthouse scores of this very page**, kept in `SITE.scores` in `main.js` with the date and conditions of the measurement. Never type a score that was not measured. Re-run Lighthouse after any change that can affect it and on the deployed URL, then update them. **No other made-up numbers.**
 4. **Services:** four services: websites and landing pages, online stores, dashboards and web apps, tweaks and maintenance. The form is free. Avoid identical boxes with the same radius and the same soft grey shadow. Let the layout reflect what each service is.
 5. **Projects:** three clearly marked placeholders (type, image, title, short description, link). Samuel plans to build 3 projects for this site, ideally one website, one online store and one dashboard, so the projects prove each kind of work he sells. Each project carries its type as a short label. Projects are the proof of work, so give them more visual weight than Services. The form is free, with the same warning against identical cards. Vary radius and elevation by importance, and don't use gradient washes as decoration.
 6. **How it works** (`#process`, nav label "How it works"): 4 steps (briefing, layout, development, delivery) in a dark block. Four boxes in a row, the even ones set lower than the odd ones, joined by upright semicircles (with a straight piece that reaches the lower or higher box) that alternate under and over the row (on mobile, a column of narrower boxes alternating left and right, joined by S-shaped curves with the same stroke and dots; on tablet each curve leaves its box a little to the side of where the previous one arrived). Replaces the old terminal mock (2026-10-14). When the row reaches the screen it plays once, in order: box 1 appears, the line is drawn from it, and the next box appears as the line arrives; slower (1.3x) on phone and tablet.
 7. **About:** photo, short first-person paragraph, stack. Include the idea that he picks the tool for the job (plain HTML for a simple site, React when the interface has a lot of state).
-8. **Final CTA and footer:** "Let's talk?" on a `sand` background (not dark) with a contact form in a cream panel (name, email, optional project type as radio chips, message; the submit button is the primary "Send me a message"), and the email address as a text link. No Upwork mention anywhere: this site is separate from his Upwork profile. The form posts to `SITE.form.action` when set; otherwise it opens the visitor's email app with a ready `mailto:`. Validation messages follow the EN/PT toggle. The footer stays dark (`ink`) with email, WhatsApp, Instagram and GitHub (no LinkedIn: Samuel removed it, 2026-10-16).
+8. **Final CTA and footer:** "Let's talk?" on a `sand` background (not dark) with a contact form in a cream panel (name, email, optional project type as radio chips, message; the submit button is the primary "Send me a message"), and the email address as a text link. No Upwork mention anywhere: this site is separate from his Upwork profile. The form posts to `SITE.form.action` (Formspree) when set; otherwise it opens the visitor's email app with a ready `mailto:`. Limits: name 100, email 254, message 10 to 3000 characters, with a counter near the end. The Formspree form ID is public by design; secrets (the Turnstile secret key) live only in the Formspree dashboard. The cookie notice (Accept and Decline at the same size) and the "Cookie settings" footer button exist only when `SITE.tracking.gtm` is set; there is no privacy page (one page only), the notice itself says what is measured. Validation messages follow the EN/PT toggle. The footer stays dark (`ink`) with email, WhatsApp, Instagram and GitHub (no LinkedIn: Samuel removed it, 2026-10-16).
 
 ## Content and i18n
 
@@ -133,9 +133,138 @@ Everything Samuel will replace lives in one object (e.g. `const SITE = {...}` in
 ## Git
 
 - The repo uses git. Make small, descriptive commits in English, and only when Samuel asks.
-- Commit the generated files (`assets/tailwind.css`, `index.html`, `404.html`, `pt/index.html`, `pt/404.html`, `sitemap.xml`, `robots.txt`) along with the source changes that produced them. Run `npm run build` first.
+- Commit the generated files (`assets/tailwind.css`, `index.html`, `404.html`, `pt/index.html`, `pt/404.html`, `sitemap.xml`, `robots.txt`, `.well-known/security.txt`, `_headers`) along with the source changes that produced them. Run `npm run build` first.
 
 ## Deliverables
 
 - Organized code, commented where it isn't obvious.
-- A short `README` covering: how to open locally, how to rebuild (`npm run build`), where to change the photo, links and projects, and how to publish on Cloudflare.
+- A short `README` (lean on purpose, rewritten 2026-10-20): the live link, how to open and build locally, where to change content, and a three-line deploy summary. The detailed deploy steps and service setup live in this file, in the to-do checklist below.
+
+## To-do checklist
+
+Everything still to do, reviewed on 2026-10-20 and grouped by when it happens: **before**, **during** and **after** the deploy. Tick items here as they are done and add the date. **Samuel** marks what only he can do or decide. `SEO.md` and `ACCESSIBILITY.md` keep the detail; this list is the overview.
+
+### A. Before the deploy
+
+**Decisions and approvals (Samuel)**
+
+- [x] (2026-10-20) Approve the copy added without his sign-off: the cookie notice (`consent.text`, `consent.accept`, `consent.decline`, `footer.cookies`, EN and PT) and the form messages `form.error.messageShort`, `form.count` and `form.countOne`.
+- [x] (2026-10-20, kept as is) Check the Portuguese meta description (`meta.description` in `TRANSLATIONS.pt`), a translation of the approved English one.
+- [x] (2026-10-20, seen in the GTM dashboard: version 2 live, 4 tags, 3 triggers) Confirm the GTM container `GTM-5B9PSTB3` is published (Versions tab shows a live version with the GA4 Google tag `G-W9Y8S0FQWZ` and the three event tags). Without it the site loads an empty container.
+- [x] (2026-10-20, kept as is) Hero strip: it lists the stack of this page, "Built with HTML, Tailwind, JavaScript and GSAP", without React because the site does not use it. The brief (Sections, item 2) was updated to match.
+- [x] (2026-10-20, kept as is) About: Samuel chose to leave `about.text2` as it is, without the "plain HTML for a simple site, React when the interface has a lot of state" sentence.
+- [x] (2026-10-20) LGPD text. Samuel chose a "Details" disclosure inside the cookie notice (no privacy page, so the one-page rule stands) and approved the text: who is responsible, what Google Analytics records, cookie 2 years and 2 months of data retention, Google may process it abroad (EN says "in other countries", PT "fora do Brasil"), rights and how to block cookies, and the email as the rights channel (`SITE.links.email`, to be swapped when the professional email exists). Keys `consent.details`, `consent.who`, `consent.what`, `consent.keep`, `consent.abroad`, `consent.rights`, `consent.contact`. The form has a line under the send button, `form.privacy` (Formspree and Cloudflare Turnstile are US services, used only to reply, deletion on request). Still to do in GA4: set the data retention to 2 months on purpose (see section C), so the notice stays true.
+- [x] (2026-10-20) Launch with one real project. Samuel confirmed project 1 (a concept website built pixel to pixel from a Figma design, HTML, Tailwind and JavaScript, live at samuelsdutra25.github.io/figma-project/, no domain of its own) and its texts; `placeholder: false`. The store and dashboard cards stay commented out until they exist. The card is labeled as a concept project (type label and `details.about`), at Samuel's request.
+- [x] (2026-10-20) License: none, all rights reserved. Samuel's choice; the README says so.
+- [x] (2026-10-20) Accessibility statement: one line in the footer (`footer.a11y`, `footer.a11yEnd`), saying the site aims for WCAG 2.2 level AA and where to report a problem. It does not claim full conformance, because the screen reader and other manual tests are still pending. Revisit the wording after them.
+- [x] (2026-10-20) MEI: Samuel is not a MEI yet, so no name and CNPJ in the footer. Revisit if he opens one.
+
+**Content (Samuel)**
+
+- [ ] The other two real projects (online store, dashboard): type, title, short text, details (about, role, stack), image and live link, in EN and PT. Then set `placeholder: false`, uncomment cards 1 and 2 in `index.html`, and check the `project_open` event with the real titles. Project 1 is done (2026-10-20). Samuel left the other two out for now, so the launch has proof of one kind of work only.
+- [ ] Project images: AVIF or WebP, about 1200px wide, descriptive file names, `width` and `height` (the build writes them), `loading="lazy"`.
+- [ ] Professional email (for example `contato@samueldutra.com.br` with Cloudflare Email Routing, free), then replace `SITE.links.email` (today `samuelsdutra25@gmail.com`) and the Formspree notification address. Samuel decided (2026-10-20) to launch with the Gmail, because the first clients come through Upwork, and to move to a paid Google address or Email Routing later. Moved to "after the deploy" in practice: nothing blocks the launch.
+- [x] (2026-10-20) Real metrics: Samuel has none yet, so the site shows none. Add them only when they exist.
+
+**Code (ask before starting)**
+
+- [x] (2026-10-20) Re-ask consent after 12 months: the choice is saved with its date (`analytics-consent-date` in `localStorage`) and `storedConsent()` in `main.js` ignores it after `CONSENT_MONTHS` (12). A choice saved before this change has no date, so those visitors are asked once more.
+- [x] (2026-10-20) `/.well-known/security.txt`, generated by the build (Contact, Expires at the start of the month 11 months ahead, Preferred-Languages, Canonical). After deploy, check that it returns 200 (see section C).
+- [x] (2026-10-20) About photo cut to 800x800 (38 KB, was 1254px and 91 KB). The build writes `width="800" height="800"` into the `<img>`.
+- [x] (2026-10-20) Form without JavaScript: it posts to a `mailto:` (`action` written by the build from `SITE.links.email`, `enctype="text/plain"`), so the email app opens with the fields. `main.js` sets `novalidate` and names the honeypot `_gotcha` when it runs. The CSP has `form-action 'self' mailto:`. Not tested in a real mail client with script off.
+- [x] (2026-10-20) The "Cookie settings" button is removed from the 404 footers by the build (`withSiteChrome`), because those pages do not load `main.js`. 404 visits stay unmeasured on purpose.
+- [x] (2026-10-20) Stale docs refreshed: `README.md`, `SEO.md` and `ACCESSIBILITY.md`.
+
+**Tests that need no live site**
+
+- [x] (2026-10-20, done by Samuel, no problems found) W3C HTML validator on `/`, `/pt/` and both 404 pages.
+- [x] (2026-10-20, done by Samuel, no problems found) Keyboard only through the whole page, including the cookie notice.
+- [x] (2026-10-20, done by Samuel, no problems found) Screen reader pass.
+- [x] (2026-10-20, done by Samuel, no problems found) 200% zoom and Firefox text-only zoom.
+- [x] (2026-10-20, done by Samuel, no problems found) Windows high contrast.
+- [x] (2026-10-20, done by Samuel, no problems found) Real phones (Android and iPhone).
+
+**Last step**
+
+- [ ] `npm run build`, then commit everything pending, when Samuel asks. Nothing since `d812387` is committed, and `_headers` and `assets/project-website-figma.avif` are untracked.
+
+### B. During the deploy
+
+The order matters. Do these one after another.
+
+1. [ ] Put the repository on GitHub.
+2. [ ] Cloudflare dashboard > Workers & Pages > Create application > connect GitHub and choose the repository. Worker name `samueldutra` (must match `wrangler.jsonc`), build command empty, default deploy command (`npx wrangler deploy`).
+3. [ ] Open the `*.workers.dev` address and check `/`, `/pt/`, and that `/CLAUDE.md`, `/README.md` and `/package.json` return 404.
+4. [ ] **Samuel.** Turnstile: create the widget in Cloudflare (Managed, domain `samueldutra.com.br`) and put its site key in `SITE.form.turnstile`. Run `npm run build`, commit and deploy. Only after that build is live, paste the secret key in Formspree (Settings > CAPTCHA > Turnstile). The other order breaks real sends.
+5. [ ] **Samuel.** Formspree: turn on Restrict to Domain with `samueldutra.com.br`.
+6. [ ] **Samuel.** Domain: add `samueldutra.com.br` to Cloudflare (Free plan) and change the name servers at Registro.br to the two Cloudflare gives. Wait until Cloudflare says the domain is active.
+7. [ ] Worker > Settings > Domains & Routes > Add > Custom Domain > `samueldutra.com.br`.
+8. [ ] `www`: a proxied DNS record plus a Redirect Rule from `www.samueldutra.com.br` to `https://samueldutra.com.br` (301).
+9. [ ] Turn off the `*.workers.dev` address and the preview URLs in Domains & Routes, so Google sees one copy of the site.
+10. [ ] Cloudflare zone settings that rewrite the HTML clash with the CSP hashes: keep Rocket Loader off, keep the automatic Web Analytics beacon off (or allow it in the CSP), and view the source to check that Email Address Obfuscation did not rewrite the `mailto:` links or inject a script.
+11. [ ] **Samuel.** AI crawlers: Cloudflare can block them by default and prepend its own rules to `robots.txt`. Check Security > Bots / AI Crawl Control and decide whether ChatGPT, Perplexity and Google AI may read the site. For a portfolio, allowing search crawlers is usually what you want.
+12. [ ] DNS: turn on DNSSEC (Cloudflare, then the DS record at Registro.br). Until the professional email exists, publish "no mail" records so nobody can send email as `@samueldutra.com.br`: SPF `v=spf1 -all`, DMARC `p=reject` and a null MX. Replace them with the real ones when Email Routing is set up.
+13. [ ] HSTS, only after HTTPS is confirmed on the live domain: turn it on in Cloudflare (SSL/TLS > Edge Certificates) or add `Strict-Transport-Security` to `_headers` through the build. Also check "Always Use HTTPS" is on.
+
+After this, every push to `main` publishes by itself.
+
+**Tag Manager setup notes** (kept from the old README). The page sends three events to the `dataLayer`, only after the visitor accepts the notice: `generate_lead` (form sent successfully, `form_name` = `contact`), `contact_click` (email or WhatsApp link, `contact_method`) and `project_open` (`project_title`). In GTM each one has a Custom Event trigger and a GA4 Event tag, and the Google tag with the GA4 ID fires on "Initialization - All Pages". Use GTM Preview only on a copy of the site (its iframe is blocked by the CSP). Do not use Custom HTML tags (the CSP blocks inline scripts on purpose); the built-in templates work.
+
+### C. After the deploy
+
+**Check the live site**
+
+- [ ] `/` and `/pt/` return 200 over HTTPS; `www` redirects (301); `/x` and `/pt/x` return 404 in the right language. Also `/.well-known/security.txt` returns 200 as plain text (Cloudflare's docs do not say whether dotfile folders are uploaded; if it is 404, ask before changing the config).
+- [ ] Browser console on both pages, before and after accepting cookies: no CSP violations.
+- [ ] Live headers with Mozilla Observatory or securityheaders.com, and the live `/robots.txt`.
+- [ ] Real form send with Turnstile on (the email arrives in Formspree, `generate_lead` shows in GA4).
+- [ ] Analytics in a normal tab: accept the notice, see the visit in GA4 > Reports > Realtime, then test `contact_click` (email, WhatsApp) and `project_open`. Decline in another browser and check that no request goes to Google.
+- [ ] Lighthouse / PageSpeed Insights (mobile) on the real address, with the notice open, in EN and PT. Update `SITE.scores` and its comment (date and conditions), rebuild and redeploy. Never type a score that was not measured.
+- [ ] axe on the deployed pages with the notice open (still untested), plus the mobile menu open and a project expanded.
+- [ ] Real phones again on the live site, and the Turnstile challenge by keyboard if it appears.
+
+**Search and sharing**
+
+- [ ] **Samuel.** Google Search Console: Domain property verified by a DNS record (in Cloudflare DNS), submit `sitemap.xml`, URL Inspection > Test live URL on `/` and `/pt/` (check the screenshot is not hidden by the intro), request indexing.
+- [ ] **Samuel.** Link GA4 and Search Console (GA4 Admin > Product links).
+- [ ] **Samuel.** Bing Webmaster Tools: import from Search Console.
+- [ ] Validate the JSON-LD with the Schema Markup Validator and the Rich Results Test.
+- [ ] Test the share preview on WhatsApp and the LinkedIn Post Inspector, EN and PT.
+- [ ] **Samuel.** Link the site from GitHub (profile and repository), Instagram bio, WhatsApp Business, email signature and Upwork profile, with the same name and role everywhere.
+
+**Google Analytics settings (Samuel, in GA4)**
+
+- [ ] Mark `generate_lead` as a key event.
+- [ ] Data retention: set it to 2 months on purpose (Admin > Data collection > Data retention), because the cookie notice already says "2 months in reports". The GA4 default is 2 months, but check that it was not changed.
+- [ ] Google signals and ads personalization off (the page never grants ad storage, keep the property consistent with that).
+- [ ] Optionally set the `_ga` cookie lifetime in the Google tag (`cookie_expires`, for example 13 months, the European reference) so the notice can state it.
+
+### D. Ongoing
+
+- [ ] After every content change: `npm run build`, commit, deploy, re-run Lighthouse and update `SITE.scores`.
+- [ ] Search Console every few weeks (Pages, Performance, Manual actions) and GA4 for the three events.
+- [ ] `npm run vendor:gsap` when GSAP is updated; `npm update` for Tailwind now and then, then rebuild.
+
+### Notes and sources
+
+What the site already meets: WCAG 2.2 AA (see `ACCESSIBILITY.md`, also the base of ABNT NBR 17225:2025, the Brazilian reference for LBI art. 63), Google Search Essentials (see `SEO.md`), Core Web Vitals, and from the ANPD cookie guide: a reject button as visible as accept, analytics off by default, no pre-ticked boxes, text in the visitor's language, and a way to change the choice later (footer). Researched 2026-10-16.
+
+**Notes on this section**
+
+- The LGPD items follow the ANPD guide and the law text; they are not legal advice. For legal certainty, a quick review by a lawyer is worth it.
+- Sources:
+  - ANPD, Guia orientativo "Cookies e proteção de dados pessoais" (2022): https://webcon.unioeste.br/portal/arq/files/NIC/guia-orientativo-cookies-e-protecao-de-dados-pessoais.pdf (pages 28 to 33: cookie policy, first and second layer, what to avoid)
+  - Summaries of the guide: https://www.mattosfilho.com.br/unico/anpd-guia-cookies-protecao-dados/ and https://lefosse.com/noticias/anpd-publica-guia-orientativo-sobre-o-uso-de-cookies
+  - LGPD (Lei 13.709/2018), art. 9 (information owed to the data subject), art. 18 (rights), arts. 33 to 36 (international transfer): https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm
+  - Resolução CD/ANPD 2/2022 (small processing agents, no DPO but a channel): https://www.mayerbrown.com/-/media/files/perspectives-events/publications/2022/02/regulation-for-the-application-of-the-general-data-protection-law-lgpd-for-small-business-data-processing-agents/legal-update--regulamento-agentes-de-pequeno-porte.pdf
+  - International transfer in the privacy notice: https://www.conjur.com.br/?p=364819
+  - LBI art. 63 and its regulation: https://www.mpf.mp.br/o-mpf/unidades/pr-sp/noticias/mpf-exige-que-a-uniao-defina-regras-para-garantir-acessibilidade-em-sites-publicos-e-privados
+  - ABNT NBR 17225:2025 (based on WCAG 2.2): https://acervo.ceweb.br/acervos/conteudo/1386e03c-4991-4473-b969-5cf4d8caeebb and https://teletime.com.br/11/03/2025/abnt-lanca-norma-para-aprimorar-a-acessibilidade-de-sites/
+  - OWASP Secure Headers Project: https://owasp.org/www-project-secure-headers-project/
+  - RFC 9116 (security.txt): https://www.rfc-editor.org/rfc/rfc9116
+  - Cloudflare Email Address Obfuscation: https://developers.cloudflare.com/waf/tools/scrape-shield/email-address-obfuscation
+  - Cloudflare AI crawler settings (changelog): https://developers.cloudflare.com/bots/changelog/
+  - Domains that do not send email: https://www.gov.uk/guidance/protect-domains-that-dont-send-email and https://www.suped.com/learn/dmarc-for-msps/how-to-handle-client-domains-that-do-not-send-email
+  - GA4 privacy settings (retention, Google signals): https://infotrust.com/articles/privacy-centric-google-analytics-4-consent-opt-out-configuration/
+  - Decreto 7.962/2013: https://www.planalto.gov.br/ccivil_03/_ato2011-2014/2013/decreto/d7962.htm
+

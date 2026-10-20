@@ -12,7 +12,7 @@ Where each rule comes from:
 - **[G]** is written in Google's own documentation (Search Central). The sources are listed at the end.
 - **[P]** is common practice, not a Google rule.
 
-Status date: 2026-10-15. The site is not deployed yet.
+Status date: 2026-10-20. The site is not deployed yet.
 
 ## Decisions taken (2026-10-15)
 
@@ -32,9 +32,13 @@ Status date: 2026-10-15. The site is not deployed yet.
 - [x] Broken link fixed: the email icon in Contact pointed to `undefined` (`data-link="gmail"`, which does not exist in `SITE.links`).
 - [ ] **After deploy.** `/` and `/pt/` return 200 over HTTPS. One host only: `www.samueldutra.com.br` redirects (301) to `https://samueldutra.com.br/`, and the `*.workers.dev` and preview addresses are turned off [G].
 - [ ] **After deploy.** A wrong address returns a real 404 with the error page: `/x` gets `404.html` and `/pt/x` gets `pt/404.html` (`not_found_handling: "404-page"` in `wrangler.jsonc`). Tested locally with `wrangler dev`: status 404, right language. Check it again on the live site [G].
-- [ ] **After deploy.** Google Search Console: add a Domain property (verified by a DNS record at Registro.br), submit `sitemap.xml`, then URL Inspection > Test live URL on `/` and `/pt/` and check the screenshot and the HTML. Request indexing for both [G].
+- [ ] **After deploy.** Google Search Console: add a Domain property (verified by a DNS record, in Cloudflare DNS once the name servers moved there), submit `sitemap.xml`, then URL Inspection > Test live URL on `/` and `/pt/` and check the screenshot and the HTML. Request indexing for both [G].
 - [ ] **After deploy.** In that screenshot, check that the opening animation does not hide the page [P].
+- [x] Analytics: Google Tag Manager and GA4, loaded only after the visitor accepts the cookie notice, so Lighthouse and Core Web Vitals for visitors who decline are unchanged. The GTM container `GTM-5B9PSTB3` is published (version 2, with the GA4 tag and three event tags) and set in `SITE.tracking.gtm`. The notice asks again after 12 months. Re-run Lighthouse on the deployed site with the notice open [G].
+- [ ] **After deploy.** Link GA4 and Search Console in GA4 (Admin > Product links) so queries and pages show up together [G].
 - [ ] **After deploy.** Bing Webmaster Tools: import from Search Console [P].
+- [x] Security headers: `_headers` (generated) sets a Content-Security-Policy, `nosniff`, `Referrer-Policy` and `Permissions-Policy`. Tested locally with the Turnstile test key: no violations, the form sends, an injected script is blocked. Check the console once on the deployed site [G].
+- [x] `/.well-known/security.txt` (RFC 9116): written by the build with `Contact` (the site email), `Expires` (start of the month 11 months ahead, so a build every few months keeps it valid), `Preferred-Languages` and `Canonical`. **After deploy**, open it on the live site: Cloudflare's docs do not say whether dotfile folders such as `.well-known` are uploaded, so confirm it returns 200 as `text/plain`.
 - [x] Repository files are not published: `.assetsignore` hides README, CLAUDE.md, SEO.md, ACCESSIBILITY.md, `src/`, `scripts/`, `.claude/`, `package*.json` and `.git/`. Tested locally with `wrangler dev` (all return 404). **After deploy**, open `/CLAUDE.md` and `/README.md` on the live site and check for 404.
 
 ## 2. JavaScript
@@ -48,7 +52,7 @@ Status date: 2026-10-15. The site is not deployed yet.
 
 - [x] One `<title>` and one meta description per language, from `meta.title` and `meta.description` in `TRANSLATIONS` [G].
 - [x] One `<h1>`, one `<h2>` per section [G: order is not a ranking factor; this is for readers].
-- [ ] **Samuel.** The Portuguese description (`meta.description` in `TRANSLATIONS.pt`) is a translation of the approved English one. Check the wording.
+- [x] The Portuguese description (`meta.description` in `TRANSLATIONS.pt`) is a translation of the approved English one. Samuel checked it and kept it as is (2026-10-20). At 162 characters the end may be cut in results; that is accepted.
 - [x] Titles chosen by Samuel (2026-10-15), short enough not to be cut: EN `Samuel Dutra, freelance front-end developer` (43), PT `Samuel Dutra, programador front-end freelancer` (46). "Programador" is in the PT title and "desenvolvedor" in the PT description, so both words are covered.
 - [ ] Check that the words people type appear naturally in the visible text ("front-end developer", "websites", "landing pages", "online stores", "dashboards"), without repeating them [G: keyword stuffing is spam].
 - [x] No year or date in the title [G: outdated dates make Google rewrite titles].
@@ -65,9 +69,9 @@ Google asks "who made this, how, and why" [G]. For a portfolio that means proof,
 
 - [x] The name is on the page (logo, About, footer) and the copy talks to the client in plain words.
 - [x] Nothing is hidden from users, and bots and visitors get the same page (no cloaking) [G].
-- [~] **Samuel.** The real photo is in (`SITE.photo`, with a descriptive alt in `about.photoAlt`); the About text is still to confirm. A real face and a clear author are trust signals [G].
-- [ ] **Samuel.** The three real projects, each with the problem, what he built, the stack and a live link or repo. First-hand detail is what tells a portfolio apart from a template [G].
-- [ ] **Samuel.** Real links in `SITE.links` (today `#`). On the next build they also go into the structured data (`sameAs`).
+- [x] The real photo is in (`SITE.photo`, 800x800 AVIF of 38 KB, with a descriptive alt in `about.photoAlt`) and Samuel confirmed the About text (2026-10-20). A real face and a clear author are trust signals [G].
+- [~] **Samuel.** One real project is in (a concept website built from a Figma design, labeled as a concept project, with its stack and a live link). The online store and the dashboard come later. First-hand detail is what tells a portfolio apart from a template [G].
+- [x] Real links in `SITE.links` (done 2026-10-16). The build also writes the GitHub and Instagram ones into the structured data (`sameAs`).
 - [ ] Project details open on a click. Google indexes them, but "Read more" deep links work best with text that is visible without a click [G]. The title and short text are visible, which is enough.
 
 ## 6. Structured data (JSON-LD)
@@ -83,8 +87,8 @@ Google asks "who made this, how, and why" [G]. For a portfolio that means proof,
 ## 7. Images (when the photo and project images arrive)
 
 - [x] The build writes them as `<img>` with `alt` (the project title, or `about.photoAlt` for the photo). Google does not index CSS background images [G].
-- [ ] Descriptive file names: `samuel-dutra.jpg`, `online-store-product-page.webp`, not `IMG_0023.jpg` [G].
-- [ ] WebP or AVIF, sized for the layout (about 1200px wide for the project card), and add `width` and `height` to avoid layout shift [G, P]. The project images are `loading="lazy"`; the photo should not be lazy if it ever moves above the fold [P].
+- [x] Descriptive file names: `samuel-dutra.avif` and `project-website-figma.avif` (keep this for the next projects, for example `online-store-product-page.avif`, never `IMG_0023.jpg`) [G].
+- [x] AVIF, with `width` and `height` written by the build to avoid layout shift [G, P]. The photo is 800px (enough for 2x screens, shown at most 384px wide); the project image is 1600x900. The next project images should be about 1200 to 1600px wide. Both are `loading="lazy"`; the photo should not be lazy if it ever moves above the fold [P].
 
 ## 8. Icon and share previews
 
