@@ -106,11 +106,11 @@
        hero title uses it; the regular is found early anyway through the CSS -->
   <link rel="preload" href="../assets/fonts/hind-700.woff2" as="font" type="font/woff2" crossorigin>
 
-  <link rel="stylesheet" href="../assets/tailwind.css?v=1d5c213b">
+  <link rel="stylesheet" href="../assets/tailwind.css?v=e02ea940">
   <link rel="stylesheet" href="../style.css?v=78040f1b">
   <script src="../assets/gsap.min.js?v=92bb9a96" defer></script>
   <script src="../assets/ScrollToPlugin.min.js?v=07cfd328" defer></script>
-  <script src="../main.js?v=640ba013" defer></script>
+  <script src="../main.js?v=40846417" defer></script>
 </head>
 <body>
   <!-- The text inside the data-i18n, data-link, data-project-* and similar hooks is written by
@@ -559,11 +559,15 @@
 
     <!-- Final call to action -->
     <section id="contact" class="section-y bg-sand" aria-labelledby="contact-title">
-      <div class="wrap grid gap-12 lg:grid-cols-12 lg:gap-8">
-        <div class="lg:col-span-5">
+      <div class="wrap grid gap-12 lg:grid-cols-12 lg:grid-rows-[auto_1fr] lg:gap-8">
+        <div class="lg:col-span-5 lg:col-start-1 lg:row-start-1">
           <h2 id="contact-title" class="text-display font-bold" data-i18n="contact.title">Vamos conversar?</h2>
           <p class="mt-6 max-w-[65ch]" data-i18n="contact.text">Descreva o que você precisa e receba um orçamento. Uma mensagem curta é suficiente.</p>
-          <p class="mt-8 text-body font-bold" data-i18n="contact.direct">Prefere outro canal de contato?</p>
+        </div>
+
+        <!-- Other channels: under the text beside the form on desktop, and after the form on phones (order-last) -->
+        <div class="order-last lg:order-0 lg:col-span-5 lg:col-start-1 lg:row-start-2">
+          <p class="text-body font-bold" data-i18n="contact.direct">Prefere outro canal de contato?</p>
           <!-- Direct channels as icons; the links come from SITE.links, the names from the translations (aria-label) -->
           <ul class="mt-6 flex flex-wrap gap-4">
             <li><a href="mailto:samuelsdutra25@gmail.com" data-link="email" data-i18n-aria="form.email" class="social-link" aria-label="E-mail"><svg class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/></svg></a></li>
@@ -574,7 +578,7 @@
         </div>
 
         <!-- The form is the briefing (step 1 of "How it works"): who you are, what kind of project, what you need -->
-        <form data-contact-form novalidate method="dialog" class="relative rounded-tile border border-line bg-cream p-6 sm:p-8 lg:col-span-6 lg:col-start-7">
+        <form data-contact-form novalidate method="dialog" class="relative rounded-tile border border-line bg-cream p-6 sm:p-8 lg:col-span-6 lg:col-start-7 lg:row-span-2 lg:row-start-1">
           <!-- Without script the form cannot send (method="dialog" makes the browser do nothing on submit, so no field ends up in the address bar): this note points to the email instead -->
           <noscript><p class="mb-6 font-bold"><span data-i18n="form.noscript">O formulário precisa de JavaScript. Escreva para</span> <a href="mailto:samuelsdutra25@gmail.com" data-link="email" data-email-text class="underline underline-offset-4 hover:text-orange-deep">samuelsdutra25@gmail.com</a>.</p></noscript>
           <div class="grid gap-5 sm:grid-cols-2">

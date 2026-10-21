@@ -912,17 +912,17 @@ function playIntro() {
     await run(
       gsap
         .timeline()
-        .fromTo(messages, { yPercent: 25, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.8, ease: 'power3.out' }, 0)
-        .to(progress, { value: 100, duration: 1.8, ease: 'power2.inOut', onUpdate: draw }, 0.5),
+        .fromTo(messages, { yPercent: 25, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.6, ease: 'power3.out' }, 0)
+        .to(progress, { value: 100, duration: 1.2, ease: 'power2.inOut', onUpdate: draw }, 0.3),
     );
     // Only if the page is still loading once the screen is full, it waits here (at most 4 s)
     await Promise.race([loaded, wait(4000)]);
-    await wait(250);
+    await wait(150);
 
     await run(
       gsap
         .timeline()
-        .to(panel, { y: -panel.offsetHeight, duration: 0.85, ease: 'power3.inOut' })
+        .to(panel, { y: -panel.offsetHeight, duration: 0.7, ease: 'power3.inOut' })
         .call(release, null, 0.45),
     );
   }
